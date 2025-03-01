@@ -1,0 +1,39 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Wegia",
+        "description": "Documentação da API Wegia",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "Servidor Local"
+        }
+    ],
+    "paths": {
+        "/teste": {
+            "get": {
+                "tags": [
+                    "Teste"
+                ],
+                "summary": "Lista todos os teste",
+                "operationId": "f1871d2f690955656f648a952fe2e2ec",
+                "responses": {
+                    "200": {
+                        "description": "Lista de teste"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Teste",
+            "description": "Operações relacionadas a teste"
+        }
+    ]
+}
