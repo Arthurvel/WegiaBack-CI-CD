@@ -12,28 +12,540 @@
         }
     ],
     "paths": {
-        "/teste": {
-            "get": {
+        "/auth/login": {
+            "post": {
                 "tags": [
-                    "Teste"
+                    "Auth"
                 ],
-                "summary": "Lista todos os teste",
-                "operationId": "f1871d2f690955656f648a952fe2e2ec",
+                "summary": "Realizar login",
+                "operationId": "8cb7742ae98d0990acb2907c4e00bf24",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cpf",
+                                    "senha"
+                                ],
+                                "properties": {
+                                    "cpf": {
+                                        "type": "string"
+                                    },
+                                    "senha": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
-                        "description": "Lista de teste"
+                        "description": "Usuário e token retornados com sucesso"
+                    },
+                    "401": {
+                        "description": "Usuário não autorizado (login ou senha invalidos)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "message",
+                                            "example": "CPF ou senha incorretos"
+                                        },
+                                        "data": {
+                                            "type": "data",
+                                            "example": null
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "message",
+                                            "example": "Mensagem de erro"
+                                        },
+                                        "data": {
+                                            "type": "data",
+                                            "example": null
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Realizar logout",
+                "operationId": "0d29c740dc06d77602af8095bf4654cc",
+                "responses": {
+                    "200": {
+                        "description": "Token revogado com sucesso"
+                    },
+                    "401": {
+                        "description": "Usuário não autorizado (token invalido)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "message",
+                                            "example": "Token inválido"
+                                        },
+                                        "data": {
+                                            "type": "data",
+                                            "example": null
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "message",
+                                            "example": "Mensagem de erro"
+                                        },
+                                        "data": {
+                                            "type": "data",
+                                            "example": null
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pessoa": {
+            "post": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Cadastrar uma nova pessoa",
+                "operationId": "1a317c3ef9034524989ba311b0066196",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cpf"
+                                ],
+                                "properties": {
+                                    "cpf": {
+                                        "description": "CPF único",
+                                        "type": "string",
+                                        "maxLength": 11
+                                    },
+                                    "senha": {
+                                        "description": "Senha do usuário",
+                                        "type": "string",
+                                        "maxLength": 70,
+                                        "nullable": true
+                                    },
+                                    "nome": {
+                                        "description": "Nome do usuário",
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "nullable": true
+                                    },
+                                    "sobrenome": {
+                                        "description": "Sobrenome do usuário",
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "nullable": true
+                                    },
+                                    "sexo": {
+                                        "description": "Sexo do usuário",
+                                        "type": "string",
+                                        "maxLength": 1,
+                                        "nullable": true
+                                    },
+                                    "telefone": {
+                                        "description": "Telefone de contato",
+                                        "type": "string",
+                                        "maxLength": 25,
+                                        "nullable": true
+                                    },
+                                    "data_nascimento": {
+                                        "description": "Data de nascimento",
+                                        "type": "string",
+                                        "format": "date",
+                                        "nullable": true
+                                    },
+                                    "imagem": {
+                                        "description": "URL da imagem",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "cep": {
+                                        "description": "CEP",
+                                        "type": "string",
+                                        "maxLength": 10,
+                                        "nullable": true
+                                    },
+                                    "estado": {
+                                        "description": "Estado",
+                                        "type": "string",
+                                        "maxLength": 5,
+                                        "nullable": true
+                                    },
+                                    "cidade": {
+                                        "description": "Cidade",
+                                        "type": "string",
+                                        "maxLength": 40,
+                                        "nullable": true
+                                    },
+                                    "bairro": {
+                                        "description": "Bairro",
+                                        "type": "string",
+                                        "maxLength": 40,
+                                        "nullable": true
+                                    },
+                                    "logradouro": {
+                                        "description": "Logradouro",
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "nullable": true
+                                    },
+                                    "numero_endereco": {
+                                        "description": "Número do endereço",
+                                        "type": "string",
+                                        "maxLength": 80,
+                                        "nullable": true
+                                    },
+                                    "complemento": {
+                                        "description": "Complemento",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "nullable": true
+                                    },
+                                    "ibge": {
+                                        "description": "Código IBGE",
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "nullable": true
+                                    },
+                                    "registro_geral": {
+                                        "description": "Registro Geral (RG)",
+                                        "type": "string",
+                                        "maxLength": 120,
+                                        "nullable": true
+                                    },
+                                    "orgao_emissor": {
+                                        "description": "Órgão emissor do RG",
+                                        "type": "string",
+                                        "maxLength": 120,
+                                        "nullable": true
+                                    },
+                                    "data_expedicao": {
+                                        "description": "Data de expedição do RG",
+                                        "type": "string",
+                                        "format": "date",
+                                        "nullable": true
+                                    },
+                                    "nome_mae": {
+                                        "description": "Nome da mãe",
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "nullable": true
+                                    },
+                                    "nome_pai": {
+                                        "description": "Nome do pai",
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "nullable": true
+                                    },
+                                    "tipo_sanguineo": {
+                                        "description": "Tipo sanguíneo",
+                                        "type": "string",
+                                        "maxLength": 5,
+                                        "nullable": true
+                                    },
+                                    "nivel_acesso": {
+                                        "description": "Nível de acesso do usuário",
+                                        "type": "integer",
+                                        "nullable": true
+                                    },
+                                    "adm_configurado": {
+                                        "description": "Indica se o administrador está configurado",
+                                        "type": "integer",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cadastro realizado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
                     },
                     "500": {
                         "description": "Erro interno"
                     }
                 }
             }
+        },
+        "/pessoa/logada": {
+            "get": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Retorna a pessoa autenticado",
+                "operationId": "98a035012ccaa2b2292da2dcc34a52d7",
+                "responses": {
+                    "200": {
+                        "description": "Usuário retornado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Operação realizada com sucesso!"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id_pessoa": {
+                                                    "type": "integer",
+                                                    "example": ""
+                                                },
+                                                "cpf": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "nome": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "sobrenome": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "sexo": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "telefone": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "data_nascimento": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": ""
+                                                },
+                                                "imagem": {
+                                                    "type": "string",
+                                                    "example": null,
+                                                    "nullable": true
+                                                },
+                                                "cep": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "estado": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "cidade": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "bairro": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "logradouro": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "numero_endereco": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "complemento": {
+                                                    "type": "string",
+                                                    "example": null,
+                                                    "nullable": true
+                                                },
+                                                "ibge": {
+                                                    "type": "string",
+                                                    "example": null,
+                                                    "nullable": true
+                                                },
+                                                "registro_geral": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "orgao_emissor": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "data_expedicao": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": ""
+                                                },
+                                                "nome_mae": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "nome_pai": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "tipo_sanguineo": {
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "nivel_acesso": {
+                                                    "type": "integer",
+                                                    "example": ""
+                                                },
+                                                "adm_configurado": {
+                                                    "type": "integer",
+                                                    "example": ""
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "message",
+                                            "example": "Mensagem de erro"
+                                        },
+                                        "data": {
+                                            "type": "data",
+                                            "example": null
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "message",
+                                            "example": "Mensagem de erro"
+                                        },
+                                        "data": {
+                                            "type": "data",
+                                            "example": null
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
         }
     },
     "tags": [
         {
-            "name": "Teste",
-            "description": "Operações relacionadas a teste"
+            "name": "Auth",
+            "description": "Operações relacionadas a autenticação"
+        },
+        {
+            "name": "Pessoa",
+            "description": "Operações relacionadas as pessoas"
         }
     ]
 }

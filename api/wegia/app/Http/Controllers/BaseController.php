@@ -13,6 +13,13 @@ use Illuminate\Routing\Controller;
  *     description="Documentação da API Wegia"
  * )
  *
+* @OA\SecurityScheme(
+ *     type="http",
+ *     scheme="bearer",
+ *     securityScheme="bearerAuth",
+ *     bearerFormat="JWT",
+ * )
+ * 
  * @OA\Server(
  *     url="http://localhost:8000/api",
  *     description="Servidor Local"
