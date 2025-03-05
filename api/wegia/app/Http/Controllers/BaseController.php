@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\Traits\Response;
+use App\Traits\Validador;
 use Illuminate\Routing\Controller;
 
 /**
@@ -28,5 +29,5 @@ use Illuminate\Routing\Controller;
 
 class BaseController extends Controller
 {
-    use ValidatesRequests, Response;
+    use ValidatesRequests, Response, Validador;
 }

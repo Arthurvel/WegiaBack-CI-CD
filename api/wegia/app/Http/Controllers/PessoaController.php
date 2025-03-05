@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\PessoaService;
-use App\Validations\PessoaValidation;
+use App\Validations\Pessoa\AtualizarPessoaValidation;
+use App\Validations\Pessoa\PessoaValidation;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -66,7 +67,7 @@ class PessoaController extends BaseController
      *     @OA\Response(response="500", description="Erro interno")
      * )
      */
-    public function create(Request $request)
+    public function create(Request $request) : JsonResponse
     {
 
         try {
@@ -85,9 +86,70 @@ class PessoaController extends BaseController
             
             return $this->sucessoResponse($pessoa);
         } catch (\Exception $e) {
-            return $e->getMessage();
+            return $this->errorResponse($e);
         }
         
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/pessoa/{id_pessoa}",
+     *     summary="Atualizar uma pessoa",
+     *     tags={"Pessoa"},
+     *     security={{"bearerAuth": {}}}, 
+     *     @OA\Parameter(
+     *         name="id_pessoa",
+     *         in="path",
+     *         description="ID da pessoa que deseja atualizar",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             @OA\Property(property="nome", type="string", maxLength=100, nullable=true, description="Nome do usuário"),
+     *             @OA\Property(property="sobrenome", type="string", maxLength=100, nullable=true, description="Sobrenome do usuário"),
+     *             @OA\Property(property="sexo", type="string", maxLength=1, nullable=true, description="Sexo do usuário"),
+     *             @OA\Property(property="telefone", type="string", maxLength=25, nullable=true, description="Telefone de contato"),
+     *             @OA\Property(property="data_nascimento", type="string", format="date", nullable=true, description="Data de nascimento"),
+     *             @OA\Property(property="imagem", type="string", nullable=true, description="URL da imagem"),
+     *             @OA\Property(property="cep", type="string", maxLength=10, nullable=true, description="CEP"),
+     *             @OA\Property(property="estado", type="string", maxLength=5, nullable=true, description="Estado"),
+     *             @OA\Property(property="cidade", type="string", maxLength=40, nullable=true, description="Cidade"),
+     *             @OA\Property(property="bairro", type="string", maxLength=40, nullable=true, description="Bairro"),
+     *             @OA\Property(property="logradouro", type="string", maxLength=100, nullable=true, description="Logradouro"),
+     *             @OA\Property(property="numero_endereco", type="string", maxLength=80, nullable=true, description="Número do endereço"),
+     *             @OA\Property(property="complemento", type="string", maxLength=50, nullable=true, description="Complemento"),
+     *             @OA\Property(property="ibge", type="string", maxLength=20, nullable=true, description="Código IBGE"),
+     *             @OA\Property(property="registro_geral", type="string", maxLength=120, nullable=true, description="Registro Geral (RG)"),
+     *             @OA\Property(property="orgao_emissor", type="string", maxLength=120, nullable=true, description="Órgão emissor do RG"),
+     *             @OA\Property(property="data_expedicao", type="string", format="date", nullable=true, description="Data de expedição do RG"),
+     *             @OA\Property(property="nome_mae", type="string", maxLength=100, nullable=true, description="Nome da mãe"),
+     *             @OA\Property(property="nome_pai", type="string", maxLength=100, nullable=true, description="Nome do pai"),
+     *             @OA\Property(property="tipo_sanguineo", type="string", maxLength=5, nullable=true, description="Tipo sanguíneo"),
+     *             @OA\Property(property="nivel_acesso", type="integer", nullable=true, description="Nível de acesso do usuário"),
+     *             @OA\Property(property="adm_configurado", type="integer", nullable=true, description="Indica se o administrador está configurado")
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
+     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
+     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
+     * )
+    */
+    public function update(Request $request, int $id_pessoa) : JsonResponse
+    {
+        try {
+            $this->validarRequest(
+                $request->all(),
+                AtualizarPessoaValidation::rules(),
+                AtualizarPessoaValidation::messages()
+            );
+
+            $pessoa = $this->pessoaService->atualizarPessoa($request->all(), $id_pessoa);
+            
+            return $this->sucessoResponse($pessoa);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
     }
 
     /**
@@ -155,7 +217,7 @@ class PessoaController extends BaseController
      *     ),
      * )
      */
-    public function retornarPessoaLogada(Request $request) 
+    public function retornarPessoaLogada(Request $request) : JsonResponse
     {
         try {            
             return $this->sucessoResponse($request->user());

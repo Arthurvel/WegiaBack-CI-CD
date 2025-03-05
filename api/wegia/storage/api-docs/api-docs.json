@@ -163,6 +163,345 @@
                 ]
             }
         },
+        "/funcionario": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar os funcionarios",
+                "operationId": "5a4c244dc4be7b52292c1f5d9e2c0c56",
+                "parameters": [
+                    {
+                        "name": "id_situacao",
+                        "in": "query",
+                        "description": "Id da situacao do funcionario",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Nome, CPF ou Cargo do funcionário para busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo para ordenar (nome, cpf, cargo)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "ASC"
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de funcionários por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Cadastrar um novo funcionario",
+                "operationId": "c161e4cd868332522b8f65f3a5230d1e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cpf",
+                                    "nome",
+                                    "sobrenome",
+                                    "sexo",
+                                    "telefone",
+                                    "data_nascimento",
+                                    "registro_geral",
+                                    "orgao_emissor",
+                                    "data_expedicao",
+                                    "data_admissao",
+                                    "id_situacao",
+                                    "id_cargo",
+                                    "id_escala",
+                                    "id_tipo",
+                                    "certificado_reservista_numero",
+                                    "certificado_reservista_serie"
+                                ],
+                                "properties": {
+                                    "cpf": {
+                                        "description": "CPF único",
+                                        "type": "string",
+                                        "maxLength": 11,
+                                        "example": ""
+                                    },
+                                    "nome": {
+                                        "description": "Nome do usuário",
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": ""
+                                    },
+                                    "sobrenome": {
+                                        "description": "Sobrenome do usuário",
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": ""
+                                    },
+                                    "sexo": {
+                                        "description": "Sexo do usuário",
+                                        "type": "string",
+                                        "maxLength": 1,
+                                        "example": ""
+                                    },
+                                    "telefone": {
+                                        "description": "Telefone de contato",
+                                        "type": "string",
+                                        "maxLength": 25,
+                                        "example": ""
+                                    },
+                                    "data_nascimento": {
+                                        "description": "Data de nascimento",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": ""
+                                    },
+                                    "registro_geral": {
+                                        "description": "Registro Geral (RG)",
+                                        "type": "string",
+                                        "maxLength": 120,
+                                        "example": ""
+                                    },
+                                    "orgao_emissor": {
+                                        "description": "Órgão emissor do RG",
+                                        "type": "string",
+                                        "maxLength": 120,
+                                        "example": ""
+                                    },
+                                    "data_expedicao": {
+                                        "description": "Data de expedição do RG",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": ""
+                                    },
+                                    "imagem": {
+                                        "description": "URL da imagem",
+                                        "type": "string",
+                                        "example": "",
+                                        "nullable": true
+                                    },
+                                    "data_admissao": {
+                                        "description": "Data de admissão",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": ""
+                                    },
+                                    "id_situacao": {
+                                        "description": "ID da situação",
+                                        "type": "integer",
+                                        "example": 0
+                                    },
+                                    "id_cargo": {
+                                        "description": "ID do cargo",
+                                        "type": "integer",
+                                        "example": 0
+                                    },
+                                    "id_escala": {
+                                        "description": "ID da escala",
+                                        "type": "integer",
+                                        "example": 0
+                                    },
+                                    "id_tipo": {
+                                        "description": "ID do tipo",
+                                        "type": "integer",
+                                        "example": 0
+                                    },
+                                    "certificado_reservista_numero": {
+                                        "description": "Número do certificado de reservista",
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": ""
+                                    },
+                                    "certificado_reservista_serie": {
+                                        "description": "Série do certificado de reservista",
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cadastro realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/{id_funcionario}/documento": {
+            "post": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Adicionar um documento para um funcionário",
+                "operationId": "406feb08506838444f46b82ee6dcf6f5",
+                "parameters": [
+                    {
+                        "name": "id_funcionario",
+                        "in": "path",
+                        "description": "ID do funcionário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Dados do documento a ser enviado",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "arquivo": {
+                                        "description": "Arquivo a ser enviado (PDF, JPG, PNG)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "id_docfuncional": {
+                                        "description": "ID do documento funcional",
+                                        "type": "integer",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/pessoa": {
             "post": {
                 "tags": [
@@ -336,6 +675,197 @@
                         "description": "Erro interno"
                     }
                 }
+            }
+        },
+        "/pessoa/{id_pessoa}": {
+            "put": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Atualizar uma pessoa",
+                "operationId": "8514b99daaafb86c37872ddad3544afd",
+                "parameters": [
+                    {
+                        "name": "id_pessoa",
+                        "in": "path",
+                        "description": "ID da pessoa que deseja atualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nome": {
+                                        "description": "Nome do usuário",
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "nullable": true
+                                    },
+                                    "sobrenome": {
+                                        "description": "Sobrenome do usuário",
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "nullable": true
+                                    },
+                                    "sexo": {
+                                        "description": "Sexo do usuário",
+                                        "type": "string",
+                                        "maxLength": 1,
+                                        "nullable": true
+                                    },
+                                    "telefone": {
+                                        "description": "Telefone de contato",
+                                        "type": "string",
+                                        "maxLength": 25,
+                                        "nullable": true
+                                    },
+                                    "data_nascimento": {
+                                        "description": "Data de nascimento",
+                                        "type": "string",
+                                        "format": "date",
+                                        "nullable": true
+                                    },
+                                    "imagem": {
+                                        "description": "URL da imagem",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "cep": {
+                                        "description": "CEP",
+                                        "type": "string",
+                                        "maxLength": 10,
+                                        "nullable": true
+                                    },
+                                    "estado": {
+                                        "description": "Estado",
+                                        "type": "string",
+                                        "maxLength": 5,
+                                        "nullable": true
+                                    },
+                                    "cidade": {
+                                        "description": "Cidade",
+                                        "type": "string",
+                                        "maxLength": 40,
+                                        "nullable": true
+                                    },
+                                    "bairro": {
+                                        "description": "Bairro",
+                                        "type": "string",
+                                        "maxLength": 40,
+                                        "nullable": true
+                                    },
+                                    "logradouro": {
+                                        "description": "Logradouro",
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "nullable": true
+                                    },
+                                    "numero_endereco": {
+                                        "description": "Número do endereço",
+                                        "type": "string",
+                                        "maxLength": 80,
+                                        "nullable": true
+                                    },
+                                    "complemento": {
+                                        "description": "Complemento",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "nullable": true
+                                    },
+                                    "ibge": {
+                                        "description": "Código IBGE",
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "nullable": true
+                                    },
+                                    "registro_geral": {
+                                        "description": "Registro Geral (RG)",
+                                        "type": "string",
+                                        "maxLength": 120,
+                                        "nullable": true
+                                    },
+                                    "orgao_emissor": {
+                                        "description": "Órgão emissor do RG",
+                                        "type": "string",
+                                        "maxLength": 120,
+                                        "nullable": true
+                                    },
+                                    "data_expedicao": {
+                                        "description": "Data de expedição do RG",
+                                        "type": "string",
+                                        "format": "date",
+                                        "nullable": true
+                                    },
+                                    "nome_mae": {
+                                        "description": "Nome da mãe",
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "nullable": true
+                                    },
+                                    "nome_pai": {
+                                        "description": "Nome do pai",
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "nullable": true
+                                    },
+                                    "tipo_sanguineo": {
+                                        "description": "Tipo sanguíneo",
+                                        "type": "string",
+                                        "maxLength": 5,
+                                        "nullable": true
+                                    },
+                                    "nivel_acesso": {
+                                        "description": "Nível de acesso do usuário",
+                                        "type": "integer",
+                                        "nullable": true
+                                    },
+                                    "adm_configurado": {
+                                        "description": "Indica se o administrador está configurado",
+                                        "type": "integer",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/pessoa/logada": {
@@ -542,6 +1072,10 @@
         {
             "name": "Auth",
             "description": "Operações relacionadas a autenticação"
+        },
+        {
+            "name": "Funcionario",
+            "description": "Operações relacionadas aos funcionarios"
         },
         {
             "name": "Pessoa",

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\DTOs\Pessoa\PessoaAtualizarDTO;
 use App\Models\Pessoa;
 
 class PessoaRepository
@@ -15,6 +16,20 @@ class PessoaRepository
     public function buscarPessoaPorCpf(string $cpf) : Pessoa
     {
         return Pessoa::where('cpf', $cpf)->first();
+    }
+
+    public function atualizarPessoa(PessoaAtualizarDTO $pessoa, int $id) : Pessoa
+    {
+        $pessoaEncontrada = $this->buscarPessoaPorId($id);
+
+        $pessoaEncontrada->update($pessoa->toArray());
+
+        return $pessoaEncontrada;
+    }
+
+    public function buscarPessoaPorId(int $id): Pessoa
+    {
+        return Pessoa::findOrFail($id);
     }
 
 }
