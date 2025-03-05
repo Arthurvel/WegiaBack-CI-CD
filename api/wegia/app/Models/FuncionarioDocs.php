@@ -22,4 +22,9 @@ class FuncionarioDocs extends BaseModel
         'nome_arquivo',
         'arquivo'
     ]; 
+
+    public function funcionarioDocFuncional()
+    {
+        return $this->belongsTo(FuncionarioDocFuncional::class, 'id_docfuncional');
+    }
 }

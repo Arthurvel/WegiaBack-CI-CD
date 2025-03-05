@@ -429,6 +429,103 @@
             }
         },
         "/funcionario/{id_funcionario}/documento": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Pegar os documentos do funcionário",
+                "operationId": "e574097bf5bda57c4d2428afa5bcf2b0",
+                "parameters": [
+                    {
+                        "name": "id_funcionario",
+                        "in": "path",
+                        "description": "ID do funcionário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Tipo do arquivo ou data para busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo para ordenar (tipo do arquivo, data)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "ASC"
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de funcionários por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Funcionario"
@@ -469,6 +566,57 @@
                         }
                     }
                 },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/documento/{id_documento}": {
+            "delete": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Deletar o documentos do funcionário",
+                "operationId": "474ad76a6a1b7f3f9f36bdac509d5d99",
+                "parameters": [
+                    {
+                        "name": "id_documento",
+                        "in": "path",
+                        "description": "ID do documento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Operacao realizada com sucesso!",

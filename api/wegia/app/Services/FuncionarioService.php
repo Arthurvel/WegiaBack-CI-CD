@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\Funcionario\CadastrarDocumentoDTO;
+use App\DTOs\Funcionario\FuncionarioDocumentoDTO;
 use App\DTOs\Funcionario\FuncionarioDTO;
 use App\DTOs\PaginacaoDTO;
 use App\Models\Funcionario;
@@ -29,7 +30,19 @@ class FuncionarioService
 
     public function pegarFuncionarios(array $parametros = []) : PaginacaoDTO
     {
-        return $this->funcionarioRepository->pegarFuncionarios($parametros);
+        $funcionarios = $this->funcionarioRepository->pegarFuncionarios($parametros);
+
+        $itens = collect($funcionarios->items())->map(function ($funcionario) {
+            return FuncionarioDTO::fromArray($funcionario->toArray());
+        })->toArray();
+
+        return new PaginacaoDTO(
+            $itens,
+            $funcionarios->currentPage(),
+            $funcionarios->lastPage(),
+            $funcionarios->total(),
+            $funcionarios->perPage()
+        );
     }
 
     public function cadastrarFuncionario(array $dados) : Funcionario
@@ -79,5 +92,27 @@ class FuncionarioService
         );
 
         return $this->funcionarioRepository->cadastrarDocumento($FuncionarioDocumentoDTO);
+    }
+
+    public function pegarDocumentos(array $parametros = [], $id_funcionario = null) : PaginacaoDTO
+    {
+        $funcionarioDocs = $this->funcionarioRepository->pegarDocumentos($parametros, $id_funcionario);
+
+        $itens = collect($funcionarioDocs->items())->map(function ($documento) {
+            return FuncionarioDocumentoDTO::fromArray($documento->toArray())->toArray();
+        })->toArray();
+
+        return new PaginacaoDTO(
+            $itens,
+            $funcionarioDocs->currentPage(),
+            $funcionarioDocs->lastPage(),
+            $funcionarioDocs->total(),
+            $funcionarioDocs->perPage()
+        );
+    }
+
+    public function deletarDocumento(int $id_documento) : bool
+    {
+        return $this->funcionarioRepository->deletarDocumento($id_documento);
     }
 }
