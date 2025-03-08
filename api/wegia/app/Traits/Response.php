@@ -38,8 +38,6 @@ trait Response
     {
         $status = $statusCode;
         $message = $messageError;
-
-        // dd($exception);
         
         if ($exception instanceof ModelNotFoundException) {
             $message = 'Não encontrado';
@@ -47,7 +45,7 @@ trait Response
         }
 
         if ($exception instanceof ValidationException) {
-            $message = 'Erro de validação';
+            $message = $exception->validator->getMessageBag()->getMessages();
             $status = 422;
         }
 

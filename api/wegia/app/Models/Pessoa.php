@@ -63,4 +63,9 @@ class Pessoa extends Authenticatable
         return Hash::check($senha, $this->senha);
     }
 
+    public function funcionario()
+    {
+        return $this->hasMany(Funcionario::class, 'id_pessoa');
+    }
+
 }

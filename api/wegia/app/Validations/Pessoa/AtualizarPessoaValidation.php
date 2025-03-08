@@ -1,21 +1,12 @@
 <?php
 
-namespace App\Validations;
+namespace App\Validations\Pessoa;
 
-use Illuminate\Validation\Rule;
-
-class PessoaValidation
+class AtualizarPessoaValidation
 {
-    public static function rules($pessoaId = null)
+    public static function rules()
     {
         return [
-            'cpf' => [
-                'required',
-                'string',
-                'max:11',
-                Rule::unique('pessoa', 'cpf')->ignore($pessoaId, 'id_pessoa'),
-            ],
-            'senha' => 'nullable|string|max:70',
             'nome' => 'nullable|string|max:100',
             'sobrenome' => 'nullable|string|max:100',
             'sexo' => 'nullable|string|size:1',
@@ -44,10 +35,8 @@ class PessoaValidation
     public static function messages()
     {
         return [
-            'required' => 'O campo é obrigatório.',
-            'cpf.unique' => 'Este CPF já está em uso.',
             'data_nascimento.date' => 'O campo data de nascimento deve ser uma data válida.',
-
+            'data_expedicao.date' => 'O campo data de nascimento deve ser uma data válida.',
         ];
     }
 }

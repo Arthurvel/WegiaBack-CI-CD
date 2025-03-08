@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\DTOs\Pessoa\PessoaAtualizarDTO;
+use App\DTOs\Pessoa\PessoaDTO;
 use App\Repositories\PessoaRepository;
 use App\Models\Pessoa;
 
@@ -24,4 +26,12 @@ class PessoaService
         return $this->pessoaRepository->buscarPessoaPorCpf($cpf);
     }
 
+    public function atualizarPessoa(array $pessoa, int $id) : array
+    {
+        $pessoaAtualizaDTO = PessoaAtualizarDTO::fromArray($pessoa);
+
+        $pessoaAtualizada = $this->pessoaRepository->atualizarPessoa($pessoaAtualizaDTO, $id);
+    
+        return PessoaDTO::fromArray($pessoaAtualizada->toArray())->toArray();
+    }
 }
