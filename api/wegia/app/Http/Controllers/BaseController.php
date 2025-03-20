@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\Traits\Response;
+use App\Traits\Validador;
 use Illuminate\Routing\Controller;
 
 /**
@@ -13,6 +14,13 @@ use Illuminate\Routing\Controller;
  *     description="Documentação da API Wegia"
  * )
  *
+* @OA\SecurityScheme(
+ *     type="http",
+ *     scheme="bearer",
+ *     securityScheme="bearerAuth",
+ *     bearerFormat="JWT",
+ * )
+ * 
  * @OA\Server(
  *     url="http://localhost:8000/api",
  *     description="Servidor Local"
@@ -21,5 +29,5 @@ use Illuminate\Routing\Controller;
 
 class BaseController extends Controller
 {
-    use ValidatesRequests, Response;
+    use ValidatesRequests, Response, Validador;
 }

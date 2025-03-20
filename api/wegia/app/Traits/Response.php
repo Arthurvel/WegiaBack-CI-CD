@@ -16,7 +16,7 @@ trait Response
      * @param int $statusCode
      * @return JsonResponse
     */
-    protected function sucessoResponse($data, string $message = 'Operação realizada com sucesso!', int $statusCode = 200): JsonResponse 
+    protected function sucessoResponse($data, int $statusCode = 200,  string $message = 'Operação realizada com sucesso!'): JsonResponse 
     
     {
         return response()->json([
@@ -38,8 +38,6 @@ trait Response
     {
         $status = $statusCode;
         $message = $messageError;
-
-        // dd($exception);
         
         if ($exception instanceof ModelNotFoundException) {
             $message = 'Não encontrado';
@@ -47,7 +45,7 @@ trait Response
         }
 
         if ($exception instanceof ValidationException) {
-            $message = 'Erro de validação';
+            $message = $exception->validator->getMessageBag()->getMessages();
             $status = 422;
         }
 
