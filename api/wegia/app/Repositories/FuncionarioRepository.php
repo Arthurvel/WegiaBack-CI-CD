@@ -5,8 +5,11 @@ namespace App\Repositories;
 use App\DTOs\Funcionario\AtualizarFuncionarioDTO;
 use App\DTOs\Funcionario\CadastrarDocumentoDTO;
 use App\DTOs\Funcionario\FuncionarioDTO;
-use App\Models\Funcionario;
-use App\Models\FuncionarioDocs;
+use App\Models\Funcionario\Funcionario;
+use App\Models\Funcionario\FuncionarioDocs;
+use App\Models\Funcionario\FuncionarioListaInfo;
+use App\Models\Funcionario\FuncionarioOutrasInfo;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class FuncionarioRepository
@@ -112,5 +115,62 @@ class FuncionarioRepository
     public function deletarDocumento(int $id_documento) : bool
     {
         return $this->pegarDocumentoPorId($id_documento)->delete();
+    }
+
+    public function buscarInfosPorIdFuncionario(int $id_funcionario, array $parametros = []) : LengthAwarePaginator
+    {
+        $buscar         = $parametros['buscar'] ?? null;
+        $ordenacao      = $parametros['ordenacao'] ?? null;
+        $tipoOrdenacao  = $parametros['tipoOrdenacao'] ?? 'ASC';
+        $itensPorPagina = $parametros['itensPorPagina'] ?? 10;
+        $pagina         = $parametros['pagina'] ?? 1;
+
+        return FuncionarioOutrasInfo::with(['listaInfo'])
+            ->where('funcionario_id_funcionario', $id_funcionario)
+            ->when(!is_null($buscar), function ($q) use ($buscar) {
+                return $q->whereHas('listaInfo', function ($q2) use ($buscar) {
+                    $q2->where('descricao', 'like', "%{$buscar}%");
+                })
+                ->orWhere('dado', 'like', "%{$buscar}%");
+            })
+            ->when(!is_null($ordenacao), function ($q) use ($ordenacao, $tipoOrdenacao) {
+
+                if($ordenacao == 'descricao') {
+                    return $q->join(
+                        'funcionario_listainfo', 
+                        'funcionario_outrasinfo.funcionario_listainfo_idfuncionario_listainfo', 
+                        '=', 
+                        'funcionario_listainfo.idfuncionario_listainfo'
+                    )
+                        ->orderBy("funcionario_listainfo.{$ordenacao}", $tipoOrdenacao);
+                } else {
+                    return $q->orderBy($ordenacao, $tipoOrdenacao);
+                }
+            })
+            ->paginate($itensPorPagina, ['*'], 'page', $pagina);
+    }
+
+    public function cadastrarInfo(string $dado, int $id_funcionario, int $id_funcionario_lista_info) : FuncionarioOutrasInfo
+    {
+        return FuncionarioOutrasInfo::create([
+            "dado" => $dado,
+            "funcionario_id_funcionario" => $id_funcionario,
+            "funcionario_listainfo_idfuncionario_listainfo" => $id_funcionario_lista_info
+        ]);
+    }
+
+    public function deletarInfo(int $id_funcionario_outrasinfo) : bool
+    {
+        return FuncionarioOutrasInfo::findOrFail($id_funcionario_outrasinfo)->delete();
+    }
+
+    public function pegarListaInfo() : Collection
+    {
+        return FuncionarioListaInfo::all();
+    }
+
+    public function cadastrarListaInfo(string $descricao) : FuncionarioListaInfo
+    {
+        return FuncionarioListaInfo::create(['descricao' => $descricao]);
     }
 }

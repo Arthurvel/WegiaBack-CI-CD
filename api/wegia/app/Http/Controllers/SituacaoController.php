@@ -47,7 +47,7 @@ class SituacaoController extends BaseController
 
             return  $this->sucessoResponse($situacoes);
         } catch (Exception $e) {
-            return $this->errorResponse(null, 500, $e->getMessage());
+            return $this->errorResponse($e);
         } 
     }
 
@@ -82,7 +82,7 @@ class SituacaoController extends BaseController
 
             return  $this->sucessoResponse($situacoes, 201);
         } catch (Exception $e) {
-            return $this->errorResponse(null, 500, $e->getMessage());
+            return $this->errorResponse($e);
         } 
     }
 
@@ -111,7 +111,7 @@ class SituacaoController extends BaseController
 
             return  $this->sucessoResponse($situacoes);
         } catch (Exception $e) {
-            return $this->errorResponse(null, 500, $e->getMessage());
+            return $this->errorResponse($e);
         } 
     }
 }

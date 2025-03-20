@@ -98,7 +98,7 @@ class FuncionarioController extends BaseController
 
             return $this->sucessoResponse($funcionario);
         } catch (Exception $e) {
-            return $this->errorResponse(null, 500, $e->getMessage());
+            return $this->errorResponse($e);
         }
     }
 

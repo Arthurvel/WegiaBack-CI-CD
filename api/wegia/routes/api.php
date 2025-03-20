@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\Funcionario\FuncionarioController;
 use App\Http\Controllers\Funcionario\FuncionarioDocumentoController;
+use App\Http\Controllers\Funcionario\FuncionarioInfoController;
 use App\Http\Controllers\SituacaoController;
 
 Route::group([ 'prefix' => 'auth' ], function () {
@@ -27,6 +28,15 @@ Route::group([ 'prefix' => 'funcionario' ], function () {
     Route::get('/{id_funcionario}/documento', [FuncionarioDocumentoController::class, 'pegarDocumentosDeUmFuncionario']);
     Route::post('/{id_funcionario}/documento', [FuncionarioDocumentoController::class, 'adicionarDocumento']);
     Route::delete('/documento/{id_documento}', [FuncionarioDocumentoController::class, 'deletarDocumento']);
+
+    Route::get('/{id_funcionario}/outra-info', [FuncionarioInfoController::class, 'buscarInfosPorIdFuncionario']);
+    Route::post('/{id_funcionario}/outra-info/{id_funcionario_lista_info}', [FuncionarioInfoController::class, 'create']);
+    Route::delete('/outra-info/{id_funcionario_outrasinfo}', [FuncionarioInfoController::class, 'destroy']);
+
+    Route::group([ 'prefix' => 'lista-info' ], function () {
+        Route::get('/', [FuncionarioInfoController::class, 'pegarListaInfo']);
+        Route::post('/', [FuncionarioInfoController::class, 'cadastrarListaInfo']);
+    });
 });
 
 Route::group([ 'prefix' => 'situacao'], function () {
