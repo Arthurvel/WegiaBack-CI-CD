@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Funcionario;
 
 use App\Models\BaseModel\BaseModel;
+use App\Models\Cargo;
+use App\Models\Pessoa;
+use App\Models\Situacao;
 
 class Funcionario extends BaseModel
 {
