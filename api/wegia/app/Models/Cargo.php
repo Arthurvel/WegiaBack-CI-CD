@@ -11,6 +11,10 @@ class Cargo extends BaseModel
 
     protected $primaryKey = 'id_cargo';
 
+    protected $fillable = [
+        'cargo'
+    ];
+
     public $timestamps = false;
 
     public function funcionario()

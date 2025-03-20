@@ -11,6 +11,10 @@ class Situacao extends BaseModel
 
     protected $primaryKey = 'id_situacao';
 
+    protected $fillable = [
+        'situacoes'
+    ];
+
     public $timestamps = false;
 
     public function funcionario()

@@ -16,7 +16,7 @@ trait Response
      * @param int $statusCode
      * @return JsonResponse
     */
-    protected function sucessoResponse($data, string $message = 'Operação realizada com sucesso!', int $statusCode = 200): JsonResponse 
+    protected function sucessoResponse($data, int $statusCode = 200,  string $message = 'Operação realizada com sucesso!'): JsonResponse 
     
     {
         return response()->json([

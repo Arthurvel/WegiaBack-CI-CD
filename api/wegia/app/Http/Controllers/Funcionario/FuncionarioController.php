@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Funcionario;
 
+use App\Http\Controllers\BaseController;
 use App\Services\FuncionarioService;
 use App\Validations\Funcionario\BuscarFuncionarioValidation;
 use App\Validations\Funcionario\CriarDocumentoFuncionarioValidation;
 use App\Validations\Funcionario\CriarFuncionarioValidation;
+use App\Validations\Pessoa\AtualizarPessoaValidation;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -153,146 +155,52 @@ class FuncionarioController extends BaseController
     }
 
     /**
-     * @OA\Post(
-     *     path="/funcionario/{id_funcionario}/documento",
-     *     summary="Adicionar um documento para um funcionário",
+     * @OA\Put(
+     *     path="/funcionario/{id_funcionario}",
+     *     summary="Atualizar um funcionario",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id_funcionario",
      *         in="path",
-     *         description="ID do funcionário",
+     *         description="ID do Funcionario",
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         description="Dados do documento a ser enviado",
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 @OA\Property(property="arquivo", type="string", format="binary", description="Arquivo a ser enviado (PDF, JPG, PNG)"),
-     *                 @OA\Property(property="id_docfuncional", type="integer", nullable=true, description="ID do documento funcional")
-     *             )
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id_cargo", type="integer", description="ID do cargo"),
+     *             @OA\Property(property="id_situacao", type="integer", description="ID da situação"),
+     *             @OA\Property(property="data_admissao", type="string", format="date", description="Data de admissão"),
+     *             @OA\Property(property="ctps", type="string", maxLength=150, description="Carteira de Trabalho"),
+     *             @OA\Property(property="pis", type="string", maxLength=140, description="Número do PIS"),
+     *             @OA\Property(property="uf_ctps", type="string", maxLength=20, description="UF da CTPS"),
+     *             @OA\Property(property="numero_titulo", type="string", maxLength=150, description="Número do título de eleitor"),
+     *             @OA\Property(property="zona", type="string", maxLength=30, description="Zona eleitoral"),
+     *             @OA\Property(property="secao", type="string", maxLength=40, description="Seção eleitoral"),
+     *             @OA\Property(property="certificado_reservista_numero", type="string", maxLength=100, description="Número do certificado de reservista"),
+     *             @OA\Property(property="certificado_reservista_serie", type="string", maxLength=100, description="Série do certificado de reservista")
      *         )
      *     ),
-     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
+     *     @OA\Response(response="200", description="Funcionario atualizado realizado com sucesso", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
-     */
-    public function adicionarDocumento(Request $request, int $id_funcionario) : JsonResponse
+    */
+    public function update(Request $request, int $id_funcionario) : JsonResponse
     {
         try {
-            $request->merge(['id_funcionario' => $id_funcionario]);
-
             $this->validarRequest(
-                $request->only(['arquivo', 'id_funcionario', 'id_docfuncional']),
-                CriarDocumentoFuncionarioValidation::rules(),
-                CriarDocumentoFuncionarioValidation::messages()
+                $request->all(),
+                AtualizarPessoaValidation::rules(),
+                AtualizarPessoaValidation::messages()
             );
 
-            $resultado = $this->funcionarioService->cadastrarDocumento(
-                $request->file('arquivo'),
-                $id_funcionario,
-                $request->id_docfuncional
-            );
+            $resultado = $this->funcionarioService->atualizarFuncionario($request->all(), $id_funcionario);
 
             return $this->sucessoResponse($resultado);
             
-        } catch (Exception $e) {
-            return $this->errorResponse($e);
-        } 
-    }
-
-    /**
-     * @OA\Get(
-     *     path="/funcionario/{id_funcionario}/documento",
-     *     summary="Pegar os documentos do funcionário",
-     *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
-     *     @OA\Parameter(
-     *         name="id_funcionario",
-     *         in="path",
-     *         description="ID do funcionário",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\Parameter(
-     *         name="buscar",
-     *         in="query",
-     *         description="Tipo do arquivo ou data para busca",
-     *         required=false,
-     *         @OA\Schema(type="string")
-     *     ),
-     *     @OA\Parameter(
-     *         name="ordenacao",
-     *         in="query",
-     *         description="Campo para ordenar (tipo do arquivo, data)",
-     *         required=false,
-     *         @OA\Schema(type="string")
-     *     ),
-     *     @OA\Parameter(
-     *         name="tipoOrdenacao",
-     *         in="query",
-     *         description="Tipo de ordenação",
-     *         required=false,
-     *         @OA\Schema(type="string", default="ASC")
-     *     ),
-     *     @OA\Parameter(
-     *         name="itensPorPagina",
-     *         in="query",
-     *         description="Quantidade de funcionários por página",
-     *         required=false,
-     *         @OA\Schema(type="integer", default=10)
-     *     ),
-     *     @OA\Parameter(
-     *         name="pagina",
-     *         in="query",
-     *         description="Número da página",
-     *         required=false,
-     *         @OA\Schema(type="integer", default=1)
-     *     ),
-     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
-     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
-     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
-     * )
-    */
-    public function pegarDocumentosDeUmFuncionario(Request $request, int $id_funcionario) : JsonResponse
-    {
-        try {
-            $documentos = $this->funcionarioService->pegarDocumentos($request->query(), $id_funcionario);
-
-            return  $this->sucessoResponse($documentos);
-        } catch (Exception $e) {
-            return $this->errorResponse($e);
-        } 
-    }
-
-    /**
-     * @OA\Delete(
-     *     path="/funcionario/documento/{id_documento}",
-     *     summary="Deletar o documentos do funcionário",
-     *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
-     *     @OA\Parameter(
-     *         name="id_documento",
-     *         in="path",
-     *         description="ID do documento",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
-     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
-     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
-     * )
-    */
-    public function deletarDocumento(int $id_documento) : JsonResponse
-    {
-        try {
-            $documentoDeletado = $this->funcionarioService->deletarDocumento($id_documento);
-
-            return  $this->sucessoResponse($documentoDeletado);
         } catch (Exception $e) {
             return $this->errorResponse($e);
         } 
