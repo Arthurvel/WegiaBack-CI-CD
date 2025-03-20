@@ -3,7 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PessoaController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\FuncionarioController;
+use App\Http\Controllers\CargoController;
+use App\Http\Controllers\Funcionario\FuncionarioController;
+use App\Http\Controllers\Funcionario\FuncionarioDocumentoController;
+use App\Http\Controllers\SituacaoController;
 
 Route::group([ 'prefix' => 'auth' ], function () {
     Route::post('/login', [AuthController::class, 'login']);
@@ -19,8 +22,21 @@ Route::group([ 'prefix' => 'pessoa' ], function () {
 Route::group([ 'prefix' => 'funcionario' ], function () {
     Route::get('/', [FuncionarioController::class, 'index']);
     Route::post('/', [FuncionarioController::class, 'create']);
+    Route::put('/{id_funcionario}', [FuncionarioController::class, 'update']);
 
-    Route::get('/{id_funcionario}/documento', [FuncionarioController::class, 'pegarDocumentosDeUmFuncionario']);
-    Route::post('/{id_funcionario}/documento', [FuncionarioController::class, 'adicionarDocumento']);
-    Route::delete('/documento/{id_documento}', [FuncionarioController::class, 'deletarDocumento']);
+    Route::get('/{id_funcionario}/documento', [FuncionarioDocumentoController::class, 'pegarDocumentosDeUmFuncionario']);
+    Route::post('/{id_funcionario}/documento', [FuncionarioDocumentoController::class, 'adicionarDocumento']);
+    Route::delete('/documento/{id_documento}', [FuncionarioDocumentoController::class, 'deletarDocumento']);
+});
+
+Route::group([ 'prefix' => 'situacao'], function () {
+    Route::get('/', [SituacaoController::class, 'index']);
+    Route::post('/', [SituacaoController::class, 'create']);
+    Route::delete('/{id_situacao}', [SituacaoController::class, 'destroy']);
+});
+
+Route::group([ 'prefix' => 'cargo'], function () {
+    Route::get('/', [CargoController::class, 'index']);
+    Route::post('/', [CargoController::class, 'create']);
+    Route::delete('/{id_cargo}', [CargoController::class, 'destroy']);
 });

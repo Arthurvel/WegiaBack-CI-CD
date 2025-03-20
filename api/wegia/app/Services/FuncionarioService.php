@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\DTOs\Funcionario\AtualizarFuncionarioDTO;
 use App\DTOs\Funcionario\CadastrarDocumentoDTO;
 use App\DTOs\Funcionario\FuncionarioDocumentoDTO;
 use App\DTOs\Funcionario\FuncionarioDTO;
 use App\DTOs\PaginacaoDTO;
+use App\DTOs\Situacao\SituacaoDTO;
 use App\Models\Funcionario;
 use App\Models\FuncionarioDocs;
 use App\Repositories\PessoaRepository;
@@ -76,6 +78,17 @@ class FuncionarioService
         }
     }
 
+    public function atualizarFuncionario(array $dados, int $id_funcionario) : FuncionarioDTO
+    {
+        $funcionarioDTO = AtualizarFuncionarioDTO::fromArray($dados);
+
+        $funcionario = $this->funcionarioRepository->atualizarFuncionario($funcionarioDTO, $id_funcionario);
+
+        $funcionarioDTO = FuncionarioDTO::fromArray($funcionario->toArray());
+
+        return $funcionarioDTO;
+    }
+
     public function cadastrarDocumento(UploadedFile $arquivo, int $id_funcionario, int $id_docfuncional ) : FuncionarioDocs
     {
         $nome_arquivo = $arquivo->getClientOriginalName();
@@ -115,4 +128,5 @@ class FuncionarioService
     {
         return $this->funcionarioRepository->deletarDocumento($id_documento);
     }
+
 }

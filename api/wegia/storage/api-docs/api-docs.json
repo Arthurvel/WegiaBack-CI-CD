@@ -163,13 +163,163 @@
                 ]
             }
         },
+        "/cargo": {
+            "get": {
+                "tags": [
+                    "Cargo"
+                ],
+                "summary": "Buscar os todos os Cargos",
+                "operationId": "a3e551bd5f87eda79d8f71ed7d118dbf",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Cargo"
+                ],
+                "summary": "Cadastrar um novo cargo",
+                "operationId": "cc5b9795058bf1cd2451fe4772bd9e50",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cargo"
+                                ],
+                                "properties": {
+                                    "cargo": {
+                                        "description": "Nome do Cargo",
+                                        "type": "string",
+                                        "maxLength": 30,
+                                        "example": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cargo cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/cargo/{id_cargo}": {
+            "delete": {
+                "tags": [
+                    "Cargo"
+                ],
+                "summary": "Deletar um cargo",
+                "operationId": "973d9b7d57ea43fc8df5a5b88603cdc5",
+                "parameters": [
+                    {
+                        "name": "id_cargo",
+                        "in": "path",
+                        "description": "ID do cargo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cargo deletado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/funcionario": {
             "get": {
                 "tags": [
                     "Funcionario"
                 ],
                 "summary": "Buscar os funcionarios",
-                "operationId": "5a4c244dc4be7b52292c1f5d9e2c0c56",
+                "operationId": "7c9d862db776bba01e6236aeb0b96066",
                 "parameters": [
                     {
                         "name": "id_situacao",
@@ -266,7 +416,7 @@
                     "Funcionario"
                 ],
                 "summary": "Cadastrar um novo funcionario",
-                "operationId": "c161e4cd868332522b8f65f3a5230d1e",
+                "operationId": "2445a67eb3618df3da075fbc7a755b2d",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -428,13 +578,129 @@
                 ]
             }
         },
+        "/funcionario/{id_funcionario}": {
+            "put": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Atualizar um funcionario",
+                "operationId": "c70484ee88df00d27c7666a84979fd46",
+                "parameters": [
+                    {
+                        "name": "id_funcionario",
+                        "in": "path",
+                        "description": "ID do Funcionario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id_cargo": {
+                                        "description": "ID do cargo",
+                                        "type": "integer"
+                                    },
+                                    "id_situacao": {
+                                        "description": "ID da situação",
+                                        "type": "integer"
+                                    },
+                                    "data_admissao": {
+                                        "description": "Data de admissão",
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "ctps": {
+                                        "description": "Carteira de Trabalho",
+                                        "type": "string",
+                                        "maxLength": 150
+                                    },
+                                    "pis": {
+                                        "description": "Número do PIS",
+                                        "type": "string",
+                                        "maxLength": 140
+                                    },
+                                    "uf_ctps": {
+                                        "description": "UF da CTPS",
+                                        "type": "string",
+                                        "maxLength": 20
+                                    },
+                                    "numero_titulo": {
+                                        "description": "Número do título de eleitor",
+                                        "type": "string",
+                                        "maxLength": 150
+                                    },
+                                    "zona": {
+                                        "description": "Zona eleitoral",
+                                        "type": "string",
+                                        "maxLength": 30
+                                    },
+                                    "secao": {
+                                        "description": "Seção eleitoral",
+                                        "type": "string",
+                                        "maxLength": 40
+                                    },
+                                    "certificado_reservista_numero": {
+                                        "description": "Número do certificado de reservista",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "certificado_reservista_serie": {
+                                        "description": "Série do certificado de reservista",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Funcionario atualizado realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/funcionario/{id_funcionario}/documento": {
             "get": {
                 "tags": [
                     "Funcionario"
                 ],
                 "summary": "Pegar os documentos do funcionário",
-                "operationId": "e574097bf5bda57c4d2428afa5bcf2b0",
+                "operationId": "56127c8b9cfe812fd5cef26f04195791",
                 "parameters": [
                     {
                         "name": "id_funcionario",
@@ -531,7 +797,7 @@
                     "Funcionario"
                 ],
                 "summary": "Adicionar um documento para um funcionário",
-                "operationId": "406feb08506838444f46b82ee6dcf6f5",
+                "operationId": "1eaa2967334b1453947b4e2072ec384e",
                 "parameters": [
                     {
                         "name": "id_funcionario",
@@ -605,7 +871,7 @@
                     "Funcionario"
                 ],
                 "summary": "Deletar o documentos do funcionário",
-                "operationId": "474ad76a6a1b7f3f9f36bdac509d5d99",
+                "operationId": "d72b39862ecce6df6a94a29e08411154",
                 "parameters": [
                     {
                         "name": "id_documento",
@@ -1205,6 +1471,156 @@
                     }
                 ]
             }
+        },
+        "/situacao": {
+            "get": {
+                "tags": [
+                    "Situacao"
+                ],
+                "summary": "Buscar os todas as situacoes",
+                "operationId": "43ebff4e2054233d381486658812d405",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Situacao"
+                ],
+                "summary": "Cadastrar uma nova situacao",
+                "operationId": "588f072fcf9054e22cf897e17c16d69b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "situacao"
+                                ],
+                                "properties": {
+                                    "situacao": {
+                                        "description": "Nome da Situacao",
+                                        "type": "string",
+                                        "maxLength": 30,
+                                        "example": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Sitacao cadastrada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/situacao/{id_situacao}": {
+            "delete": {
+                "tags": [
+                    "Situacao"
+                ],
+                "summary": "Deletar uma situacao",
+                "operationId": "ed42a9820a5cf7b59083baa6e292de89",
+                "parameters": [
+                    {
+                        "name": "id_situacao",
+                        "in": "path",
+                        "description": "ID da situacao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sitacao deletada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -1222,12 +1638,20 @@
             "description": "Operações relacionadas a autenticação"
         },
         {
+            "name": "Cargo",
+            "description": "Operações relacionadas ao Cargo do Funcionario"
+        },
+        {
             "name": "Funcionario",
             "description": "Operações relacionadas aos funcionarios"
         },
         {
             "name": "Pessoa",
             "description": "Operações relacionadas as pessoas"
+        },
+        {
+            "name": "Situacao",
+            "description": "Operações relacionadas a Situacao"
         }
     ]
 }

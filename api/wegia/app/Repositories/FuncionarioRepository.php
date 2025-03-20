@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\DTOs\Funcionario\AtualizarFuncionarioDTO;
 use App\DTOs\Funcionario\CadastrarDocumentoDTO;
 use App\DTOs\Funcionario\FuncionarioDTO;
 use App\Models\Funcionario;
@@ -43,9 +44,24 @@ class FuncionarioRepository
             ->paginate($itensPorPagina, ['*'], 'page', $pagina);
     }
 
+    public function pegarFuncionarioPorId(int $id) : Funcionario
+    {
+        return Funcionario::findOrFail($id);
+    }
+
     public function cadastrarFuncionario(FuncionarioDTO $dados) : Funcionario
     {
         return Funcionario::create($dados->toArray());
+    }
+
+    public function atualizarFuncionario(AtualizarFuncionarioDTO $dados, int $id_funcionario) : Funcionario
+    {
+        $funcionario = $this->pegarFuncionarioPorId($id_funcionario);
+
+        $funcionario->update($dados->toArray());
+        $funcionario->save();
+
+        return $funcionario;
     }
 
     public function cadastrarDocumento(CadastrarDocumentoDTO $dados) : FuncionarioDocs
