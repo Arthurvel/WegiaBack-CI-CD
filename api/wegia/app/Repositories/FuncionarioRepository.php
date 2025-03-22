@@ -4,11 +4,18 @@ namespace App\Repositories;
 
 use App\DTOs\Funcionario\AtualizarFuncionarioDTO;
 use App\DTOs\Funcionario\CadastrarDocumentoDTO;
+use App\DTOs\Funcionario\CadastrarQuadroHorarioDTO;
 use App\DTOs\Funcionario\FuncionarioDTO;
+use App\DTOs\Funcionario\CadastrarRemuneracaoDTO;
 use App\Models\Funcionario\Funcionario;
 use App\Models\Funcionario\FuncionarioDocs;
 use App\Models\Funcionario\FuncionarioListaInfo;
 use App\Models\Funcionario\FuncionarioOutrasInfo;
+use App\Models\Funcionario\FuncionarioQuadroHorario;
+use App\Models\Funcionario\FuncionarioQuadroHorarioEscala;
+use App\Models\Funcionario\FuncionarioQuadroHorarioTipo;
+use App\Models\Funcionario\FuncionarioRemuneracao;
+use App\Models\Funcionario\FuncionarioRemuneracaoTipo;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -172,5 +179,82 @@ class FuncionarioRepository
     public function cadastrarListaInfo(string $descricao) : FuncionarioListaInfo
     {
         return FuncionarioListaInfo::create(['descricao' => $descricao]);
+    }
+
+    public function pegarRemuneracaoTipo() : Collection
+    {
+        return FuncionarioRemuneracaoTipo::all();
+    }
+
+    public function cadastrarRemuneracaoTipo(string $descricao) : FuncionarioRemuneracaoTipo
+    {
+        return FuncionarioRemuneracaoTipo::create(['descricao' => $descricao]);
+    }
+
+    public function buscarRemuneracaoPorFuncionario(int $id_funcionario, array $parametros = []) : LengthAwarePaginator
+    {
+        $buscar         = $parametros['buscar'] ?? null;
+        $ordenacao      = $parametros['ordenacao'] ?? null;
+        $tipoOrdenacao  = $parametros['tipoOrdenacao'] ?? 'ASC';
+        $itensPorPagina = $parametros['itensPorPagina'] ?? 10;
+        $pagina       = $parametros['pagina'] ?? 1;
+
+        return FuncionarioRemuneracao::with(['remuneracaoTipo'])
+            ->where('funcionario_id_funcionario', $id_funcionario)
+            ->when(!is_null($buscar), function ($q) use ($buscar) {
+                return $q->whereHas('remuneracaoTipo', function ($q2) use ($buscar) {
+                    $q2->where('descricao', 'like', "%{$buscar}%");
+                })
+                ->orWhere('valor', 'like', "%{$buscar}%")
+                ->orWhere('inicio', 'like', "%{$buscar}%")
+                ->orWhere('fim', 'like', "%{$buscar}%");
+            })
+            ->when(!is_null($ordenacao), function ($q) use ($ordenacao, $tipoOrdenacao) {
+
+                if($ordenacao == 'descricao') {
+                    return $q->join(
+                        'funcionario_remuneracao_tipo', 
+                        'funcionario_remuneracao.funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo', 
+                        '=', 
+                        'funcionario_remuneracao_tipo.idfuncionario_remuneracao_tipo'
+                    )
+                        ->orderBy("funcionario_remuneracao_tipo.{$ordenacao}", $tipoOrdenacao);
+                } else {
+                    return $q->orderBy($ordenacao, $tipoOrdenacao);
+                }
+            })
+            ->paginate($itensPorPagina, ['*'], 'page', $pagina);
+    }
+
+    public function cadastrarRemuneracao(CadastrarRemuneracaoDTO $remuneracao) : FuncionarioRemuneracao
+    {
+        return FuncionarioRemuneracao::create($remuneracao->toArray());
+    }
+
+    public function deletarRemuneracao(int $id_remuneracao) : bool
+    {
+        return FuncionarioRemuneracao::findOrFail($id_remuneracao)->delete();
+    }
+
+    public function buscarQuadroHorarioPorFuncionario(int $id_funcionario) : FuncionarioQuadroHorario
+    {
+        return FuncionarioQuadroHorario::with(['quadroHorarioTipo', 'quadroHorarioEscala'])
+            ->where('id_funcionario', $id_funcionario)
+            ->first();
+    }
+
+    public function cadastrarQuadroHorario(CadastrarQuadroHorarioDTO $dados) : FuncionarioQuadroHorario
+    {
+        return FuncionarioQuadroHorario::create($dados->toArray());
+    }
+
+    public function buscarEscalaQuadroHorario() : Collection
+    {
+        return FuncionarioQuadroHorarioEscala::all();
+    }
+
+    public function buscarTipoQuadroHorario() : Collection
+    {
+        return FuncionarioQuadroHorarioTipo::all();
     }
 }

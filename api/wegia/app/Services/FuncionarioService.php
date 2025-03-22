@@ -4,14 +4,21 @@ namespace App\Services;
 
 use App\DTOs\Funcionario\AtualizarFuncionarioDTO;
 use App\DTOs\Funcionario\CadastrarDocumentoDTO;
+use App\DTOs\Funcionario\CadastrarQuadroHorarioDTO;
+use App\DTOs\Funcionario\CadastrarRemuneracaoDTO;
 use App\DTOs\Funcionario\FuncionarioDocumentoDTO;
 use App\DTOs\Funcionario\FuncionarioDTO;
 use App\DTOs\Funcionario\FuncionarioOutrasInfoDTO;
+use App\DTOs\Funcionario\FuncionarioQuadroHorarioDTO;
+use App\DTOs\Funcionario\FuncionarioRemuneracaoDTO;
 use App\DTOs\PaginacaoDTO;
 use App\Models\Funcionario\Funcionario;
 use App\Models\Funcionario\FuncionarioDocs;
 use App\Models\Funcionario\FuncionarioListaInfo;
 use App\Models\Funcionario\FuncionarioOutrasInfo;
+use App\Models\Funcionario\FuncionarioQuadroHorario;
+use App\Models\Funcionario\FuncionarioRemuneracao;
+use App\Models\Funcionario\FuncionarioRemuneracaoTipo;
 use App\Repositories\PessoaRepository;
 use App\Repositories\FuncionarioRepository;
 use Illuminate\Support\Facades\DB;
@@ -167,5 +174,68 @@ class FuncionarioService
     public function cadastrarListaInfo(string $descricao) : FuncionarioListaInfo
     {
         return $this->funcionarioRepository->cadastrarListaInfo($descricao);
+    }
+
+    public function pegarRemuneracaoTipo() : Collection
+    {
+        return $this->funcionarioRepository->pegarRemuneracaoTipo();
+    }
+
+    public function cadastrarRemuneracaoTipo(string $descricao) : FuncionarioRemuneracaoTipo
+    {
+        return $this->funcionarioRepository->cadastrarRemuneracaoTipo($descricao);
+    }
+
+    public function buscarRemuneracaoPorFuncionario(int $id_funcionario, $parametros = []) : PaginacaoDTO
+    {
+        $remuneracoes = $this->funcionarioRepository->buscarRemuneracaoPorFuncionario($id_funcionario,$parametros);
+
+        $itens = collect($remuneracoes->items())->map(function ($remuneracao) {
+            return FuncionarioRemuneracaoDTO::fromArray($remuneracao->toArray())->toArray();
+        })->toArray();
+
+        return new PaginacaoDTO(
+            $itens,
+            $remuneracoes->currentPage(),
+            $remuneracoes->lastPage(),
+            $remuneracoes->total(),
+            $remuneracoes->perPage()
+        );
+    }
+
+    public function cadastrarRemuneracao(array $dados) : FuncionarioRemuneracao
+    {
+        $remuneracao = CadastrarRemuneracaoDTO::fromArray($dados);
+
+        return $this->funcionarioRepository->cadastrarRemuneracao($remuneracao);
+    }
+
+    public function deletarRemuneracao(int $id_remuneracao) : bool
+    {
+        return $this->funcionarioRepository->deletarRemuneracao($id_remuneracao);
+    }
+
+    public function cadastrarQuadroHorario(array $dados) : FuncionarioQuadroHorario
+    {
+        $quadroHorario = CadastrarQuadroHorarioDTO::fromArray($dados);
+
+        return $this->funcionarioRepository->cadastrarQuadroHorario($quadroHorario);
+    }
+
+    public function buscarQuadroHorarioPorFuncionario(int $id_funcionario) : FuncionarioQuadroHorarioDTO
+    {
+        $quadroHorario = $this->funcionarioRepository->buscarQuadroHorarioPorFuncionario($id_funcionario);
+
+        return FuncionarioQuadroHorarioDTO::fromArray($quadroHorario->toArray());
+    }
+
+    public function buscarEscalaQuadroHorario() : Collection
+    {
+        return $this->funcionarioRepository->buscarEscalaQuadroHorario();
+    }
+
+    public function buscarTipoQuadroHorario() : Collection
+    {
+        return $this->funcionarioRepository->buscarTipoQuadroHorario();
     }
 }
