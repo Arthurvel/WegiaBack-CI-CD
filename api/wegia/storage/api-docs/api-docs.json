@@ -1244,6 +1244,593 @@
                 ]
             }
         },
+        "/funcionario/{id_funcionario}/quadro-horario": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar o quadro horario",
+                "operationId": "e3183e4cd66f1c0f409d72fdce262563",
+                "parameters": [
+                    {
+                        "name": "id_funcionario",
+                        "in": "path",
+                        "description": "ID do Funcionario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cadastro realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/quadro-horario": {
+            "post": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Cadastrar o quadro horario",
+                "operationId": "6f6478a9cf6b6d2b996475d202d3bccf",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_funcionario",
+                                    "escala",
+                                    "tipo"
+                                ],
+                                "properties": {
+                                    "id_funcionario": {
+                                        "description": "ID do funcionário",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "escala": {
+                                        "description": "ID da escala",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "tipo": {
+                                        "description": "ID do tipo de quadro horário",
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "carga_horaria": {
+                                        "description": "Carga horária do funcionário",
+                                        "type": "string",
+                                        "maxLength": 200,
+                                        "example": "08:00",
+                                        "nullable": true
+                                    },
+                                    "entrada1": {
+                                        "description": "Primeira entrada do funcionário",
+                                        "type": "string",
+                                        "maxLength": 200,
+                                        "example": "09:00",
+                                        "nullable": true
+                                    },
+                                    "saida1": {
+                                        "description": "Primeira saída do funcionário",
+                                        "type": "string",
+                                        "maxLength": 200,
+                                        "example": "12:00",
+                                        "nullable": true
+                                    },
+                                    "entrada2": {
+                                        "description": "Segunda entrada do funcionário",
+                                        "type": "string",
+                                        "maxLength": 200,
+                                        "example": "13:00",
+                                        "nullable": true
+                                    },
+                                    "saida2": {
+                                        "description": "Segunda saída do funcionário",
+                                        "type": "string",
+                                        "maxLength": 200,
+                                        "example": "17:00",
+                                        "nullable": true
+                                    },
+                                    "total": {
+                                        "description": "Total de horas trabalhadas",
+                                        "type": "string",
+                                        "maxLength": 200,
+                                        "example": "08:00",
+                                        "nullable": true
+                                    },
+                                    "dias_trabalhados": {
+                                        "description": "Dias trabalhados pelo funcionário",
+                                        "type": "string",
+                                        "maxLength": 200,
+                                        "example": "5",
+                                        "nullable": true
+                                    },
+                                    "folga": {
+                                        "description": "Dias de folga do funcionário",
+                                        "type": "string",
+                                        "maxLength": 200,
+                                        "example": "2",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cadastro realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/quadro-horario/escala": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar escala de quadro horário",
+                "operationId": "071aabbb466d0fde116000593dba6860",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/quadro-horario/tipo": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar is tipos de quadro horário",
+                "operationId": "73c5426c29ef240e7a54ef5a931c6f81",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/{id_funcionario}/remuneracao": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar as remuneracoes do funcionario",
+                "operationId": "1dd2db935d4d0bd984ace8a541a56439",
+                "parameters": [
+                    {
+                        "name": "id_funcionario",
+                        "in": "path",
+                        "description": "Id do funcionario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Nome, CPF ou Cargo do funcionário para busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo para ordenar (nome, cpf, cargo)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "ASC"
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de funcionários por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/remuneracao": {
+            "post": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Cadastra uma nova remuneracao",
+                "operationId": "00c30f08f1858c17faab175da88d95ae",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "funcionario_id_funcionario",
+                                    "funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo",
+                                    "valor"
+                                ],
+                                "properties": {
+                                    "funcionario_id_funcionario": {
+                                        "description": "id do funcionario",
+                                        "type": "integer"
+                                    },
+                                    "funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo": {
+                                        "description": "id do tipo de remuneracao",
+                                        "type": "integer"
+                                    },
+                                    "valor": {
+                                        "description": "valor da remuneracao",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "inicio": {
+                                        "description": "inicio da remuneracao",
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "fim": {
+                                        "description": "fim da remuneracao",
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/remuneracao/{id_remuneracao}": {
+            "delete": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Deletar uma remuneracao",
+                "operationId": "6afc248cacdfb0de4102704d98e03a92",
+                "parameters": [
+                    {
+                        "name": "id_remuneracao",
+                        "in": "path",
+                        "description": "ID da remuneracao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/remuneracao/tipo": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Busca os tipos de remuneração",
+                "operationId": "c2c4b93161462ee867a7d61dd9c9c843",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Cadastra um novo tipo de remuneracao",
+                "operationId": "5b0d4efe7c9d28a209312efc5ac990bb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "descricao"
+                                ],
+                                "properties": {
+                                    "descricao": {
+                                        "description": "Descricao do tipo",
+                                        "type": "string",
+                                        "maxLength": 255
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/pessoa": {
             "post": {
                 "tags": [

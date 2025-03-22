@@ -7,6 +7,8 @@ use App\Http\Controllers\CargoController;
 use App\Http\Controllers\Funcionario\FuncionarioController;
 use App\Http\Controllers\Funcionario\FuncionarioDocumentoController;
 use App\Http\Controllers\Funcionario\FuncionarioInfoController;
+use App\Http\Controllers\Funcionario\FuncionarioQuadroHorarioController;
+use App\Http\Controllers\Funcionario\FuncionarioRemuneracaoController;
 use App\Http\Controllers\SituacaoController;
 
 Route::group([ 'prefix' => 'auth' ], function () {
@@ -36,6 +38,26 @@ Route::group([ 'prefix' => 'funcionario' ], function () {
     Route::group([ 'prefix' => 'lista-info' ], function () {
         Route::get('/', [FuncionarioInfoController::class, 'pegarListaInfo']);
         Route::post('/', [FuncionarioInfoController::class, 'cadastrarListaInfo']);
+    });
+
+    Route::get('/{id_funcionario}/remuneracao', [FuncionarioRemuneracaoController::class, 'buscarRemuneracaoPorFuncionario']);
+
+    Route::group([ 'prefix' => 'remuneracao' ], function () {
+        Route::post('/', [FuncionarioRemuneracaoController::class, 'create']);
+        Route::delete('/{id_remuneracao}', [FuncionarioRemuneracaoController::class, 'destroy']);
+
+        Route::group([ 'prefix' => 'tipo' ], function () {
+            Route::get('/', [FuncionarioRemuneracaoController::class, 'pegarRemuneracaoTipo']);
+            Route::post('/', [FuncionarioRemuneracaoController::class, 'cadastrarRemuneracaoTipo']);
+        });
+    });
+
+    Route::get('/{id_funcionario}/quadro-horario', [FuncionarioQuadroHorarioController::class, 'buscarQuadroHorarioPorFuncionario']);
+    Route::group([ 'prefix' => 'quadro-horario' ], function () {
+        Route::post('/', [FuncionarioQuadroHorarioController::class, 'create']);
+
+        Route::get('/escala', [FuncionarioQuadroHorarioController::class, 'buscarEscalaQuadroHorario']);
+        Route::get('/tipo', [FuncionarioQuadroHorarioController::class, 'buscarTipoQuadroHorario']);
     });
 });
 
