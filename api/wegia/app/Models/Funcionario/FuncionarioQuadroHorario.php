@@ -30,11 +30,11 @@ class FuncionarioQuadroHorario extends BaseModel
 
     public function quadroHorarioTipo()
     {
-        return $this->hasOne(FuncionarioQuadroHorarioTipo::class, 'id_tipo');
+        return $this->hasOne(FuncionarioQuadroHorarioTipo::class, 'id_tipo', 'tipo');
     }
 
     public function quadroHorarioEscala()
     {
-        return $this->hasOne(FuncionarioQuadroHorarioEscala::class, 'id_escala');
+        return $this->hasOne(FuncionarioQuadroHorarioEscala::class, 'id_escala', 'escala');
     }
 }

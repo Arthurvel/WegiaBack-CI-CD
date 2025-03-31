@@ -12,6 +12,15 @@ class PessoaRepository
     {
         return Pessoa::create($pessoa);
     }
+    
+    public function cadastrarOuAtualizarPessoa(array $dados): Pessoa
+    {
+        return Pessoa::updateOrCreate(
+            ['cpf' => $dados['cpf']],
+            $dados
+        );
+    
+    }
 
     public function buscarPessoaPorCpf(string $cpf) : Pessoa
     {

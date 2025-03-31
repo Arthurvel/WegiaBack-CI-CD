@@ -77,7 +77,7 @@ class AuthController extends BaseController
                 'senha' => 'required|string',
             ]);
 
-            $pessoa = $this->pessoaService->buscarPessoaPorCpf($request->cpf);
+            $pessoa = $this->pessoaService->buscarPessoaPorCpfSemFormatacao($request->cpf);
 
             if ($pessoa && $pessoa->validarSenha($request->senha)) {    
             

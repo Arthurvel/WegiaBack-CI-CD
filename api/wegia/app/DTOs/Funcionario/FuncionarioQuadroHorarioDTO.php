@@ -6,22 +6,22 @@ class FuncionarioQuadroHorarioDTO
 {
     public int $id_quadro_horario;
     public int $id_funcionario;
-    public string $carga_horaria;
-    public string $entrada1;
-    public string $saida1;
-    public string $entrada2;
-    public string $saida2;
-    public string $total;
-    public string $dias_trabalhados;
-    public string $folga;
-    public array $escala;
-    public array $tipo;
+    public ?string $carga_horaria;
+    public ?string $entrada1;
+    public ?string $saida1;
+    public ?string $entrada2;
+    public ?string $saida2;
+    public ?string $total;
+    public ?string $dias_trabalhados;
+    public ?string $folga;
+    public ?array $escala;
+    public ?array $tipo;
 
     public function __construct(
         int $id_quadro_horario,
         int $id_funcionario,
-        array $escala,
-        array $tipo,
+        ?array $tipo,
+        ?array $escala,
         string $carga_horaria,
         string $entrada1,
         string $saida1,
@@ -33,8 +33,8 @@ class FuncionarioQuadroHorarioDTO
     ) {
         $this->id_quadro_horario = $id_quadro_horario;
         $this->id_funcionario    = $id_funcionario;
-        $this->escala            = $escala;
         $this->tipo              = $tipo;
+        $this->escala            = $escala;
         $this->carga_horaria     = $carga_horaria;
         $this->entrada1          = $entrada1;
         $this->saida1            = $saida1;
@@ -50,8 +50,8 @@ class FuncionarioQuadroHorarioDTO
         return new self(
             $dados['id_quadro_horario'],
             $dados['id_funcionario'],
-            $dados['quadro_horario_tipo'],
-            $dados['quadro_horario_escala'],
+            $dados['quadro_horario_tipo'] ?? null,
+            $dados['quadro_horario_escala'] ?? null,
             $dados['carga_horaria'] ?? null,
             $dados['entrada1'] ?? null,
             $dados['saida1'] ?? null,
