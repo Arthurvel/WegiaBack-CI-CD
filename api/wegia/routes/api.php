@@ -5,8 +5,11 @@ use App\Http\Controllers\PessoaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\Funcionario\FuncionarioController;
+use App\Http\Controllers\Funcionario\FuncionarioDependenteController;
 use App\Http\Controllers\Funcionario\FuncionarioDocumentoController;
 use App\Http\Controllers\Funcionario\FuncionarioInfoController;
+use App\Http\Controllers\Funcionario\FuncionarioQuadroHorarioController;
+use App\Http\Controllers\Funcionario\FuncionarioRemuneracaoController;
 use App\Http\Controllers\SituacaoController;
 
 Route::group([ 'prefix' => 'auth' ], function () {
@@ -16,6 +19,7 @@ Route::group([ 'prefix' => 'auth' ], function () {
 
 Route::group([ 'prefix' => 'pessoa' ], function () {
     Route::get('/logada', [PessoaController::class, 'retornarPessoaLogada']);
+    Route::get('/{cpf}', [PessoaController::class, 'buscarPessoaPorCpf']);
     Route::post('/', [PessoaController::class, 'create']);
     Route::put('/{id_pessoa}', [PessoaController::class, 'update']);
 });
@@ -23,11 +27,13 @@ Route::group([ 'prefix' => 'pessoa' ], function () {
 Route::group([ 'prefix' => 'funcionario' ], function () {
     Route::get('/', [FuncionarioController::class, 'index']);
     Route::post('/', [FuncionarioController::class, 'create']);
-    Route::put('/{id_funcionario}', [FuncionarioController::class, 'update']);
 
     Route::get('/{id_funcionario}/documento', [FuncionarioDocumentoController::class, 'pegarDocumentosDeUmFuncionario']);
     Route::post('/{id_funcionario}/documento', [FuncionarioDocumentoController::class, 'adicionarDocumento']);
     Route::delete('/documento/{id_documento}', [FuncionarioDocumentoController::class, 'deletarDocumento']);
+
+    Route::get('/documento/tipo', [FuncionarioDocumentoController::class, 'buscarDocumentoTipo']);
+    Route::post('/documento/tipo', [FuncionarioDocumentoController::class, 'cadastrarDocumentoTipo']);
 
     Route::get('/{id_funcionario}/outra-info', [FuncionarioInfoController::class, 'buscarInfosPorIdFuncionario']);
     Route::post('/{id_funcionario}/outra-info/{id_funcionario_lista_info}', [FuncionarioInfoController::class, 'create']);
@@ -37,6 +43,39 @@ Route::group([ 'prefix' => 'funcionario' ], function () {
         Route::get('/', [FuncionarioInfoController::class, 'pegarListaInfo']);
         Route::post('/', [FuncionarioInfoController::class, 'cadastrarListaInfo']);
     });
+
+    Route::get('/{id_funcionario}/remuneracao', [FuncionarioRemuneracaoController::class, 'buscarRemuneracaoPorFuncionario']);
+
+    Route::group([ 'prefix' => 'remuneracao' ], function () {
+        Route::post('/', [FuncionarioRemuneracaoController::class, 'create']);
+        Route::delete('/{id_remuneracao}', [FuncionarioRemuneracaoController::class, 'destroy']);
+
+        Route::group([ 'prefix' => 'tipo' ], function () {
+            Route::get('/', [FuncionarioRemuneracaoController::class, 'pegarRemuneracaoTipo']);
+            Route::post('/', [FuncionarioRemuneracaoController::class, 'cadastrarRemuneracaoTipo']);
+        });
+    });
+
+    Route::get('/{id_funcionario}/quadro-horario', [FuncionarioQuadroHorarioController::class, 'buscarQuadroHorarioPorFuncionario']);
+    Route::post('/{id_funcionario}/quadro-horario', [FuncionarioQuadroHorarioController::class, 'create']);
+
+    Route::group([ 'prefix' => 'quadro-horario' ], function () {
+
+        Route::get('/escala', [FuncionarioQuadroHorarioController::class, 'buscarEscalaQuadroHorario']);
+        Route::get('/tipo', [FuncionarioQuadroHorarioController::class, 'buscarTipoQuadroHorario']);
+    });
+
+    Route::get('/{id_funcionario}/dependente', [FuncionarioDependenteController::class, 'index']);
+    Route::group([ 'prefix' => 'dependente' ], function () {
+        Route::post('/', [FuncionarioDependenteController::class, 'create']);
+        Route::delete('/{id_dependente}', [FuncionarioDependenteController::class, 'destroy']);
+
+        Route::get('/tipo', [FuncionarioDependenteController::class, 'buscarDependenteParentesco']);
+        Route::post('/tipo', [FuncionarioDependenteController::class, 'cadastrarDependenteParentesco']);
+    });
+
+    Route::get('/{id_funcionario}', [FuncionarioController::class, 'findById']);
+    Route::put('/{id_funcionario}', [FuncionarioController::class, 'update']);
 });
 
 Route::group([ 'prefix' => 'situacao'], function () {

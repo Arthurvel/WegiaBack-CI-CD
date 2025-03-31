@@ -3,12 +3,24 @@
 namespace App\Repositories;
 
 use App\DTOs\Funcionario\AtualizarFuncionarioDTO;
+use App\DTOs\Funcionario\CadastrarDependenteFuncionarioDTO;
 use App\DTOs\Funcionario\CadastrarDocumentoDTO;
-use App\DTOs\Funcionario\FuncionarioDTO;
+use App\DTOs\Funcionario\CadastrarDocumentoTipoDTO;
+use App\DTOs\Funcionario\CadastrarFuncionarioDTO;
+use App\DTOs\Funcionario\CadastrarQuadroHorarioDTO;
+use App\DTOs\Funcionario\CadastrarRemuneracaoDTO;
 use App\Models\Funcionario\Funcionario;
+use App\Models\Funcionario\FuncionarioDependente;
+use App\Models\Funcionario\FuncionarioDependenteParentesco;
+use App\Models\Funcionario\FuncionarioDocFuncional;
 use App\Models\Funcionario\FuncionarioDocs;
 use App\Models\Funcionario\FuncionarioListaInfo;
 use App\Models\Funcionario\FuncionarioOutrasInfo;
+use App\Models\Funcionario\FuncionarioQuadroHorario;
+use App\Models\Funcionario\FuncionarioQuadroHorarioEscala;
+use App\Models\Funcionario\FuncionarioQuadroHorarioTipo;
+use App\Models\Funcionario\FuncionarioRemuneracao;
+use App\Models\Funcionario\FuncionarioRemuneracaoTipo;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -47,12 +59,13 @@ class FuncionarioRepository
             ->paginate($itensPorPagina, ['*'], 'page', $pagina);
     }
 
-    public function pegarFuncionarioPorId(int $id) : Funcionario
+    public function pegarFuncionarioPorId(int $id, $with = []) : Funcionario
     {
-        return Funcionario::findOrFail($id);
+        return Funcionario::with($with)
+            ->findOrFail($id);
     }
 
-    public function cadastrarFuncionario(FuncionarioDTO $dados) : Funcionario
+    public function cadastrarFuncionario(CadastrarFuncionarioDTO $dados) : Funcionario
     {
         return Funcionario::create($dados->toArray());
     }
@@ -74,11 +87,11 @@ class FuncionarioRepository
     
     public function pegarDocumentos(array $parametros = [], $id_funcionario = null) : LengthAwarePaginator
     {
-        $buscar         = $parametros['buscar'] ?? null;
-        $ordenacao      = $parametros['ordenacao'] ?? null;
-        $tipoOrdenacao  = $parametros['tipoOrdenacao'] ?? 'ASC';
-        $itensPorPagina = $parametros['itensPorPagina'] ?? 10;
-        $pagina         = $parametros['pagina'] ?? 1;
+        $buscar         = !empty($parametros['buscar']) ? $parametros['buscar'] : null;
+        $ordenacao      = !empty($parametros['ordenacao'])? $parametros['ordenacao'] : null;
+        $tipoOrdenacao  = !empty($parametros['tipoOrdenacao'])? $parametros['tipoOrdenacao'] : 'ASC';
+        $itensPorPagina = !empty($parametros['itensPorPagina'])? $parametros['itensPorPagina'] : 10;
+        $pagina         = !empty($parametros['pagina'])? $parametros['pagina'] : 1;
 
         return FuncionarioDocs::with(['funcionarioDocFuncional'])
             ->when(!is_null($id_funcionario), function ($q) use ($id_funcionario) {
@@ -115,6 +128,16 @@ class FuncionarioRepository
     public function deletarDocumento(int $id_documento) : bool
     {
         return $this->pegarDocumentoPorId($id_documento)->delete();
+    }
+
+    public function buscarDocumentoTipo() : Collection
+    {
+        return FuncionarioDocFuncional::get();
+    }
+
+    public function cadastrarDocumentoTipo(CadastrarDocumentoTipoDTO $documento)
+    {
+        return FuncionarioDocFuncional::create($documento->toArray());
     }
 
     public function buscarInfosPorIdFuncionario(int $id_funcionario, array $parametros = []) : LengthAwarePaginator
@@ -172,5 +195,141 @@ class FuncionarioRepository
     public function cadastrarListaInfo(string $descricao) : FuncionarioListaInfo
     {
         return FuncionarioListaInfo::create(['descricao' => $descricao]);
+    }
+
+    public function pegarRemuneracaoTipo() : Collection
+    {
+        return FuncionarioRemuneracaoTipo::all();
+    }
+
+    public function cadastrarRemuneracaoTipo(string $descricao) : FuncionarioRemuneracaoTipo
+    {
+        return FuncionarioRemuneracaoTipo::create(['descricao' => $descricao]);
+    }
+
+    public function buscarRemuneracaoPorFuncionario(int $id_funcionario, array $parametros = []) : LengthAwarePaginator
+    {
+        $buscar         = $parametros['buscar'] ?? null;
+        $ordenacao      = $parametros['ordenacao'] ?? null;
+        $tipoOrdenacao  = $parametros['tipoOrdenacao'] ?? 'ASC';
+        $itensPorPagina = $parametros['itensPorPagina'] ?? 10;
+        $pagina       = $parametros['pagina'] ?? 1;
+
+        return FuncionarioRemuneracao::with(['remuneracaoTipo'])
+            ->where('funcionario_id_funcionario', $id_funcionario)
+            ->when(!is_null($buscar), function ($q) use ($buscar) {
+                return $q->whereHas('remuneracaoTipo', function ($q2) use ($buscar) {
+                    $q2->where('descricao', 'like', "%{$buscar}%");
+                })
+                ->orWhere('valor', 'like', "%{$buscar}%")
+                ->orWhere('inicio', 'like', "%{$buscar}%")
+                ->orWhere('fim', 'like', "%{$buscar}%");
+            })
+            ->when(!is_null($ordenacao), function ($q) use ($ordenacao, $tipoOrdenacao) {
+
+                if($ordenacao == 'descricao') {
+                    return $q->join(
+                        'funcionario_remuneracao_tipo', 
+                        'funcionario_remuneracao.funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo', 
+                        '=', 
+                        'funcionario_remuneracao_tipo.idfuncionario_remuneracao_tipo'
+                    )
+                        ->orderBy("funcionario_remuneracao_tipo.{$ordenacao}", $tipoOrdenacao);
+                } else {
+                    return $q->orderBy($ordenacao, $tipoOrdenacao);
+                }
+            })
+            ->paginate($itensPorPagina, ['*'], 'page', $pagina);
+    }
+
+    public function cadastrarRemuneracao(CadastrarRemuneracaoDTO $remuneracao) : FuncionarioRemuneracao
+    {
+        return FuncionarioRemuneracao::create($remuneracao->toArray());
+    }
+
+    public function deletarRemuneracao(int $id_remuneracao) : bool
+    {
+        return FuncionarioRemuneracao::findOrFail($id_remuneracao)->delete();
+    }
+
+    public function buscarQuadroHorarioPorFuncionario(int $id_funcionario) : FuncionarioQuadroHorario
+    {
+        return FuncionarioQuadroHorario::with(['quadroHorarioTipo', 'quadroHorarioEscala'])
+            ->where('id_funcionario', $id_funcionario)
+            ->first();
+    }
+
+    public function cadastrarQuadroHorario(CadastrarQuadroHorarioDTO $dados) : FuncionarioQuadroHorario
+    {
+        return FuncionarioQuadroHorario::create($dados->toArray());
+    }
+
+    public function buscarEscalaQuadroHorario() : Collection
+    {
+        return FuncionarioQuadroHorarioEscala::all();
+    }
+
+    public function buscarTipoQuadroHorario() : Collection
+    {
+        return FuncionarioQuadroHorarioTipo::all();
+    }
+
+    public function buscarDependentesPorFuncionario(array $parametros, int $id_funcionario, array $with = []) : LengthAwarePaginator
+    {
+        $buscar         = $parametros['buscar'] ?? null;
+        $ordenacao      = $parametros['ordenacao'] ?? null;
+        $tipoOrdenacao  = $parametros['tipoOrdenacao'] ?? 'ASC';
+        $itensPorPagina = $parametros['itensPorPagina'] ?? 10;
+        $pagina         = $parametros['pagina'] ?? 1;
+
+        return FuncionarioDependente::with($with)
+            ->where('id_funcionario', $id_funcionario)
+            ->when(!is_null($buscar), function ($q) use ($buscar, $id_funcionario) {
+                return $q->where(function ($query) use ($buscar, $id_funcionario) {
+
+                    $query->where('id_funcionario', $id_funcionario) 
+                        ->where(function ($subQuery) use ($buscar) {
+                            $subQuery->whereHas('pessoa', function ($q2) use ($buscar) {
+                                $q2->where('nome', 'like', "%{$buscar}%")
+                                    ->orWhere('cpf', 'like', "%{$buscar}%");
+                            })
+                            ->orWhereHas('parentesco', function ($q3) use ($buscar) {
+                                $q3->where('descricao', 'like', "%{$buscar}%");
+                            });
+                        });
+                        
+                });
+            })
+            ->when(!is_null($ordenacao), function ($q) use ($ordenacao, $tipoOrdenacao) {
+
+                if($ordenacao == 'nome' || $ordenacao == 'cpf') {
+                    return $q->join('pessoa', 'funcionario_dependentes.id_pessoa', '=', 'pessoa.id_pessoa')
+                        ->orderBy("pessoa.{$ordenacao}", $tipoOrdenacao);
+                } else if($ordenacao == 'parentesco') {
+                    return $q->join('funcionario_dependente_parentesco', 'funcionario_dependentes.id_parentesco', '=', 'funcionario_dependente_parentesco.id_parentesco')
+                    ->orderBy("funcionario_dependente_parentesco.id_parentesco", $tipoOrdenacao);
+                }
+            })
+            ->paginate($itensPorPagina, ['*'], 'page', $pagina);
+    }
+
+    public function cadastrarDependente(CadastrarDependenteFuncionarioDTO $dados) :FuncionarioDependente
+    {
+        return FuncionarioDependente::create($dados->toArray());
+    }
+    
+    public function excluirDependente(int $id_dependente) : bool
+    {
+        return FuncionarioDependente::findOrFail($id_dependente)->delete();
+    }
+    
+    public function buscarDependenteParentesco() : Collection
+    {
+        return FuncionarioDependenteParentesco::get();
+    }
+
+    public function cadastrarDependenteParentesco(array $dados) : FuncionarioDependenteParentesco
+    {
+        return FuncionarioDependenteParentesco::create($dados);
     }
 }
