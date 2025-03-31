@@ -92,6 +92,38 @@ class PessoaController extends BaseController
     }
 
     /**
+     * @OA\Get(
+     *     path="/pessoa/{cpf}",
+     *     summary="Buscar pessoa por cpf",
+     *     tags={"Pessoa"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="cpf",
+     *         in="path",
+     *         description="cpf da pessoa",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response="200", description="Operação realizado com sucesso"),
+     *     @OA\Response(response="422", description="Erro de validação"),
+     *     @OA\Response(response="500", description="Erro interno")
+     * )
+     */
+    public function buscarPessoaPorCpf(String $cpf) : JsonResponse
+    {
+        try {
+
+            $pessoa = $this->pessoaService->buscarPessoaPorCpf($cpf);
+            
+            return $this->sucessoResponse($pessoa->toArray());
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
+        
+    }
+
+
+    /**
      * @OA\Put(
      *     path="/pessoa/{id_pessoa}",
      *     summary="Atualizar uma pessoa",

@@ -48,7 +48,7 @@ class CargoController extends BaseController
 
             return  $this->sucessoResponse($cargos);
         } catch (Exception $e) {
-            return $this->errorResponse(null, 500, $e->getMessage());
+            return $this->errorResponse($e);
         } 
     }
 
@@ -83,7 +83,7 @@ class CargoController extends BaseController
 
             return  $this->sucessoResponse($cargo, 201);
         } catch (Exception $e) {
-            return $this->errorResponse(null, 500, $e->getMessage());
+            return $this->errorResponse($e);
         } 
     }
 
@@ -112,7 +112,7 @@ class CargoController extends BaseController
 
             return  $this->sucessoResponse($cargo);
         } catch (Exception $e) {
-            return $this->errorResponse(null, 500, $e->getMessage());
+            return $this->errorResponse($e);
         } 
     }
 }

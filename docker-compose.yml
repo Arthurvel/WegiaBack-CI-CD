@@ -5,6 +5,8 @@ services:
       context: ./api
       dockerfile: Dockerfile
     restart: unless-stopped
+    ports:
+      - 9000:9000
     volumes:
       - ./api/wegia:/var/www/html
     networks:

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Funcionario;
 use App\Http\Controllers\BaseController;
 use App\Services\FuncionarioService;
 use App\Validations\Funcionario\BuscarFuncionarioValidation;
-use App\Validations\Funcionario\CriarDocumentoFuncionarioValidation;
 use App\Validations\Funcionario\CriarFuncionarioValidation;
 use App\Validations\Pessoa\AtualizarPessoaValidation;
 use Exception;
@@ -102,6 +101,37 @@ class FuncionarioController extends BaseController
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/funcionario/{id_funcionario}",
+     *     summary="Buscar funcionario pelo id",
+     *     tags={"Funcionario"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *          name="id_funcionario",
+     *          in="query",
+     *          description="Id do funcionario",
+     *          required=false,
+     *          @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
+     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
+     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
+     * )
+    */
+    public function findById(int $id_funcionario) : JsonResponse
+    {
+        try {
+            $id_funcionario = (int) $id_funcionario;
+
+            $funcionario = $this->funcionarioService->pegarFuncionarioPorId($id_funcionario);
+
+            return $this->sucessoResponse($funcionario->toArray());
+        } catch (Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+    
     /**
      * @OA\Post(
      *     path="/funcionario",
