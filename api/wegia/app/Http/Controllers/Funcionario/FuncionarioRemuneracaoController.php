@@ -174,6 +174,35 @@ class FuncionarioRemuneracaoController extends BaseController
 
     /**
      * @OA\Get(
+     *     path="/funcionario/{id_funcionario}/remuneracao/total",
+     *     summary="Buscar as remuneracoes do funcionario",
+     *     tags={"Funcionario"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *          name="id_funcionario",
+     *          in="path",
+     *          description="Id do funcionario",
+     *          required=true,
+     *          @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
+     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
+     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
+     * )
+    */   
+    public function buscarRemuneracaoTotalPorFuncionario(int $id_funcionario) : JsonResponse
+    {
+        try {
+            $total = $this->funcionarioService->buscarRemuneracaoTotalPorFuncionario($id_funcionario);
+
+            return $this->sucessoResponse($total);
+        } catch (Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+
+    /**
+     * @OA\Get(
      *     path="/funcionario/remuneracao/tipo",
      *     summary="Busca os tipos de remuneração",
      *     tags={"Funcionario"},

@@ -21,6 +21,7 @@ Route::group([ 'prefix' => 'pessoa' ], function () {
     Route::get('/logada', [PessoaController::class, 'retornarPessoaLogada']);
     Route::get('/{cpf}', [PessoaController::class, 'buscarPessoaPorCpf']);
     Route::post('/', [PessoaController::class, 'create']);
+    Route::post('/{id_pessoa}/imagem', [PessoaController::class, 'cadastrarOuAtualizarImagem']);
     Route::put('/{id_pessoa}', [PessoaController::class, 'update']);
 });
 
@@ -45,6 +46,7 @@ Route::group([ 'prefix' => 'funcionario' ], function () {
     });
 
     Route::get('/{id_funcionario}/remuneracao', [FuncionarioRemuneracaoController::class, 'buscarRemuneracaoPorFuncionario']);
+    Route::get('/{id_funcionario}/remuneracao/total', [FuncionarioRemuneracaoController::class, 'buscarRemuneracaoTotalPorFuncionario']);
 
     Route::group([ 'prefix' => 'remuneracao' ], function () {
         Route::post('/', [FuncionarioRemuneracaoController::class, 'create']);
