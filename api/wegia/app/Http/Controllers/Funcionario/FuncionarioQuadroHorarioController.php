@@ -114,7 +114,7 @@ class FuncionarioQuadroHorarioController extends BaseController
 
             return $this->sucessoResponse($remuneracaoTipo);
         } catch (Exception $e) {
-            return $this->errorResponse($e);
+            return $this->errorResponse(null,500,$e->getMessage());
         }
     }
 
