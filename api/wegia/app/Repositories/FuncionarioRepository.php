@@ -151,10 +151,12 @@ class FuncionarioRepository
         return FuncionarioOutrasInfo::with(['listaInfo'])
             ->where('funcionario_id_funcionario', $id_funcionario)
             ->when(!is_null($buscar), function ($q) use ($buscar) {
-                return $q->whereHas('listaInfo', function ($q2) use ($buscar) {
-                    $q2->where('descricao', 'like', "%{$buscar}%");
-                })
-                ->orWhere('dado', 'like', "%{$buscar}%");
+                $q->where(function ($query) use ($buscar) {
+                    $query->whereHas('listaInfo', function ($q2) use ($buscar) {
+                        $q2->where('descricao', 'like', "%{$buscar}%");
+                    })
+                    ->orWhere('dado', 'like', "%{$buscar}%");
+                });
             })
             ->when(!is_null($ordenacao), function ($q) use ($ordenacao, $tipoOrdenacao) {
 
@@ -218,28 +220,30 @@ class FuncionarioRepository
         return FuncionarioRemuneracao::with(['remuneracaoTipo'])
             ->where('funcionario_id_funcionario', $id_funcionario)
             ->when(!is_null($buscar), function ($q) use ($buscar) {
-                return $q->whereHas('remuneracaoTipo', function ($q2) use ($buscar) {
-                    $q2->where('descricao', 'like', "%{$buscar}%");
-                })
-                ->orWhere('valor', 'like', "%{$buscar}%")
-                ->orWhere('inicio', 'like', "%{$buscar}%")
-                ->orWhere('fim', 'like', "%{$buscar}%");
+                $q->where(function ($query) use ($buscar) {
+                    $query->whereHas('remuneracaoTipo', function ($q2) use ($buscar) {
+                        $q2->where('descricao', 'like', "%{$buscar}%");
+                    })
+                    ->orWhere('valor', 'like', "%{$buscar}%")
+                    ->orWhere('inicio', 'like', "%{$buscar}%")
+                    ->orWhere('fim', 'like', "%{$buscar}%");
+                });
             })
             ->when(!is_null($ordenacao), function ($q) use ($ordenacao, $tipoOrdenacao) {
-
-                if($ordenacao == 'descricao') {
+                if ($ordenacao == 'descricao') {
                     return $q->join(
                         'funcionario_remuneracao_tipo', 
                         'funcionario_remuneracao.funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo', 
                         '=', 
                         'funcionario_remuneracao_tipo.idfuncionario_remuneracao_tipo'
                     )
-                        ->orderBy("funcionario_remuneracao_tipo.{$ordenacao}", $tipoOrdenacao);
+                    ->orderBy("funcionario_remuneracao_tipo.{$ordenacao}", $tipoOrdenacao);
                 } else {
                     return $q->orderBy($ordenacao, $tipoOrdenacao);
                 }
             })
             ->paginate($itensPorPagina, ['*'], 'page', $pagina);
+
     }
 
     public function cadastrarRemuneracao(CadastrarRemuneracaoDTO $remuneracao) : FuncionarioRemuneracao
@@ -252,6 +256,12 @@ class FuncionarioRepository
         return FuncionarioRemuneracao::findOrFail($id_remuneracao)->delete();
     }
 
+    public function buscarRemuneracaoTotalPorFuncionario(int $id_funcionario) 
+    {
+        return FuncionarioRemuneracao::where('funcionario_id_funcionario', $id_funcionario)
+            ->sum('valor');
+    }
+
     public function buscarQuadroHorarioPorFuncionario(int $id_funcionario) : FuncionarioQuadroHorario
     {
         return FuncionarioQuadroHorario::with(['quadroHorarioTipo', 'quadroHorarioEscala'])
@@ -261,7 +271,10 @@ class FuncionarioRepository
 
     public function cadastrarQuadroHorario(CadastrarQuadroHorarioDTO $dados) : FuncionarioQuadroHorario
     {
-        return FuncionarioQuadroHorario::create($dados->toArray());
+        return FuncionarioQuadroHorario::updateOrCreate(
+            ['id_funcionario' => $dados->id_funcionario],
+            $dados->toArray()
+        );
     }
 
     public function buscarEscalaQuadroHorario() : Collection

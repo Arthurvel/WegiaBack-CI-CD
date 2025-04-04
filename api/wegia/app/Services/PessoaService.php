@@ -7,6 +7,7 @@ use App\DTOs\Pessoa\PessoaDTO;
 use App\Helpers\ArquivoHelper;
 use App\Repositories\PessoaRepository;
 use App\Models\Pessoa;
+use Illuminate\Http\UploadedFile;
 
 class PessoaService
 {
@@ -45,5 +46,14 @@ class PessoaService
         $pessoaAtualizada = $this->pessoaRepository->atualizarPessoa($pessoaAtualizaDTO, $id);
     
         return PessoaDTO::fromArray($pessoaAtualizada->toArray())->toArray();
+    }
+
+    public function cadastrarOuAtualizarImagem(array $dados, String $id_pessoa)
+    {
+        $base64 = ArquivoHelper::passarParaBase64($dados['imagem']);
+
+        $pessoaAtualizada = $this->pessoaRepository->cadastrarOuAtualizarImagem($base64, $id_pessoa);
+
+        return $pessoaAtualizada;
     }
 }

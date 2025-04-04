@@ -50,8 +50,8 @@ class FuncionarioRemuneracaoDTO
             'idfuncionario_remuneracao'  => $this->idfuncionario_remuneracao,
             'funcionario_id_funcionario' => $this->funcionario_id_funcionario,
             'valor'                      => $this->valor,
-            'inicio'                     => $this->inicio ? $this->inicio->toDateString() : null,
-            'fim'                        => $this->fim ? $this->fim->toDateString() : null,
+            'inicio'                     => $this->inicio ? $this->inicio->format('d/m/Y') : null,
+            'fim'                        => $this->fim ? $this->fim->format('d/m/Y') : null,
             'tipo'                       => $this->tipo
         ];
     }

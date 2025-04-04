@@ -17,10 +17,10 @@ use App\DTOs\Funcionario\FuncionarioQuadroHorarioDTO;
 use App\DTOs\Funcionario\FuncionarioRemuneracaoDTO;
 use App\DTOs\PaginacaoDTO;
 use App\DTOs\Pessoa\PessoaCadastrarDTO;
+use App\Helpers\ArquivoHelper;
 use App\Models\Funcionario\Funcionario;
 use App\Models\Funcionario\FuncionarioDependente;
 use App\Models\Funcionario\FuncionarioDependenteParentesco;
-use App\Models\Funcionario\FuncionarioDocFuncional;
 use App\Models\Funcionario\FuncionarioDocs;
 use App\Models\Funcionario\FuncionarioListaInfo;
 use App\Models\Funcionario\FuncionarioOutrasInfo;
@@ -78,7 +78,12 @@ class FuncionarioService
 
         try {
 
+            if(!empty($dados['imagem'])) {
+                $dados['imagem'] = ArquivoHelper::passarParaBase64($dados['imagem']);
+            }
+
             $pessoaDTO = PessoaCadastrarDTO::fromArray($dados)->toArray();
+            
 
             $pessoa = $this->pessoaRepository->cadastrarOuAtualizarPessoa($pessoaDTO);
 
@@ -234,6 +239,11 @@ class FuncionarioService
     public function deletarRemuneracao(int $id_remuneracao) : bool
     {
         return $this->funcionarioRepository->deletarRemuneracao($id_remuneracao);
+    }
+
+    public function buscarRemuneracaoTotalPorFuncionario(int $id_funcionario)
+    {
+        return $this->funcionarioRepository->buscarRemuneracaoTotalPorFuncionario($id_funcionario);
     }
 
     public function cadastrarQuadroHorario(array $dados, int $id_funcionario) : FuncionarioQuadroHorario
