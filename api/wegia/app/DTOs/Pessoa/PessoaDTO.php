@@ -2,6 +2,7 @@
 
 namespace App\DTOs\Pessoa;
 
+use App\Helpers\UploadSeguroHelper;
 use App\Models\Pessoa;
 use Carbon\Carbon;
 
@@ -124,7 +125,7 @@ class PessoaDTO
             'sexo'            => $this->sexo,
             'telefone'        => $this->telefone,
             'data_nascimento' => Carbon::parse($this->data_nascimento)->format('d/m/Y'),
-            'imagem'          => $this->imagem,
+            'imagem'          => $this->imagem ? UploadSeguroHelper::urlTemporaria($this->imagem) : null,
             'cep'             => $this->cep,
             'estado'          => $this->estado,
             'cidade'          => $this->cidade,

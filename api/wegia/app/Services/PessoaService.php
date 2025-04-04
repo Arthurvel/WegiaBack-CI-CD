@@ -4,10 +4,9 @@ namespace App\Services;
 
 use App\DTOs\Pessoa\PessoaAtualizarDTO;
 use App\DTOs\Pessoa\PessoaDTO;
-use App\Helpers\ArquivoHelper;
+use App\Helpers\UploadSeguroHelper;
 use App\Repositories\PessoaRepository;
 use App\Models\Pessoa;
-use Illuminate\Http\UploadedFile;
 
 class PessoaService
 {
@@ -21,7 +20,8 @@ class PessoaService
     public function cadastrarPessoa(array $pessoa) : Pessoa
     {
         if(!empty($pessoa['imagem'])) {
-            $pessoa['imagem'] = ArquivoHelper::passarParaBase64($pessoa['imagem']);
+            $url = UploadSeguroHelper::salvarImagem($pessoa['imagem'], 'pessoa');
+            $pessoa['imagem'] = $url;
         }
 
         return $this->pessoaRepository->cadastrarPessoa($pessoa);
@@ -50,9 +50,9 @@ class PessoaService
 
     public function cadastrarOuAtualizarImagem(array $dados, String $id_pessoa)
     {
-        $base64 = ArquivoHelper::passarParaBase64($dados['imagem']);
+        $url = UploadSeguroHelper::salvarImagem($dados['imagem'], 'pessoa');
 
-        $pessoaAtualizada = $this->pessoaRepository->cadastrarOuAtualizarImagem($base64, $id_pessoa);
+        $pessoaAtualizada = $this->pessoaRepository->cadastrarOuAtualizarImagem($url, $id_pessoa);
 
         return $pessoaAtualizada;
     }
