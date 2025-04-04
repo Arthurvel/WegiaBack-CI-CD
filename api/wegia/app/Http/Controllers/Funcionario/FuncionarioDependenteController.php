@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Funcionario;
 
 use App\Http\Controllers\BaseController;
 use App\Services\FuncionarioService;
-use App\Validations\Funcionario\BuscarRemuneracaoPorFuncionarioValidation;
-use App\Validations\Funcionario\CriarRemuneracaoFuncionarioValidation;
-use App\Validations\Funcionario\CriarRemuneracaoTipoFuncionarioValidation;
+use App\Validations\Funcionario\CriarDependenteParentescoValidation;
+use App\Validations\Funcionario\CriarFuncionarioDepententeValidation;
+use App\Validations\Funcionario\IdFuncionarioValidation;
+use App\Validations\PaginacaoValidation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Exception;
@@ -17,7 +18,7 @@ use Exception;
  *     description="Operações relacionadas aos funcionarios"
  * )
  */
-class FuncionarioRemuneracaoController extends BaseController
+class FuncionarioDependenteController extends BaseController
 {
 
     protected $funcionarioService;
@@ -31,17 +32,18 @@ class FuncionarioRemuneracaoController extends BaseController
         $this->funcionarioService = $funcionarioService;
     }
 
+
     /**
      * @OA\Get(
-     *     path="/funcionario/{id_funcionario}/remuneracao",
-     *     summary="Buscar as remuneracoes do funcionario",
+     *     path="/funcionario/{id_funcionario}/dependente",
+     *     summary="Buscar os dependentes",
      *     tags={"Funcionario"},
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *          name="id_funcionario",
      *          in="path",
      *          description="Id do funcionario",
-     *          required=true,
+     *          required=false,
      *          @OA\Schema(type="integer")
      *     ),
      *     @OA\Parameter(
@@ -83,61 +85,65 @@ class FuncionarioRemuneracaoController extends BaseController
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
-    */    
-    public function buscarRemuneracaoPorFuncionario(Request $request, int $id_funcionario) : JsonResponse
+    */
+    public function index(Request $request, int $id_funcionario) : JsonResponse
     {
         try {
             $this->validarRequest(
                 [
-                    "id_funcionario" => $id_funcionario,
-                    ...$request->query()
+                    'id_funcionario' => $id_funcionario,
+                    ...$request->all()
                 ],
-                BuscarRemuneracaoPorFuncionarioValidation::rules(),
-                BuscarRemuneracaoPorFuncionarioValidation::messages()
+                [
+                    ...IdFuncionarioValidation::rules(),
+                    ...PaginacaoValidation::rules()
+                ],
+                [
+                    ...IdFuncionarioValidation::messages(),
+                    ...PaginacaoValidation::messages()
+                ]
             );
 
-            $remuneracoes = $this->funcionarioService->buscarRemuneracaoPorFuncionario($id_funcionario, $request->query());
+            $dependentes = $this->funcionarioService->buscarDependentesPorFuncionario($request->all(), $id_funcionario);
 
-            return $this->sucessoResponse($remuneracoes);
+            return $this->sucessoResponse($dependentes);
         } catch (Exception $e) {
-            return $this->errorResponse($e);
+            return $this->errorResponse(null,500,$e->getMessage());
         }
     }
 
     /**
      * @OA\Post(
-     *     path="/funcionario/remuneracao",
-     *     summary="Cadastra uma nova remuneracao",
+     *     path="/funcionario/dependente",
+     *     summary="Cadastra um novo dependente para um funcionario",
      *     tags={"Funcionario"},
      *     security={{"bearerAuth": {}}}, 
      *     @OA\RequestBody(
-     *       required=true,
-     *       @OA\JsonContent(
-     *          required={"funcionario_id_funcionario", "funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo", "valor"},
-     *          @OA\Property(property="funcionario_id_funcionario", type="integer", description="id do funcionario"),
-     *          @OA\Property(property="funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo", type="integer", description="id do tipo de remuneracao"),
-     *          @OA\Property(property="valor", type="float", description="valor da remuneracao"),
-     *          @OA\Property(property="inicio", type="string", format="date", description="inicio da remuneracao"),
-     *          @OA\Property(property="fim", type="string", format="date", description="fim da remuneracao")
-     *      )
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"id_funcionario", "cpf", "nome", "sobrenome", "sexo", "telefone", "data_nascimento", "id_parentesco"},
+     *             @OA\Property(property="id_funcionario", type="integer", description="ID do funcionário"),
+     *             @OA\Property(property="id_pessoa", type="integer", description="id da pessoa que é dependente"),
+     *             @OA\Property(property="id_parentesco", type="integer", description="ID do parentesco do dependente")
+     *         )
      *     ),
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
-    */
+     */
     public function create(Request $request) : JsonResponse
     {
         try {
             $this->validarRequest(
                 $request->all(),
-                CriarRemuneracaoFuncionarioValidation::rules(),
-                CriarRemuneracaoFuncionarioValidation::messages()
+                CriarFuncionarioDepententeValidation::rules($request->id_funcionario),
+                CriarFuncionarioDepententeValidation::messages()
             );
 
-            $remuneracao = $this->funcionarioService->cadastrarRemuneracao($request->all());
+            $dependente = $this->funcionarioService->cadastrarDependente($request->all());
 
-            return $this->sucessoResponse($remuneracao);
+            return $this->sucessoResponse($dependente, 201);
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
@@ -145,14 +151,14 @@ class FuncionarioRemuneracaoController extends BaseController
 
     /**
      * @OA\Delete(
-     *     path="/funcionario/remuneracao/{id_remuneracao}",
-     *     summary="Deletar uma remuneracao",
+     *     path="/funcionario/dependente/{id_dependente}",
+     *     summary="Deletar um dependente",
      *     tags={"Funcionario"},
      *     security={{"bearerAuth": {}}}, 
      *      @OA\Parameter(
-     *         name="id_remuneracao",
+     *         name="id_dependente",
      *         in="path",
-     *         description="ID da remuneracao",
+     *         description="ID do dependente",
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
@@ -161,12 +167,12 @@ class FuncionarioRemuneracaoController extends BaseController
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
      */
-    public function destroy(int $id_remuneracao) : JsonResponse
+    public function destroy(int $id_dependente) : JsonResponse
     {
         try {
-            $deletado = $this->funcionarioService->deletarRemuneracao($id_remuneracao);
+            $dependente = $this->funcionarioService->excluirDependente($id_dependente);
 
-            return $this->sucessoResponse($deletado);
+            return $this->sucessoResponse($dependente);
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
@@ -174,83 +180,19 @@ class FuncionarioRemuneracaoController extends BaseController
 
     /**
      * @OA\Get(
-     *     path="/funcionario/{id_funcionario}/remuneracao/total",
-     *     summary="Buscar as remuneracoes do funcionario",
+     *     path="/funcionario/dependente/tipo",
+     *     summary="Buscar os tipos de dependentes possiveis",
      *     tags={"Funcionario"},
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(
-     *          name="id_funcionario",
-     *          in="path",
-     *          description="Id do funcionario",
-     *          required=true,
-     *          @OA\Schema(type="integer")
-     *     ),
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
-    */   
-    public function buscarRemuneracaoTotalPorFuncionario(int $id_funcionario) : JsonResponse
+    */
+    public function buscarDependenteParentesco() : JsonResponse
     {
         try {
-            $total = $this->funcionarioService->buscarRemuneracaoTotalPorFuncionario($id_funcionario);
-
-            return $this->sucessoResponse($total);
-        } catch (Exception $e) {
-            return $this->errorResponse($e);
-        }
-    }
-
-    /**
-     * @OA\Get(
-     *     path="/funcionario/remuneracao/tipo",
-     *     summary="Busca os tipos de remuneração",
-     *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
-     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
-     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
-     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
-     * )
-     */
-    public function pegarRemuneracaoTipo() : JsonResponse
-    {
-        try {
-            $tipos = $this->funcionarioService->pegarRemuneracaoTipo();
-
-            return $this->sucessoResponse($tipos);
-        } catch (Exception $e) {
-            return $this->errorResponse($e);
-        } 
-    }
-
-    /**
-     * @OA\Post(
-     *     path="/funcionario/remuneracao/tipo",
-     *     summary="Cadastra um novo tipo de remuneracao",
-     *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
-     *     @OA\RequestBody(
-     *       required=true,
-     *       @OA\JsonContent(
-     *          required={"descricao"},
-     *          @OA\Property(property="descricao", type="string", maxLength=255, description="Descricao do tipo")
-     *      )
-     *     ),
-     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
-     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
-     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
-     * )
-     */
-    public function cadastrarRemuneracaoTipo(Request $request) : JsonResponse
-    {
-        try {
-            $this->validarRequest(
-                $request->all(),
-                CriarRemuneracaoTipoFuncionarioValidation::rules(),
-                CriarRemuneracaoTipoFuncionarioValidation::messages()
-            );
-
-            $tipo = $this->funcionarioService->cadastrarRemuneracaoTipo($request->descricao);
+            $tipo = $this->funcionarioService->buscarDependenteParentesco();
 
             return $this->sucessoResponse($tipo);
         } catch (Exception $e) {
@@ -258,4 +200,38 @@ class FuncionarioRemuneracaoController extends BaseController
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/funcionario/dependente/tipo",
+     *     summary="Cadastra um tipo de parentesco do dependente",
+     *     tags={"Funcionario"},
+     *     security={{"bearerAuth": {}}}, 
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"descricao"},
+     *             @OA\Property(property="descricao", type="string", description="Tipo de parentesco"),
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
+     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
+     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
+     * )
+     */
+    public function cadastrarDependenteParentesco(Request $request) : JsonResponse
+    {
+        try {
+            $this->validarRequest(
+                $request->only('descricao'),
+                CriarDependenteParentescoValidation::rules(),
+                CriarDependenteParentescoValidation::messages()
+            );
+
+            $tipo = $this->funcionarioService->cadastrarDependenteParentesco($request->only('descricao'));
+
+            return $this->sucessoResponse($tipo);
+        } catch (Exception $e) {
+            return $this->errorResponse(null,500,$e->getMessage());
+        }
+    }
 }

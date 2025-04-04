@@ -12,7 +12,7 @@ class AtualizarPessoaValidation
             'sexo' => 'nullable|string|size:1',
             'telefone' => 'nullable|string|max:25',
             'data_nascimento' => 'nullable|date',
-            'imagem' => 'nullable|string',
+            'imagem' => 'nullable|file|mimes:jpg,jpeg,png|max:5120',
             'cep' => 'nullable|string|max:10',
             'estado' => 'nullable|string|max:5',
             'cidade' => 'nullable|string|max:40',
@@ -37,6 +37,8 @@ class AtualizarPessoaValidation
         return [
             'data_nascimento.date' => 'O campo data de nascimento deve ser uma data válida.',
             'data_expedicao.date' => 'O campo data de nascimento deve ser uma data válida.',
+            'mimes'    => 'O campo :attribute deve receber apenas extensões do tipo .pdf, .jpg, jpeg e .png',
+            'max'      => 'O campo :attribute  deve ter no maximo 5mb',
         ];
     }
 }

@@ -579,6 +579,55 @@
             }
         },
         "/funcionario/{id_funcionario}": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar funcionario pelo id",
+                "operationId": "07a6a4fe1dd131659fb3849d4949cf9a",
+                "parameters": [
+                    {
+                        "name": "id_funcionario",
+                        "in": "query",
+                        "description": "Id do funcionario",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "put": {
                 "tags": [
                     "Funcionario"
@@ -664,6 +713,327 @@
                 "responses": {
                     "200": {
                         "description": "Funcionario atualizado realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/{id_funcionario}/dependente": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar os dependentes",
+                "operationId": "8df1b29846fb21f97caa208a9c15e254",
+                "parameters": [
+                    {
+                        "name": "id_funcionario",
+                        "in": "path",
+                        "description": "Id do funcionario",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Nome, CPF ou Cargo do funcionário para busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo para ordenar (nome, cpf, cargo)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "ASC"
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de funcionários por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/dependente": {
+            "post": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Cadastra um novo dependente para um funcionario",
+                "operationId": "29cdaaae93668daf5c7206016b469da1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_funcionario",
+                                    "cpf",
+                                    "nome",
+                                    "sobrenome",
+                                    "sexo",
+                                    "telefone",
+                                    "data_nascimento",
+                                    "id_parentesco"
+                                ],
+                                "properties": {
+                                    "id_funcionario": {
+                                        "description": "ID do funcionário",
+                                        "type": "integer"
+                                    },
+                                    "id_pessoa": {
+                                        "description": "id da pessoa que é dependente",
+                                        "type": "integer"
+                                    },
+                                    "id_parentesco": {
+                                        "description": "ID do parentesco do dependente",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/dependente/{id_dependente}": {
+            "delete": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Deletar um dependente",
+                "operationId": "49e45c60ab7fe730837c26fa9a9f37fe",
+                "parameters": [
+                    {
+                        "name": "id_dependente",
+                        "in": "path",
+                        "description": "ID do dependente",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/dependente/tipo": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar os tipos de dependentes possiveis",
+                "operationId": "b9472ccce3e08c39c85f2a03da68af7f",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Cadastra um tipo de parentesco do dependente",
+                "operationId": "183da1d8748ad1120c9e991e3ec966fd",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "descricao"
+                                ],
+                                "properties": {
+                                    "descricao": {
+                                        "description": "Tipo de parentesco",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -883,6 +1253,109 @@
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/documento/tipo": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Pegar os tipos de documentos do funcionário",
+                "operationId": "e4d5a4a5268ac188bcd0458105e07ce6",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Adicionar um novo tipo de documento",
+                "operationId": "4c04304a529782d421bba7b844b50a59",
+                "requestBody": {
+                    "description": "Dados do documento a ser enviado",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome_docfuncional"
+                                ],
+                                "properties": {
+                                    "nome_docfuncional": {
+                                        "description": "Nome do documento",
+                                        "type": "string"
+                                    },
+                                    "descricao_docfuncional": {
+                                        "description": "Descricao do documento",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Operacao realizada com sucesso!",
@@ -1293,37 +1766,40 @@
                         "bearerAuth": []
                     }
                 ]
-            }
-        },
-        "/funcionario/quadro-horario": {
+            },
             "post": {
                 "tags": [
                     "Funcionario"
                 ],
                 "summary": "Cadastrar o quadro horario",
-                "operationId": "6f6478a9cf6b6d2b996475d202d3bccf",
+                "operationId": "51cea2bb75f97e73de75ca523f9b96d6",
+                "parameters": [
+                    {
+                        "name": "id_funcionario",
+                        "in": "path",
+                        "description": "ID do Funcionario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "id_funcionario",
-                                    "escala",
-                                    "tipo"
+                                    "id_escala",
+                                    "id_tipo"
                                 ],
                                 "properties": {
-                                    "id_funcionario": {
-                                        "description": "ID do funcionário",
-                                        "type": "integer",
-                                        "example": 1
-                                    },
-                                    "escala": {
+                                    "id_escala": {
                                         "description": "ID da escala",
                                         "type": "integer",
                                         "example": 2
                                     },
-                                    "tipo": {
+                                    "id_tipo": {
                                         "description": "ID do tipo de quadro horário",
                                         "type": "integer",
                                         "example": 3
@@ -1733,6 +2209,57 @@
                 ]
             }
         },
+        "/funcionario/{id_funcionario}/remuneracao/total": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar as remuneracoes do funcionario",
+                "operationId": "ac948091f9a645ba63ce88485d2129e1",
+                "parameters": [
+                    {
+                        "name": "id_funcionario",
+                        "in": "path",
+                        "description": "Id do funcionario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/funcionario/remuneracao/tipo": {
             "get": {
                 "tags": [
@@ -2004,6 +2531,98 @@
                         "description": "Erro interno"
                     }
                 }
+            }
+        },
+        "/pessoa/{id_pessoa}/imagem": {
+            "post": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Cadastrar uma nova imagem para pessoa",
+                "operationId": "355be652fca4fac34692b59fbfa69a86",
+                "parameters": [
+                    {
+                        "name": "id_pessoa",
+                        "in": "path",
+                        "description": "ID da pessoa que deseja atualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "imagem"
+                                ],
+                                "properties": {
+                                    "imagem": {
+                                        "description": "Imagem da pessoa para upload",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cadastro realizado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pessoa/{cpf}": {
+            "get": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Buscar pessoa por cpf",
+                "operationId": "90bd58268422d571591f60bbf631eb3c",
+                "parameters": [
+                    {
+                        "name": "cpf",
+                        "in": "path",
+                        "description": "cpf da pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/pessoa/{id_pessoa}": {

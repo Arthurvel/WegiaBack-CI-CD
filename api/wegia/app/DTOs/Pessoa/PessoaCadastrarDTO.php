@@ -2,16 +2,11 @@
 
 namespace App\DTOs\Pessoa;
 
-use App\Helpers\UploadSeguroHelper;
-use App\Models\Pessoa;
-use Carbon\Carbon;
-
-class PessoaDTO
+class PessoaCadastrarDTO
 {
-    public int $id_pessoa;
-    public string $cpf;
     public ?string $nome;
     public ?string $sobrenome;
+    public string  $cpf;
     public ?string $sexo;
     public ?string $telefone;
     public ?string $data_nascimento;
@@ -30,14 +25,13 @@ class PessoaDTO
     public ?string $nome_mae;
     public ?string $nome_pai;
     public ?string $tipo_sanguineo;
-    public int $nivel_acesso;
-    public int $adm_configurado;
+    public ?int $nivel_acesso;
+    public ?int $adm_configurado;
 
     public function __construct(
-        int $id_pessoa,
-        string $cpf,
         ?string $nome = null,
         ?string $sobrenome = null,
+        string  $cpf,
         ?string $sexo = null,
         ?string $telefone = null,
         ?string $data_nascimento = null,
@@ -56,13 +50,12 @@ class PessoaDTO
         ?string $nome_mae = null,
         ?string $nome_pai = null,
         ?string $tipo_sanguineo = null,
-        int $nivel_acesso = 0,
-        int $adm_configurado = 0
+        ?int $nivel_acesso = null,
+        ?int $adm_configurado = null
     ) {
-        $this->id_pessoa       = $id_pessoa;
-        $this->cpf             = $cpf;
         $this->nome            = $nome;
         $this->sobrenome       = $sobrenome;
+        $this->cpf             = $cpf;
         $this->sexo            = $sexo;
         $this->telefone        = $telefone;
         $this->data_nascimento = $data_nascimento;
@@ -88,10 +81,9 @@ class PessoaDTO
     public static function fromArray(array $dados): self
     {
         return new self(
-            $dados['id_pessoa'],
-            $dados['cpf'],
             $dados['nome'] ?? null,
             $dados['sobrenome'] ?? null,
+            $dados['cpf'],
             $dados['sexo'] ?? null,
             $dados['telefone'] ?? null,
             $dados['data_nascimento'] ?? null,
@@ -110,22 +102,21 @@ class PessoaDTO
             $dados['nome_mae'] ?? null,
             $dados['nome_pai'] ?? null,
             $dados['tipo_sanguineo'] ?? null,
-            $dados['nivel_acesso'] ?? 0,
-            $dados['adm_configurado'] ?? 0
+            $dados['nivel_acesso'] ?? null,
+            $dados['adm_configurado'] ?? null
         );
     }
 
     public function toArray(): array
     {
-        return [
-            'id_pessoa'       => $this->id_pessoa,
-            'cpf'             => $this->cpf,
+        return array_filter([
             'nome'            => $this->nome,
             'sobrenome'       => $this->sobrenome,
+            'cpf'             => $this->cpf,
             'sexo'            => $this->sexo,
             'telefone'        => $this->telefone,
-            'data_nascimento' => Carbon::parse($this->data_nascimento)->format('d/m/Y'),
-            'imagem'          => $this->imagem ? UploadSeguroHelper::urlTemporaria($this->imagem) : null,
+            'data_nascimento' => $this->data_nascimento,
+            'imagem'          => $this->imagem,
             'cep'             => $this->cep,
             'estado'          => $this->estado,
             'cidade'          => $this->cidade,
@@ -136,44 +127,14 @@ class PessoaDTO
             'ibge'            => $this->ibge,
             'registro_geral'  => $this->registro_geral,
             'orgao_emissor'   => $this->orgao_emissor,
-            'data_expedicao'  => Carbon::parse($this->data_expedicao)->format('d/m/Y'),
+            'data_expedicao'  => $this->data_expedicao,
             'nome_mae'        => $this->nome_mae,
             'nome_pai'        => $this->nome_pai,
             'tipo_sanguineo'  => $this->tipo_sanguineo,
             'nivel_acesso'    => $this->nivel_acesso,
             'adm_configurado' => $this->adm_configurado,
-        ];
-    }
-
-    public function toModel(): Pessoa
-    {
-        $atributos = [
-            'id' => $this->id_pessoa,
-            'cpf' => $this->cpf,
-            'nome' => $this->nome,
-            'sobrenome' => $this->sobrenome,
-            'sexo' => $this->sexo,
-            'telefone' => $this->telefone,
-            'data_nascimento' => $this->data_nascimento ? Carbon::createFromFormat('d/m/Y', $this->data_nascimento)->format('Y-m-d') : null,
-            'imagem' => $this->imagem,
-            'cep' => $this->cep,
-            'estado' => $this->estado,
-            'cidade' => $this->cidade,
-            'bairro' => $this->bairro,
-            'logradouro' => $this->logradouro,
-            'numero' => $this->numero_endereco,
-            'complemento' => $this->complemento,
-            'ibge' => $this->ibge,
-            'rg' => $this->registro_geral,
-            'orgao_emissor' => $this->orgao_emissor,
-            'data_expedicao' => $this->data_expedicao ? Carbon::createFromFormat('d/m/Y', $this->data_expedicao)->format('Y-m-d') : null,
-            'nome_mae' => $this->nome_mae,
-            'nome_pai' => $this->nome_pai,
-            'tipo_sanguineo' => $this->tipo_sanguineo,
-            'nivel_acesso' => $this->nivel_acesso,
-            'adm_configurado' => $this->adm_configurado
-        ];
-
-        return new Pessoa($atributos);
+        ], function ($valor) {
+            return !is_null($valor);
+        });
     }
 }

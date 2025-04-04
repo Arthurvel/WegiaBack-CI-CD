@@ -3,9 +3,13 @@
 namespace App\Services;
 
 use App\DTOs\Funcionario\AtualizarFuncionarioDTO;
+use App\DTOs\Funcionario\CadastrarDependenteFuncionarioDTO;
 use App\DTOs\Funcionario\CadastrarDocumentoDTO;
+use App\DTOs\Funcionario\CadastrarDocumentoTipoDTO;
+use App\DTOs\Funcionario\CadastrarFuncionarioDTO;
 use App\DTOs\Funcionario\CadastrarQuadroHorarioDTO;
 use App\DTOs\Funcionario\CadastrarRemuneracaoDTO;
+use App\DTOs\Funcionario\FuncionarioDependenteDTO;
 use App\DTOs\Funcionario\FuncionarioDocumentoDTO;
 use App\DTOs\Funcionario\FuncionarioDTO;
 use App\DTOs\Funcionario\FuncionarioOutrasInfoDTO;
@@ -13,7 +17,11 @@ use App\DTOs\Funcionario\FuncionarioQuadroHorarioDTO;
 use App\DTOs\Funcionario\FuncionarioRemuneracaoDTO;
 use App\DTOs\PaginacaoDTO;
 use App\Helpers\UploadSeguroHelper;
+use App\DTOs\Pessoa\PessoaCadastrarDTO;
+use App\Helpers\ArquivoHelper;
 use App\Models\Funcionario\Funcionario;
+use App\Models\Funcionario\FuncionarioDependente;
+use App\Models\Funcionario\FuncionarioDependenteParentesco;
 use App\Models\Funcionario\FuncionarioDocs;
 use App\Models\Funcionario\FuncionarioListaInfo;
 use App\Models\Funcionario\FuncionarioOutrasInfo;
@@ -58,25 +66,32 @@ class FuncionarioService
         );
     }
 
+    public function pegarFuncionarioPorId(int $id) : FuncionarioDTO
+    {
+        $funcionario = $this->funcionarioRepository->pegarFuncionarioPorId($id, ['pessoa']);
+
+        return FuncionarioDTO::fromArray($funcionario->toArray());
+    }
+
     public function cadastrarFuncionario(array $dados) : Funcionario
     {
         DB::beginTransaction();
 
         try {
-            $pessoa = $this->pessoaRepository->cadastrarPessoa([
-                'imagem'          => $dados['imagem'],
-                'nome'            => $dados['nome'],
-                'sobrenome'       => $dados['sobrenome'],
-                'sexo'            => $dados['sexo'],
-                'telefone'        => $dados['telefone'],
-                'data_nascimento' => $dados['data_nascimento'],
-                'registro_geral'  => $dados['registro_geral'],
-                'orgao_emissor'   => $dados['orgao_emissor'],
-                'data_expedicao'  => $dados['data_expedicao'],
-                'cpf'             => $dados['cpf'],
-            ]);
 
-            $funcionarioDTO = FuncionarioDTO::fromArray($dados);
+            if(!empty($dados['imagem'])) {
+                $url = UploadSeguroHelper::salvarImagem($dados['imagem'], 'funcionario');
+                $dados['imagem'] = $url;
+            }
+
+            $pessoaDTO = PessoaCadastrarDTO::fromArray($dados)->toArray();
+            
+
+            $pessoa = $this->pessoaRepository->cadastrarOuAtualizarPessoa($pessoaDTO);
+
+            $dados['id_pessoa'] = $pessoa->id_pessoa;
+
+            $funcionarioDTO = CadastrarFuncionarioDTO::fromArray($dados);
 
             $funcionario = $this->funcionarioRepository->cadastrarFuncionario($funcionarioDTO);
 
@@ -138,6 +153,18 @@ class FuncionarioService
     public function deletarDocumento(int $id_documento) : bool
     {
         return $this->funcionarioRepository->deletarDocumento($id_documento);
+    }
+
+    public function buscarDocumentoTipo() : Collection
+    {
+        return $this->funcionarioRepository->buscarDocumentoTipo();
+    }
+
+    public function cadastrarDocumentoTipo($dados)
+    {
+        $dto = CadastrarDocumentoTipoDTO::fromArray($dados);
+
+        return $this->funcionarioRepository->cadastrarDocumentoTipo($dto);
     }
 
     public function buscarInfosPorIdFuncionario(int $id_funcionario, array $parametros = []) : PaginacaoDTO
@@ -216,8 +243,15 @@ class FuncionarioService
         return $this->funcionarioRepository->deletarRemuneracao($id_remuneracao);
     }
 
-    public function cadastrarQuadroHorario(array $dados) : FuncionarioQuadroHorario
+    public function buscarRemuneracaoTotalPorFuncionario(int $id_funcionario)
     {
+        return $this->funcionarioRepository->buscarRemuneracaoTotalPorFuncionario($id_funcionario);
+    }
+
+    public function cadastrarQuadroHorario(array $dados, int $id_funcionario) : FuncionarioQuadroHorario
+    {
+        $dados['id_funcionario'] = $id_funcionario;
+
         $quadroHorario = CadastrarQuadroHorarioDTO::fromArray($dados);
 
         return $this->funcionarioRepository->cadastrarQuadroHorario($quadroHorario);
@@ -238,5 +272,52 @@ class FuncionarioService
     public function buscarTipoQuadroHorario() : Collection
     {
         return $this->funcionarioRepository->buscarTipoQuadroHorario();
+    }
+
+    public function buscarDependentesPorFuncionario(array $dados, int $id_funcionario) : PaginacaoDTO
+    {
+        $depentendes = $this->funcionarioRepository->buscarDependentesPorFuncionario($dados, $id_funcionario, ['parentesco', 'pessoa']);
+
+        $itens = collect($depentendes->items())->map(function ($dependente) {
+            return FuncionarioDependenteDTO::fromArray($dependente->toArray())->toArray();
+        })->toArray();
+
+        return new PaginacaoDTO(
+            $itens,
+            $depentendes->currentPage(),
+            $depentendes->lastPage(),
+            $depentendes->total(),
+            $depentendes->perPage()
+        );
+
+        return $this->funcionarioRepository->buscarDependentesPorFuncionario($dados, $id_funcionario, ['pessoa', 'funcionario', 'parentesco']);
+    }
+
+    public function cadastrarDependente(array $dados) : FuncionarioDependente
+    {
+        try {
+            $depentendeCadastrarDTO = CadastrarDependenteFuncionarioDTO::fromArray($dados);
+
+            $depentende = $this->funcionarioRepository->cadastrarDependente($depentendeCadastrarDTO);
+
+            return $depentende;
+        } catch (Exception $e) {
+            throw $e; 
+        }
+    }
+
+    public function excluirDependente(int $id_dependente) : bool
+    {
+        return $this->funcionarioRepository->excluirDependente($id_dependente);
+    }
+
+    public function buscarDependenteParentesco() : Collection
+    {
+        return $this->funcionarioRepository->buscarDependenteParentesco();
+    }
+
+    public function cadastrarDependenteParentesco(array $dados) : FuncionarioDependenteParentesco
+    {
+        return $this->funcionarioRepository->cadastrarDependenteParentesco($dados);
     }
 }

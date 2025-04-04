@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\PessoaService;
 use App\Validations\Pessoa\AtualizarPessoaValidation;
+use App\Validations\Pessoa\CriarOuAtualizarImagemPessoaValidation;
 use App\Validations\Pessoa\PessoaValidation;
 use Illuminate\Support\Facades\Validator;
 
@@ -92,6 +93,90 @@ class PessoaController extends BaseController
     }
 
     /**
+     * @OA\Post(
+     *     path="/pessoa/{id_pessoa}/imagem",
+     *     summary="Cadastrar uma nova imagem para pessoa",
+     *     tags={"Pessoa"},
+     *     security={{"bearerAuth": {}}}, 
+     *     @OA\Parameter(
+     *         name="id_pessoa",
+     *         in="path",
+     *         description="ID da pessoa que deseja atualizar",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"imagem"},
+     *                 @OA\Property(
+     *                     property="imagem",
+     *                     type="string",
+     *                     format="binary",
+     *                     description="Imagem da pessoa para upload"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Cadastro realizado com sucesso"),
+     *     @OA\Response(response="422", description="Erro de validação"),
+     *     @OA\Response(response="500", description="Erro interno")
+     * )
+     */
+    public function cadastrarOuAtualizarImagem(Request $request, int $id_pessoa) : JsonResponse
+    {
+        try {
+
+            $this->validarRequest(
+                $request->all(),
+                CriarOuAtualizarImagemPessoaValidation::rules(),
+                CriarOuAtualizarImagemPessoaValidation::messages()
+            );
+
+            $pessoa = $this->pessoaService->cadastrarOuAtualizarImagem($request->only(['imagem']), $id_pessoa);
+            
+            return $this->sucessoResponse($pessoa);
+        } catch (\Exception $e) {
+            return $this->errorResponse(null,500,$e->getMessage());
+        }
+        
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/pessoa/{cpf}",
+     *     summary="Buscar pessoa por cpf",
+     *     tags={"Pessoa"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="cpf",
+     *         in="path",
+     *         description="cpf da pessoa",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response="200", description="Operação realizado com sucesso"),
+     *     @OA\Response(response="422", description="Erro de validação"),
+     *     @OA\Response(response="500", description="Erro interno")
+     * )
+     */
+    public function buscarPessoaPorCpf(String $cpf) : JsonResponse
+    {
+        try {
+
+            $pessoa = $this->pessoaService->buscarPessoaPorCpf($cpf);
+            
+            return $this->sucessoResponse($pessoa->toArray());
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
+        
+    }
+
+
+    /**
      * @OA\Put(
      *     path="/pessoa/{id_pessoa}",
      *     summary="Atualizar uma pessoa",
@@ -135,7 +220,7 @@ class PessoaController extends BaseController
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
     */
-    public function update(Request $request, int $id_pessoa) : JsonResponse
+    public function update(Request $request, int $id_pessoa)
     {
         try {
             $this->validarRequest(

@@ -12,10 +12,19 @@ class PessoaRepository
     {
         return Pessoa::create($pessoa);
     }
+    
+    public function cadastrarOuAtualizarPessoa(array $dados): Pessoa
+    {
+        return Pessoa::updateOrCreate(
+            ['cpf' => $dados['cpf']],
+            $dados
+        );
+    
+    }
 
     public function buscarPessoaPorCpf(string $cpf) : Pessoa
     {
-        return Pessoa::where('cpf', $cpf)->first();
+        return Pessoa::where('cpf', $cpf)->firstOrFail();
     }
 
     public function atualizarPessoa(PessoaAtualizarDTO $pessoa, int $id) : Pessoa
@@ -30,6 +39,17 @@ class PessoaRepository
     public function buscarPessoaPorId(int $id): Pessoa
     {
         return Pessoa::findOrFail($id);
+    }
+
+    public function cadastrarOuAtualizarImagem(string $arquivo, int $id_pessoa) : Pessoa
+    {
+        $pessoaEncontrada = $this->buscarPessoaPorId($id_pessoa);
+
+        $pessoaEncontrada->update([
+            "imagem" => $arquivo
+        ]);
+
+        return $pessoaEncontrada;
     }
 
 }

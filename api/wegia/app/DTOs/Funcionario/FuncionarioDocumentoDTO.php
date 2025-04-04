@@ -64,7 +64,7 @@ class FuncionarioDocumentoDTO
             'extensao_arquivo'       => $this->extensao_arquivo,
             'nome_docfuncional'      => $this->nome_docfuncional,
             'descricao_docfuncional' => $this->descricao_docfuncional,
-            'data'                   => $this->data->toDateTimeString(),
+            'data'                   => $this->data->format('d/m/Y'),
             'arquivo'                => UploadSeguroHelper::urlTemporaria($this->arquivo),
         ];
     }

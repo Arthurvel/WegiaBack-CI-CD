@@ -46,8 +46,8 @@ class CadastrarQuadroHorarioDTO
     {
         return new self(
             $dados['id_funcionario'],
-            $dados['escala'],
-            $dados['tipo'],
+            $dados['id_escala'],
+            $dados['id_tipo'],
             $dados['carga_horaria'] ?? null,
             $dados['entrada1'] ?? null,
             $dados['saida1'] ?? null,
