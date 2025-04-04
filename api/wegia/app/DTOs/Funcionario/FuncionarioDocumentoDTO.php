@@ -2,6 +2,7 @@
 
 namespace App\DTOs\Funcionario;
 
+use App\Helpers\UploadSeguroHelper;
 use Carbon\Carbon;
 
 class FuncionarioDocumentoDTO
@@ -64,7 +65,7 @@ class FuncionarioDocumentoDTO
             'nome_docfuncional'      => $this->nome_docfuncional,
             'descricao_docfuncional' => $this->descricao_docfuncional,
             'data'                   => $this->data->toDateTimeString(),
-            'arquivo'                => $this->arquivo,
+            'arquivo'                => UploadSeguroHelper::urlTemporaria($this->arquivo),
         ];
     }
 }

@@ -142,7 +142,7 @@ class FuncionarioDocumentoController extends BaseController
 
             return  $this->sucessoResponse($documentos);
         } catch (Exception $e) {
-            return $this->errorResponse($e);
+            return $this->errorResponse(null,500,$e->getMessage());
         } 
     }
 

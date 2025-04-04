@@ -10,6 +10,11 @@ use App\Http\Controllers\Funcionario\FuncionarioInfoController;
 use App\Http\Controllers\Funcionario\FuncionarioQuadroHorarioController;
 use App\Http\Controllers\Funcionario\FuncionarioRemuneracaoController;
 use App\Http\Controllers\SituacaoController;
+use App\Http\Controllers\UploadController;
+
+Route::get('/upload/{path}', [UploadController::class, 'retornarImagem'])
+    ->where('path', '.*')
+    ->name('file.upload');
 
 Route::group([ 'prefix' => 'auth' ], function () {
     Route::post('/login', [AuthController::class, 'login']);

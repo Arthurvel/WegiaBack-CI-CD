@@ -12,6 +12,7 @@ use App\DTOs\Funcionario\FuncionarioOutrasInfoDTO;
 use App\DTOs\Funcionario\FuncionarioQuadroHorarioDTO;
 use App\DTOs\Funcionario\FuncionarioRemuneracaoDTO;
 use App\DTOs\PaginacaoDTO;
+use App\Helpers\UploadSeguroHelper;
 use App\Models\Funcionario\Funcionario;
 use App\Models\Funcionario\FuncionarioDocs;
 use App\Models\Funcionario\FuncionarioListaInfo;
@@ -101,17 +102,17 @@ class FuncionarioService
 
     public function cadastrarDocumento(UploadedFile $arquivo, int $id_funcionario, int $id_docfuncional ) : FuncionarioDocs
     {
+
+        $url = UploadSeguroHelper::salvarImagem($arquivo, 'funcionario/documentos');
         $nome_arquivo = $arquivo->getClientOriginalName();
         $extensao_arquivo = $arquivo->getClientOriginalExtension();
-
-        $arquivo_b64 = base64_encode(file_get_contents($arquivo->getRealPath()));
 
         $FuncionarioDocumentoDTO = new CadastrarDocumentoDTO(
             $id_funcionario,
             $id_docfuncional,
             $extensao_arquivo,
             $nome_arquivo,
-            $arquivo_b64
+            $url
         );
 
         return $this->funcionarioRepository->cadastrarDocumento($FuncionarioDocumentoDTO);
