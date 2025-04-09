@@ -12,6 +12,24 @@ use App\Http\Controllers\Funcionario\FuncionarioQuadroHorarioController;
 use App\Http\Controllers\Funcionario\FuncionarioRemuneracaoController;
 use App\Http\Controllers\SituacaoController;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\CorController;
+use App\Http\Controllers\EspecieController;
+use App\Http\Controllers\RacaController;
+
+Route::get('/raca', [RacaController::class, 'index']);
+Route::post('/raca', [RacaController::class, 'store']);
+Route::put('/raca/{id}', [RacaController::class, 'update']);
+
+
+Route::get('/especie', [EspecieController::class, 'index']);
+Route::post('/especie', [EspecieController::class, 'store']);
+Route::put('/especie/{id}', [EspecieController::class, 'update']);
+
+
+Route::get('/cor', [CorController::class, 'index']);
+Route::post('/cor', [CorController::class, 'store']);
+Route::put('/cor/{id}', [CorController::class, 'update']);
+
 
 Route::get('/upload/{path}', [UploadController::class, 'retornarImagem'])
     ->where('path', '.*')
