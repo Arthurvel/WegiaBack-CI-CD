@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cor;
 
-class CorController extends Controller
+class CorController extends BaseController
 {
     public function index()
     {
