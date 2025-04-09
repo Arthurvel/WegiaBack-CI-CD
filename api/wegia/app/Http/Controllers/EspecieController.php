@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Especie;
 
-class EspecieController extends Controller
+class EspecieController extends BaseController
 {
     public function index()
     {
