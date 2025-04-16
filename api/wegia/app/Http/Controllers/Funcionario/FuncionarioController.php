@@ -135,7 +135,7 @@ class FuncionarioController extends BaseController
     /**
      * @OA\Post(
      *     path="/funcionario",
-     *     summary="Cadastrar um novo funcionario",
+     *     summary="Cadastrar uma nova cor",
      *     tags={"Funcionario"},
      *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
