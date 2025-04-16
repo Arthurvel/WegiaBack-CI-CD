@@ -415,7 +415,7 @@
                 "tags": [
                     "Funcionario"
                 ],
-                "summary": "Cadastrar um novo funcionario",
+                "summary": "Cadastrar uma nova cor",
                 "operationId": "2445a67eb3618df3da075fbc7a755b2d",
                 "requestBody": {
                     "required": true,
@@ -3006,6 +3006,200 @@
                 ]
             }
         },
+        "/pet/especie": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar os todas as especies",
+                "operationId": "e57d4f2cbd86c0b7cf8caecd9a72b665",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastrar as Especiees",
+                "operationId": "c11392fe6eb3d010a9c23dd075281c16",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "descricao"
+                                ],
+                                "properties": {
+                                    "descricao": {
+                                        "description": "Campo descrição",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/raca": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar os todas as Racas",
+                "operationId": "68514a8ce62f290d83e00b382a376d00",
+                "responses": {
+                    "200": {
+                        "description": "OpeRacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastrar as racas",
+                "operationId": "bef295c1a7a472ac4b392e8e1c25b894",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "descricao"
+                                ],
+                                "properties": {
+                                    "descricao": {
+                                        "description": "Campo descrição",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OpeRacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/situacao": {
             "get": {
                 "tags": [
@@ -3186,6 +3380,10 @@
         {
             "name": "Situacao",
             "description": "Operações relacionadas a Situacao"
+        },
+        {
+            "name": "Pet",
+            "description": "Pet"
         }
     ]
 }
