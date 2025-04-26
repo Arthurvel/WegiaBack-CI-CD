@@ -10,8 +10,12 @@ use App\Http\Controllers\Funcionario\FuncionarioDocumentoController;
 use App\Http\Controllers\Funcionario\FuncionarioInfoController;
 use App\Http\Controllers\Funcionario\FuncionarioQuadroHorarioController;
 use App\Http\Controllers\Funcionario\FuncionarioRemuneracaoController;
+use App\Http\Controllers\Pet\CorController;
+use App\Http\Controllers\Pet\EspecieController;
+use App\Http\Controllers\Pet\RacaController;
 use App\Http\Controllers\SituacaoController;
 use App\Http\Controllers\UploadController;
+use App\Models\Especie;
 
 Route::get('/upload/{path}', [UploadController::class, 'retornarImagem'])
     ->where('path', '.*')
@@ -95,4 +99,14 @@ Route::group([ 'prefix' => 'cargo'], function () {
     Route::get('/', [CargoController::class, 'index']);
     Route::post('/', [CargoController::class, 'create']);
     Route::delete('/{id_cargo}', [CargoController::class, 'destroy']);
+});
+Route::group(['prefix' => 'pet'], function ( ){
+    Route::group(['prefix' => 'especie'], function ( ){
+        Route::post('/', [EspecieController::class, 'create']);
+        Route::get('/', [EspecieController::class, 'index']);
+    });
+    Route::group(['prefix' => 'raca'], function ( ){
+        Route::post('/', [RacaController::class, 'create']);
+        Route::get('/', [RacaController::class, 'index']);
+    });
 });
