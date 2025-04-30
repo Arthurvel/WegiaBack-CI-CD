@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel\BaseModel;
+use App\Models\Funcionario\Funcionario;
 
 class Cargo extends BaseModel
 {

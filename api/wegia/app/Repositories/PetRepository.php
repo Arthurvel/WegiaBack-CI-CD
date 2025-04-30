@@ -2,9 +2,12 @@
 
 namespace App\Repositories;
 
+use App\DTOs\Pet\AtualizarFichaMedicaDTO;
 use App\DTOs\Pet\CriarEspecieDTO;
+use App\DTOs\Pet\CriarFichaMedicaDTO;
 use App\DTOs\Pet\CriarRacaDTO;
 use App\Models\Especie;
+use App\Models\Pet\FichaMedica;
 use App\Models\Raca;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -25,5 +28,26 @@ class PetRepository
     public function pegarRaca() : Collection
     {
         return Raca::get();
+    }
+    public function criarFichaMedica(CriarFichaMedicaDTO $dados) : FichaMedica
+    {
+        return FichaMedica::create($dados->toArray());
+    }
+    public function atualizarFichaMedica(AtualizarFichaMedicaDTO $dados, int $id_ficha_medica) : FichaMedica
+    {
+        $ficha_medica = $this->pegarFichaMedicaPorId($id_ficha_medica);
+
+        $ficha_medica->update($dados->toArray());
+        $ficha_medica->save();
+
+        return $ficha_medica;
+    }
+    public function pegarFichaMedicaPorId(int $id_ficha_medica) : FichaMedica
+    {
+            return FichaMedica::findOrFail($id_ficha_medica);    
+    }
+    public function pegarFichaMedicaPorPet(int $id_pet) : FichaMedica
+    {
+            return FichaMedica::where('id_pet', $id_pet)->firstOrFail();    
     }
 }
