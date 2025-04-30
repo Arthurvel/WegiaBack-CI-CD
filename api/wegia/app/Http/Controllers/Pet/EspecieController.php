@@ -26,14 +26,14 @@ class EspecieController extends BaseController
     /**
      * @OA\Post(
      *     path="/pet/especie",
-     *     summary="Cadastrar as Especiees",
+     *     summary="Cadastrar as Especies",
      *     tags={"Pet"},
      *     security={{"bearerAuth": {}}},
      *  @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
      *             required={"descricao"},
-     *             @OA\Property(property="descricao", type="string", description="Campo descrição"),
+     *             @OA\Property(property="descricao", type="string", description="Campo descrição")
      *         )
      *     ),
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),

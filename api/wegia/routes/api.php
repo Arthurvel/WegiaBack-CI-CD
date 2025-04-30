@@ -15,6 +15,7 @@ use App\Http\Controllers\Funcionario\FuncionarioQuadroHorarioController;
 use App\Http\Controllers\Funcionario\FuncionarioRemuneracaoController;
 use App\Http\Controllers\Pet\CorController;
 use App\Http\Controllers\Pet\EspecieController;
+use App\Http\Controllers\Pet\FichaMedicaController;
 use App\Http\Controllers\Pet\RacaController;
 use App\Http\Controllers\SituacaoController;
 use App\Http\Controllers\UploadController;
@@ -144,4 +145,7 @@ Route::group(['prefix' => 'pet'], function ( ){
         Route::post('/', [RacaController::class, 'create']);
         Route::get('/', [RacaController::class, 'index']);
     });
+    Route::post('/{id_pet}/ficha-medica', [FichaMedicaController::class, 'create']);
+    Route::put('/ficha-medica/{id_ficha_medica}', [FichaMedicaController::class, 'update']);
+    Route::get('/{id_pet}/ficha-medica', [FichaMedicaController::class, 'index']);
 });

@@ -974,7 +974,7 @@
                 "tags": [
                     "Funcionario"
                 ],
-                "summary": "Cadastrar uma nova cor",
+                "summary": "Cadastrar uma novo funcionario",
                 "operationId": "2445a67eb3618df3da075fbc7a755b2d",
                 "requestBody": {
                     "required": true,
@@ -3866,7 +3866,7 @@
                 "tags": [
                     "Pet"
                 ],
-                "summary": "Cadastrar as Especiees",
+                "summary": "Cadastrar as Especies",
                 "operationId": "c11392fe6eb3d010a9c23dd075281c16",
                 "requestBody": {
                     "required": true,
@@ -3890,6 +3890,198 @@
                 "responses": {
                     "200": {
                         "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/{id_pet}/ficha-medica": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar a ficha medica do Pet",
+                "operationId": "a5a7f70d7952b873c69a150bf6371964",
+                "parameters": [
+                    {
+                        "name": "id_pet",
+                        "in": "path",
+                        "description": "ID do Pet",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastrar a Ficha Medica",
+                "operationId": "f773c387cf1f4e571c542b6d1a9722e9",
+                "parameters": [
+                    {
+                        "name": "id_pet",
+                        "in": "path",
+                        "description": "ID do Pet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "castrado",
+                                    "necessidades_especiais"
+                                ],
+                                "properties": {
+                                    "castrado": {
+                                        "description": "Castrado",
+                                        "type": "string"
+                                    },
+                                    "necessidades_especiais": {
+                                        "description": "Necessidades Especiais",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/ficha-medica/{id_ficha_medica}": {
+            "put": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Atualizar uma ficha médica de um pet",
+                "operationId": "9d3ff6a1725a255d7c5842a2e0f9c0b7",
+                "parameters": [
+                    {
+                        "name": "id_ficha_medica",
+                        "in": "path",
+                        "description": "ID da Ficha Medica",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "castrado": {
+                                        "description": "Castrado(s,n)",
+                                        "type": "string"
+                                    },
+                                    "necessidades_especiais": {
+                                        "description": "Necessidades Especiais",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ficha Medica atualizada com sucesso",
                         "content": {
                             "application/json": {
                                 "schema": {}
