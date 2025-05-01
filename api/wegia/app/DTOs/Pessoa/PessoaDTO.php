@@ -2,6 +2,7 @@
 
 namespace App\DTOs\Pessoa;
 
+use App\DTOs\Funcionario\FuncionarioDTO;
 use App\Helpers\UploadSeguroHelper;
 use App\Models\Pessoa;
 use Carbon\Carbon;
@@ -32,6 +33,7 @@ class PessoaDTO
     public ?string $tipo_sanguineo;
     public int $nivel_acesso;
     public int $adm_configurado;
+    public ?array $funcionario;
 
     public function __construct(
         int $id_pessoa,
@@ -57,7 +59,8 @@ class PessoaDTO
         ?string $nome_pai = null,
         ?string $tipo_sanguineo = null,
         int $nivel_acesso = 0,
-        int $adm_configurado = 0
+        int $adm_configurado = 0,
+        ?array $funcionario = null
     ) {
         $this->id_pessoa       = $id_pessoa;
         $this->cpf             = $cpf;
@@ -83,6 +86,7 @@ class PessoaDTO
         $this->tipo_sanguineo  = $tipo_sanguineo;
         $this->nivel_acesso    = $nivel_acesso;
         $this->adm_configurado = $adm_configurado;
+        $this->funcionario     = $funcionario;
     }
 
     public static function fromArray(array $dados): self
@@ -111,7 +115,8 @@ class PessoaDTO
             $dados['nome_pai'] ?? null,
             $dados['tipo_sanguineo'] ?? null,
             $dados['nivel_acesso'] ?? 0,
-            $dados['adm_configurado'] ?? 0
+            $dados['adm_configurado'] ?? 0,
+            $dados['funcionario'] ?? null
         );
     }
 
@@ -142,6 +147,7 @@ class PessoaDTO
             'tipo_sanguineo'  => $this->tipo_sanguineo,
             'nivel_acesso'    => $this->nivel_acesso,
             'adm_configurado' => $this->adm_configurado,
+            'funcionario'     => $this->funcionario ? FuncionarioDTO::fromArray($this->funcionario) : null
         ];
     }
 
