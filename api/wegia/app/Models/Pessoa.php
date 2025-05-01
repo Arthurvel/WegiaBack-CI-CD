@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Funcionario\Funcionario;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
@@ -65,7 +66,7 @@ class Pessoa extends Authenticatable
 
     public function funcionario()
     {
-        return $this->hasMany(Funcionario::class, 'id_pessoa');
+        return $this->hasOne(Funcionario::class, 'id_pessoa');
     }
 
 }

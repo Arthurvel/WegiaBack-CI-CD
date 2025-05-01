@@ -242,6 +242,13 @@ class PessoaController extends BaseController
      *     path="/pessoa/logada",
      *     summary="Retorna a pessoa autenticado",
      *     tags={"Pessoa"},
+     *     @OA\Parameter(
+     *         name="with",
+     *         in="query",
+     *         description="Separados por virgula",
+     *         required=false,
+     *         @OA\Schema(type="string", default="")
+     *     ),
      *     security={{"bearerAuth": {}}},
      *     @OA\Response(
      *         response=200,
@@ -305,7 +312,10 @@ class PessoaController extends BaseController
     public function retornarPessoaLogada(Request $request) : JsonResponse
     {
         try {            
-            return $this->sucessoResponse($request->user());
+            $with   = isset($request->with) ? explode(',', $request->with) : [];
+            $pessoa = $request->user()->load($with);
+
+            return $this->sucessoResponse($pessoa);
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }
