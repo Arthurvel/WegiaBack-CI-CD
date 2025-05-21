@@ -7,11 +7,14 @@ use App\DTOs\Pet\AtualizarFichaMedicaDTO;
 use App\DTOs\Pet\CriarAtendimentoDTO;
 use App\DTOs\Pet\CriarEspecieDTO;
 use App\DTOs\Pet\CriarFichaMedicaDTO;
+use App\DTOs\Pet\CriarMedicacaoDTO;
 use App\DTOs\Pet\CriarRacaDTO;
 use App\Models\Especie;
 use App\Models\Pet\Atendimento;
 use App\Models\Pet\FichaMedica;
+use App\Models\Pet\Medicacao;
 use App\Models\Raca;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class PetRepository
@@ -74,5 +77,30 @@ class PetRepository
     public function pegarAtendimentoPorId(int $id_atendimento) : Atendimento
     {
             return Atendimento::findOrFail($id_atendimento);    
+    }
+    public function pegarAtendimentoPorFichaMedica(int $id_ficha_medica) : Atendimento
+    {
+            return Atendimento::where('id_ficha_medica', $id_ficha_medica)->firstOrFail();    
+    }
+    public function criarMedicacao(CriarMedicacaoDTO $dados) : Medicacao
+    {
+        return Medicacao::create($dados->toArray());
+    }
+    public function deletarMedicacao($id_medicacao) : bool
+    {
+        $medicacao = $this->pegarMedicacaoPorId($id_medicacao);
+        return $medicacao->delete();
+    }
+    public function pegarMedicacaoPorId(int $id_medicacao) : Medicacao
+    {
+            return Medicacao::findOrFail($id_medicacao);    
+    }
+    public function pegarMedicacaoPorAtendimento(int $id_pet_atendimento, array $parametros = []) : LengthAwarePaginator
+    {
+        $itensPorPagina = $parametros['itensPorPagina'] ?? 10;
+        $pagina         = $parametros['pagina'] ?? 1;
+        return Medicacao::where('id_pet_atendimento', $id_pet_atendimento)
+                ->paginate($itensPorPagina, ['*'], 'page', $pagina); 
+                   
     }
 }

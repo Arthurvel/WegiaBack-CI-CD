@@ -7,6 +7,7 @@ use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 use App\Services\PetService;
 use App\Validations\Pet\AtualizarAtendimentoValidation;
+use App\Validations\Pet\BuscarAtendimentoValidation;
 use App\Validations\Pet\CriarAtendimentoValidation;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -141,4 +142,56 @@ class AtendimentoController extends BaseController
             return $this->errorResponse(null, 500, $e->getMessage());
         } 
     }
+    /**
+     * @OA\Get(
+     *     path="/pet/ficha-medica/{id_ficha_medica}/atendimento",
+     *     summary="Buscar o atendimento do Pet",
+     *     tags={"Pet"},
+     *     security={{"bearerAuth": {}}},
+     *      @OA\Parameter(
+     *         name="id_ficha_medica",
+     *         in="path",
+     *         description="ID da Ficha Medica do Pet",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *       @OA\Parameter(
+     *         name="buscar",
+     *         in="query",
+     *         description="Campo para buscar(data_atendimento, descricao)",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="ordenacao",
+     *         in="query",
+     *         description="Campo para ordenar (data_atendimento, descricao)",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="tipoOrdenacao",
+     *         in="query",
+     *         description="Tipo de ordenação",
+     *         required=false,
+     *         @OA\Schema(type="string", default="ASC")
+     *     ),
+     *     @OA\Parameter(
+     *         name="itensPorPagina",
+     *         in="query",
+     *         description="Quantidade de atendimentos por página",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=10)
+     *     ),
+     *     @OA\Parameter(
+     *         name="pagina",
+     *         in="query",
+     *         description="Número da página",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=1)
+     *     ),
+     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
+     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
+     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
+     * )
+    */
 }
