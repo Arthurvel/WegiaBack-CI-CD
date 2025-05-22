@@ -10,11 +10,13 @@ use App\DTOs\Pet\CriarAtendimentoDTO;
 use App\DTOs\Pet\CriarEspecieDTO;
 use App\DTOs\Pet\CriarFichaMedicaDTO;
 use App\DTOs\Pet\CriarMedicacaoDTO;
+use App\DTOs\Pet\CriarMedicamentoDTO;
 use App\DTOs\Pet\CriarRacaDTO;
 use App\Models\Especie;
 use App\Models\Pet\Atendimento;
 use App\Models\Pet\FichaMedica;
 use App\Models\Pet\Medicacao;
+use App\Models\Pet\Medicamento;
 use App\Models\Raca;
 use App\Repositories\PetRepository;
 use Illuminate\Database\Eloquent\Collection;
@@ -106,6 +108,19 @@ class PetService
             $medicacoes->total(),
             $medicacoes->perPage()
         ); 
+    }
+    public function criarMedicamento(array $dados) : Medicamento
+    {
+        $criarmedicamentodto = CriarMedicamentoDTO::fromArray($dados);
+        return $this->petRepository->criarMedicamento($criarmedicamentodto); 
+    }
+    public function deletarMedicamento(int $id_medicamento) : bool
+    {
+        return $this->petRepository->deletarMedicamento($id_medicamento); 
+    }
+    public function pegarMedicamento() : Collection
+    {
+        return $this->petRepository->pegarMedicamento(); 
     }
 }
 

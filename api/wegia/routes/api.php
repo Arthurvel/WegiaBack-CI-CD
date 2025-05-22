@@ -15,6 +15,7 @@ use App\Http\Controllers\Pet\CorController;
 use App\Http\Controllers\Pet\EspecieController;
 use App\Http\Controllers\Pet\FichaMedicaController;
 use App\Http\Controllers\Pet\MedicacaoController;
+use App\Http\Controllers\Pet\MedicamentoController;
 use App\Http\Controllers\Pet\RacaController;
 use App\Http\Controllers\SituacaoController;
 use App\Http\Controllers\UploadController;
@@ -126,5 +127,8 @@ Route::group(['prefix' => 'pet'], function ( ){
         Route::post('/atendimento/{id_pet_atendimento}/medicacao', [MedicacaoController::class, 'create']);
         Route::delete('/atendimento/medicacao/{id_medicacao}', [MedicacaoController::class, 'delete']);
         Route::get('/atendimento/{id_pet_atendimento}/medicacao', [MedicacaoController::class, 'index']);
+        Route::post('/atendimento/medicacao/medicamento', [MedicamentoController::class, 'create']);
+        Route::delete('/atendimento/medicacao/medicamento/{id_medicamento}', [MedicamentoController::class, 'delete']);
+        Route::get('/atendimento/medicacao/medicamento', [MedicamentoController::class, 'index']);
     });
 });

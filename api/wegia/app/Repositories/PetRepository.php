@@ -8,11 +8,13 @@ use App\DTOs\Pet\CriarAtendimentoDTO;
 use App\DTOs\Pet\CriarEspecieDTO;
 use App\DTOs\Pet\CriarFichaMedicaDTO;
 use App\DTOs\Pet\CriarMedicacaoDTO;
+use App\DTOs\Pet\CriarMedicamentoDTO;
 use App\DTOs\Pet\CriarRacaDTO;
 use App\Models\Especie;
 use App\Models\Pet\Atendimento;
 use App\Models\Pet\FichaMedica;
 use App\Models\Pet\Medicacao;
+use App\Models\Pet\Medicamento;
 use App\Models\Raca;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -102,5 +104,22 @@ class PetRepository
         return Medicacao::where('id_pet_atendimento', $id_pet_atendimento)
                 ->paginate($itensPorPagina, ['*'], 'page', $pagina); 
                    
+    }
+    public function criarMedicamento(CriarMedicamentoDTO $dados) : Medicamento
+    {
+        return Medicamento::create($dados->toArray());
+    }
+    public function deletarMedicamento($id_medicamento) : bool
+    {
+        $medicamento = $this->pegarMedicamentoPorId($id_medicamento);
+        return $medicamento->delete();
+    }
+    public function pegarMedicamentoPorId(int $id_medicamento) : Medicamento
+    {
+            return Medicamento::findOrFail($id_medicamento);    
+    }
+    public function pegarMedicamento() : Collection
+    {
+        return Medicamento::get();
     }
 }
