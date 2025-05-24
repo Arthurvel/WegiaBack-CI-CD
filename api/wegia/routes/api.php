@@ -124,6 +124,7 @@ Route::group(['prefix' => 'pet'], function ( ){
         Route::post('/{id_ficha_medica}/atendimento', [AtendimentoController::class, 'create']);
         Route::delete('/atendimento/{id_atendimento}', [AtendimentoController::class, 'delete']);
         Route::put('/atendimento/{id_atendimento}', [AtendimentoController::class, 'update']);
+        Route::get('/{id_ficha_medica}/atendimento', [AtendimentoController::class, 'index']);
         Route::post('/atendimento/{id_pet_atendimento}/medicacao', [MedicacaoController::class, 'create']);
         Route::delete('/atendimento/medicacao/{id_medicacao}', [MedicacaoController::class, 'delete']);
         Route::get('/atendimento/{id_pet_atendimento}/medicacao', [MedicacaoController::class, 'index']);

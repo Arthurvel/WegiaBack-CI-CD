@@ -145,7 +145,7 @@ class AtendimentoController extends BaseController
     /**
      * @OA\Get(
      *     path="/pet/ficha-medica/{id_ficha_medica}/atendimento",
-     *     summary="Buscar o atendimento do Pet",
+     *     summary="Buscar o atendimento por Ficha Medica",
      *     tags={"Pet"},
      *     security={{"bearerAuth": {}}},
      *      @OA\Parameter(
@@ -194,4 +194,21 @@ class AtendimentoController extends BaseController
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
     */
+    public function index(Request $request, int $id_ficha_medica) : JsonResponse
+    {   
+        try {
+            $this->validarRequest(
+                [
+                    ...$request->all(),  
+                    'id_ficha_medica' => $id_ficha_medica  
+                ],
+                BuscarAtendimentoValidation::rules(),
+                BuscarAtendimentoValidation::messages()
+            );
+            $atendimento = $this->petService->pegarAtendimentoPorFichaMedica($id_ficha_medica, $request->all());
+            return  $this->sucessoResponse($atendimento);
+        }catch (Exception $e) {
+            return $this->errorResponse($e);
+        } 
+    }
 }

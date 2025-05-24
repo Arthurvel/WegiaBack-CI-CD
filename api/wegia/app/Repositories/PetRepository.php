@@ -80,9 +80,23 @@ class PetRepository
     {
             return Atendimento::findOrFail($id_atendimento);    
     }
-    public function pegarAtendimentoPorFichaMedica(int $id_ficha_medica) : Atendimento
+    public function pegarAtendimentoPorFichaMedica(int $id_ficha_medica, array $parametros) : LengthAwarePaginator
     {
-            return Atendimento::where('id_ficha_medica', $id_ficha_medica)->firstOrFail();    
+        $itensPorPagina = $parametros['itensPorPagina'] ?? 10;
+        $pagina         = $parametros['pagina'] ?? 1;
+        $ordenacao      = $parametros['ordenacao'] ?? null;
+        $tipoOrdenacao  = $parametros['tipoOrdenacao'] ?? 'ASC';
+        $buscar         = $parametros['buscar'] ?? null;
+        return Atendimento::where('id_ficha_medica', $id_ficha_medica)
+        ->when(!is_null($buscar), function ($q) use ($buscar) {
+            return $q->where('data_atendimento', 'LIKE', $buscar)   
+                ->orWhere('descricao', 'LIKE', $buscar);
+        })
+        ->when(!is_null($ordenacao), function ($q) use ($ordenacao, $tipoOrdenacao) {
+                return $q->orderBy("{$ordenacao}", $tipoOrdenacao);
+        })        
+        ->paginate($itensPorPagina, ['*'], 'page', $pagina);  
+                   
     }
     public function criarMedicacao(CriarMedicacaoDTO $dados) : Medicacao
     {

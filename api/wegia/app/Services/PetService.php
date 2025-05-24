@@ -5,6 +5,7 @@ namespace App\Services;
 use App\DTOs\PaginacaoDTO;
 use App\DTOs\Pet\AtualizarAtendimentoDTO;
 use App\DTOs\Pet\AtualizarFichaMedicaDTO;
+use App\DTOs\Pet\BuscarAtendimentoDTO;
 use App\DTOs\Pet\BuscarMedicacaoDTO;
 use App\DTOs\Pet\CriarAtendimentoDTO;
 use App\DTOs\Pet\CriarEspecieDTO;
@@ -19,6 +20,7 @@ use App\Models\Pet\Medicacao;
 use App\Models\Pet\Medicamento;
 use App\Models\Raca;
 use App\Repositories\PetRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class PetService
@@ -80,9 +82,19 @@ class PetService
         $atualizaratendimentodto = AtualizarAtendimentoDTO::fromArray($dados);
         return $this->petRepository->atualizarAtendimento($atualizaratendimentodto, $id_atendimento); 
     }
-    public function pegarAtendimentoPorFichaMedica(int $id_ficha_medica, array $parametros = []) : Atendimento
+    public function pegarAtendimentoPorFichaMedica(int $id_ficha_medica, array $parametros = []) : PaginacaoDTO
     {
-        return $this->petRepository->pegarAtendimentoPorFichaMedica($id_ficha_medica); 
+        $atendimento = $this->petRepository->pegarAtendimentoporFichaMedica($id_ficha_medica, $parametros);
+        $itens = collect($atendimento->items())->map(function ($atendimento) {
+            return BuscarAtendimentoDTO::fromArray($atendimento->toArray())->toArray();
+        })->toArray();
+        return new PaginacaoDTO(
+            $itens,
+            $atendimento->currentPage(),
+            $atendimento->lastPage(),
+            $atendimento->total(),
+            $atendimento->perPage()
+        );
     }
     public function criarMedicacao(array $dados, int $id_pet_atendimento) : Medicacao
     {
