@@ -49,7 +49,7 @@ class PetService
     }
     public function pegarRaca() : Collection
     {
-        return $this->petRepository->pegarEspecie(); 
+        return $this->petRepository->pegarRaca(); 
     }
     
     public function criarFichaMedica(array $dados, int $id_pet) : FichaMedica
