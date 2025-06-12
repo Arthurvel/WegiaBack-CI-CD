@@ -13,14 +13,15 @@ use App\Http\Controllers\Funcionario\FuncionarioDocumentoController;
 use App\Http\Controllers\Funcionario\FuncionarioInfoController;
 use App\Http\Controllers\Funcionario\FuncionarioQuadroHorarioController;
 use App\Http\Controllers\Funcionario\FuncionarioRemuneracaoController;
+use App\Http\Controllers\Pet\AtendimentoController;
 use App\Http\Controllers\Pet\CorController;
 use App\Http\Controllers\Pet\EspecieController;
+use App\Http\Controllers\Pet\FichaMedicaController;
 use App\Http\Controllers\Pet\RacaController;
 use App\Http\Controllers\SituacaoController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\Atendido\AtendidoTipoController;
 use App\Http\Controllers\Pessoa\PessoaDependenteController;
-
 
 Route::get('/upload/{path}', [UploadController::class, 'retornarImagem'])
     ->where('path', '.*')
@@ -144,4 +145,12 @@ Route::group(['prefix' => 'pet'], function ( ){
         Route::post('/', [RacaController::class, 'create']);
         Route::get('/', [RacaController::class, 'index']);
     });
+    Route::post('/{id_pet}/ficha-medica', [FichaMedicaController::class, 'create']);
+    Route::put('/ficha-medica/{id_ficha_medica}', [FichaMedicaController::class, 'update']);
+    Route::get('/{id_pet}/ficha-medica', [FichaMedicaController::class, 'index']);
+
+    Route::post('/ficha-medica/{id_ficha_medica}/atendimento', [AtendimentoController::class, 'create']);
+    Route::delete('/ficha-medica/atendimento/{id_atendimento}', [AtendimentoController::class, 'delete']);
+    Route::put('/ficha-medica/atendimento/{id_atendimento}', [AtendimentoController::class, 'update']);
+
 });
