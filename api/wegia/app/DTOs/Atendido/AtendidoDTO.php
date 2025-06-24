@@ -24,7 +24,7 @@ class AtendidoDTO
         int $atendido_status_idatendido_status,
         ?array $pessoa = null,
         ?array $tipo = null,
-        ?array $status = null 
+        ?array $status = null
     ) {
         $this->idatendido                        = $idatendido;
         $this->pessoa_id_pessoa                  = $pessoa_id_pessoa;
@@ -37,7 +37,7 @@ class AtendidoDTO
 
     public static function fromArray(array $dados): self
     {
-        return new self(    
+        return new self(
             $dados['idatendido'],
             $dados['pessoa_id_pessoa'],
             $dados['atendido_tipo_idatendido_tipo'],

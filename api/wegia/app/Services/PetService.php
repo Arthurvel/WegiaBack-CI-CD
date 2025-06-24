@@ -8,16 +8,16 @@ use App\DTOs\Pet\AtualizarFichaMedicaDTO;
 use App\DTOs\Pet\BuscarAtendimentoDTO;
 use App\DTOs\Pet\BuscarMedicacaoDTO;
 use App\DTOs\Pet\CriarAtendimentoDTO;
-use App\DTOs\Pet\CriarEspecieDTO;
 use App\DTOs\Pet\CriarFichaMedicaDTO;
 use App\DTOs\Pet\CriarMedicacaoDTO;
 use App\DTOs\Pet\CriarMedicamentoDTO;
-use App\DTOs\Pet\CriarRacaDTO;
-use App\Models\Especie;
 use App\Models\Pet\Atendimento;
 use App\Models\Pet\FichaMedica;
 use App\Models\Pet\Medicacao;
 use App\Models\Pet\Medicamento;
+use App\DTOs\Pet\CriarEspecieDTO;
+use App\DTOs\Pet\CriarRacaDTO;
+use App\Models\Especie;
 use App\Models\Raca;
 use App\Repositories\PetRepository;
 use Illuminate\Database\Eloquent\Collection;
@@ -37,6 +37,7 @@ class PetService
         $criarespeciedto = CriarEspecieDTO::fromArray($dados);
         return $this->petRepository->criarEspecie($criarespeciedto);
     }
+
     public function pegarEspecie() : Collection
     {
         return $this->petRepository->pegarEspecie();
@@ -134,4 +135,3 @@ class PetService
         return $this->petRepository->pegarMedicamento();
     }
 }
-
