@@ -5,19 +5,19 @@ namespace App\Models\Pet;
 use App\Models\BaseModel\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class FichaMedica extends BaseModel
+class Medicamento extends BaseModel
 {
     use HasFactory;
 
-    protected $table = 'pet_ficha_medica';
+    protected $table = 'pet_medicamento';
     
-    protected $primaryKey = 'id_ficha_medica';
+    protected $primaryKey = 'id_medicamento';
 
     public $incrementing = true;
 
     public $timestamps = false;
 
-    protected $fillable = ['id_pet','castrado', 'necessidades_especiais'];
+    protected $fillable = ['nome_medicamento','descricao_medicamento', 'aplicacao'];
     
     
 }
