@@ -71,6 +71,7 @@ class AtendimentoController extends BaseController
         }
     }
 
+
     /**
      * @OA\Delete(
      *     path="/pet/ficha-medica/atendimento/{id_atendimento}",

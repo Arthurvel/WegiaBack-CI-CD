@@ -52,10 +52,12 @@ class PetService
         return $this->petRepository->pegarRaca();
     }
 
+
     public function criarFichaMedica(array $dados, int $id_pet) : FichaMedica
     {
         $dados['id_pet'] = $id_pet;
         $criarfichamedicadto = CriarFichaMedicaDTO::fromArray($dados);
+        return $this->petRepository->criarFichaMedica($criarfichamedicadto);
         return $this->petRepository->criarFichaMedica($criarfichamedicadto);
     }
     public function atualizarFichaMedica(array $dados, int $id_ficha_medica) : FichaMedica
@@ -73,6 +75,7 @@ class PetService
         $criaratendimentodto = CriarAtendimentoDTO::fromArray($dados);
         return $this->petRepository->criarAtendimento($criaratendimentodto);
     }
+
     public function deletarAtendimento(int $id_atendimento) : bool
     {
         return $this->petRepository->deletarAtendimento($id_atendimento);
@@ -135,3 +138,4 @@ class PetService
         return $this->petRepository->pegarMedicamento();
     }
 }
+

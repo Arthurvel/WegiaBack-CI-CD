@@ -54,6 +54,7 @@ class PetRepository
     {
             return FichaMedica::findOrFail($id_ficha_medica);
     }
+
     public function pegarFichaMedicaPorPet(int $id_pet) : FichaMedica
     {
             return FichaMedica::where('id_pet', $id_pet)->firstOrFail();
@@ -135,5 +136,6 @@ class PetRepository
     public function pegarMedicamento() : Collection
     {
         return Medicamento::get();
+            return Atendimento::findOrFail($id_atendimento);
     }
 }

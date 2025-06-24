@@ -2,6 +2,8 @@
 
 namespace App\DTOs\Pet;
 
+use Ramsey\Uuid\Type\Integer;
+
 class AtualizarAtendimentoDTO
 {
     public ?string $data_atendimento ;

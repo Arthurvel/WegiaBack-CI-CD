@@ -26,22 +26,18 @@ class EspecieController extends BaseController
     /**
      * @OA\Post(
      *     path="/pet/especie",
-<<<<<<< HEAD
      *     summary="Cadastrar as Especies",
-=======
      *     summary="Cadastrar as Especiees",
->>>>>>> develop
+     *     summary="Cadastrar as Especies",
      *     tags={"Pet"},
      *     security={{"bearerAuth": {}}},
      *  @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
      *             required={"descricao"},
-<<<<<<< HEAD
      *             @OA\Property(property="descricao", type="string", description="Campo descrição")
-=======
      *             @OA\Property(property="descricao", type="string", description="Campo descrição"),
->>>>>>> develop
+     *             @OA\Property(property="descricao", type="string", description="Campo descrição")
      *         )
      *     ),
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
@@ -51,7 +47,7 @@ class EspecieController extends BaseController
     */
     public function create(Request $request):JsonResponse
     {
-        try{ 
+        try{
             $this->validarRequest(
                 $request->all(),
                 CriarEspecieValidation::rules(),
@@ -76,12 +72,12 @@ class EspecieController extends BaseController
      * )
     */
     public function index() : JsonResponse
-    {   
+    {
         try {
                 $especie = $this->petService->pegarEspecie();
                     return  $this->sucessoResponse($especie);
             } catch (Exception $e) {
                     return $this->errorResponse($e);
-        } 
+        }
     }
 }
