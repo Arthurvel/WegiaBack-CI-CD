@@ -54,9 +54,9 @@ class AtendimentoController extends BaseController
     */
     public function create(int $id_ficha_medica, Request $request):JsonResponse
     {
-        try{ 
+        try{
             $this->validarRequest(
-                [   
+                [
                     ...$request->all(),
                     'id_ficha_medica' => $id_ficha_medica
                 ],
@@ -70,7 +70,7 @@ class AtendimentoController extends BaseController
 
         }
     }
-    
+
     /**
      * @OA\Delete(
      *     path="/pet/ficha-medica/atendimento/{id_atendimento}",
@@ -91,7 +91,7 @@ class AtendimentoController extends BaseController
     */
     public function delete(int $id_atendimento):JsonResponse
     {
-        try{ 
+        try{
             $deletarAtendimento=$this->petService->deletarAtendimento($id_atendimento);
             return $this->sucessoResponse($deletarAtendimento,200);
         }catch(Exception $e) {
@@ -127,8 +127,8 @@ class AtendimentoController extends BaseController
         try {
             $this->validarRequest(
                 [
-                    ...$request->all(),  
-                    'id_atendimento' => $id_atendimento  
+                    ...$request->all(),
+                    'id_atendimento' => $id_atendimento
                 ],
                 AtualizarAtendimentoValidation::rules(),
                 AtualizarAtendimentoValidation::messages()
@@ -137,10 +137,10 @@ class AtendimentoController extends BaseController
             $resultado = $this->petService->atualizarAtendimento($request->all(), $id_atendimento);
 
             return $this->sucessoResponse($resultado);
-            
+
         } catch (Exception $e) {
             return $this->errorResponse(null, 500, $e->getMessage());
-        } 
+        }
     }
     /**
      * @OA\Get(
@@ -195,12 +195,12 @@ class AtendimentoController extends BaseController
      * )
     */
     public function index(Request $request, int $id_ficha_medica) : JsonResponse
-    {   
+    {
         try {
             $this->validarRequest(
                 [
-                    ...$request->all(),  
-                    'id_ficha_medica' => $id_ficha_medica  
+                    ...$request->all(),
+                    'id_ficha_medica' => $id_ficha_medica
                 ],
                 BuscarAtendimentoValidation::rules(),
                 BuscarAtendimentoValidation::messages()
@@ -209,6 +209,6 @@ class AtendimentoController extends BaseController
             return  $this->sucessoResponse($atendimento);
         }catch (Exception $e) {
             return $this->errorResponse($e);
-        } 
+        }
     }
 }

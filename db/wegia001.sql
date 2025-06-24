@@ -72,6 +72,31 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pessoa` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
+-- Table `wegia`.`pessoa_dependente`
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `wegia`.`pessoa_dependente` (
+  id_dependente INT AUTO_INCREMENT PRIMARY KEY,
+  id_pessoa INT NOT NULL,
+  id_dependente_pessoa INT NOT NULL,
+  parentesco ENUM(
+    'Companheiro(a)',
+    'Cônjuge',
+    'Enteado(a)',
+    'Ex-cônjuge',
+    'Filho(a)',
+    'Irmão(ã)',
+    'Neto(a)',
+    'Pais',
+    'Outra relação de dependência'
+  ) NOT NULL,
+  CONSTRAINT fk_dependente_pessoa
+    FOREIGN KEY (id_pessoa) REFERENCES pessoa(id_pessoa),
+  CONSTRAINT fk_dependente_pessoa_dependente
+    FOREIGN KEY (id_dependente_pessoa) REFERENCES pessoa(id_pessoa)
+);
+
+-- -----------------------------------------------------
 -- Table `wegia`.`cargo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`cargo` (
@@ -1032,48 +1057,6 @@ CREATE TABLE IF NOT EXISTS `wegia`.`remessa` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `wegia`.`funcionario_dependente_parentesco`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`funcionario_dependente_parentesco` (
-  `id_parentesco` INT NOT NULL AUTO_INCREMENT,
-  `descricao` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`id_parentesco`),
-  UNIQUE INDEX `id_parentesco_UNIQUE` (`id_parentesco` ASC),
-  UNIQUE INDEX `descricao_UNIQUE` (`descricao` ASC))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `wegia`.`funcionario_dependentes`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`funcionario_dependentes` (
-  `id_dependente` INT NOT NULL AUTO_INCREMENT,
-  `id_funcionario` INT(11) NOT NULL,
-  `id_pessoa` INT(11) NOT NULL,
-  `id_parentesco` INT NOT NULL,
-  PRIMARY KEY (`id_dependente`),
-  INDEX `fk_funcionario_dependente_funcionario1_idx` (`id_funcionario` ASC),
-  INDEX `fk_funcionario_dependente_pessoa1_idx` (`id_pessoa` ASC),
-  INDEX `fk_funcionario_dependente_funcionario_dependente_parentesco_idx` (`id_parentesco` ASC),
-  CONSTRAINT `fk_funcionario_dependente_funcionario1`
-    FOREIGN KEY (`id_funcionario`)
-    REFERENCES `wegia`.`funcionario` (`id_funcionario`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_funcionario_dependente_pessoa1`
-    FOREIGN KEY (`id_pessoa`)
-    REFERENCES `wegia`.`pessoa` (`id_pessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_funcionario_dependente_funcionario_dependente_parentesco1`
-    FOREIGN KEY (`id_parentesco`)
-    REFERENCES `wegia`.`funcionario_dependente_parentesco` (`id_parentesco`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `wegia`.`funcionario_docdependentes`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`funcionario_docdependentes` (
@@ -1161,47 +1144,7 @@ CREATE TABLE IF NOT EXISTS `wegia`.`atendido` (
     REFERENCES `wegia`.`atendido_status` (`idatendido_status`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
--- -----------------------------------------------------
--- Table `wegia`.`atendido_parentesco`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`atendido_parentesco` (
-  `idatendido_parentesco` INT NOT NULL AUTO_INCREMENT,
-  `parentesco` VARCHAR(128) NOT NULL,
-  PRIMARY KEY (`idatendido_parentesco`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `wegia`.`atendido_familiares`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`atendido_familiares` (
-  `idatendido_familiares` INT NOT NULL AUTO_INCREMENT,
-  `atendido_idatendido` INT NOT NULL,
-  `pessoa_id_pessoa` INT(11) NOT NULL,
-  `atendido_parentesco_idatendido_parentesco` INT NOT NULL,
-  PRIMARY KEY (`idatendido_familiares`),
-  INDEX `fk_atendido_familiares_atendido1_idx` (`atendido_idatendido` ASC),
-  INDEX `fk_atendido_familiares_pessoa1_idx` (`pessoa_id_pessoa` ASC),
-  INDEX `fk_atendido_familiares_atendido_parentesco1_idx` (`atendido_parentesco_idatendido_parentesco` ASC),
-  CONSTRAINT `fk_atendido_familiares_atendido1`
-    FOREIGN KEY (`atendido_idatendido`)
-    REFERENCES `wegia`.`atendido` (`idatendido`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_atendido_familiares_pessoa1`
-    FOREIGN KEY (`pessoa_id_pessoa`)
-    REFERENCES `wegia`.`pessoa` (`id_pessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_atendido_familiares_atendido_parentesco1`
-    FOREIGN KEY (`atendido_parentesco_idatendido_parentesco`)
-    REFERENCES `wegia`.`atendido_parentesco` (`idatendido_parentesco`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+ENGINE = InnoDB; 
 
 -- -----------------------------------------------------
 -- Table `wegia`.`atendido_docs_atendidos`
@@ -1269,7 +1212,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`atendido_ocorrencia_tipos` (
   `idatendido_ocorrencia_tipos` INT NOT NULL AUTO_INCREMENT,
-  `descricao` VARCHAR(255) NULL,
+  `descricao` VARCHAR(255) NULL,	
   PRIMARY KEY (`idatendido_ocorrencia_tipos`))
 ENGINE = InnoDB;
 
@@ -1315,7 +1258,7 @@ CREATE TABLE IF NOT EXISTS `wegia`.`atendido_ocorrencia_doc` (
   `data` TIMESTAMP NOT NULL,
   `arquivo_nome` VARCHAR(255) NOT NULL,
   `arquivo_extensao` VARCHAR(200) NOT NULL,
-  `arquivo` LONGBLOB NOT NULL,
+  `arquivo` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`idatendido_ocorrencia_doc`),
   INDEX `fk_atendido_ocorrencia_doc_atentido_ocorrencia1_idx` (`atentido_ocorrencia_idatentido_ocorrencias` ASC),
   CONSTRAINT `fk_atendido_ocorrencia_doc_atentido_ocorrencia1`

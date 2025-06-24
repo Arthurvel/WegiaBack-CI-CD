@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Atendido\AtendidoController;
+use App\Http\Controllers\Atendido\AtendidoOcorrenciaController;
+use App\Http\Controllers\Atendido\AtendidoStatusController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PessoaController;
 use App\Http\Controllers\AuthController;
@@ -11,7 +14,6 @@ use App\Http\Controllers\Funcionario\FuncionarioInfoController;
 use App\Http\Controllers\Funcionario\FuncionarioQuadroHorarioController;
 use App\Http\Controllers\Funcionario\FuncionarioRemuneracaoController;
 use App\Http\Controllers\Pet\AtendimentoController;
-use App\Http\Controllers\Pet\CorController;
 use App\Http\Controllers\Pet\EspecieController;
 use App\Http\Controllers\Pet\FichaMedicaController;
 use App\Http\Controllers\Pet\MedicacaoController;
@@ -19,10 +21,8 @@ use App\Http\Controllers\Pet\MedicamentoController;
 use App\Http\Controllers\Pet\RacaController;
 use App\Http\Controllers\SituacaoController;
 use App\Http\Controllers\UploadController;
-use App\Models\Especie;
-use App\Models\Pet\Atendimento;
-use App\Models\Pet\FichaMedica;
-use App\Models\Pet\Medicacao;
+use App\Http\Controllers\Atendido\AtendidoTipoController;
+use App\Http\Controllers\Pessoa\PessoaDependenteController;
 
 Route::get('/upload/{path}', [UploadController::class, 'retornarImagem'])
     ->where('path', '.*')
@@ -35,10 +35,16 @@ Route::group([ 'prefix' => 'auth' ], function () {
 
 Route::group([ 'prefix' => 'pessoa' ], function () {
     Route::get('/logada', [PessoaController::class, 'retornarPessoaLogada']);
+    Route::get('/{id_pessoa}/dependente', [PessoaDependenteController::class, 'buscarDependentesPorIdPessoa']);
     Route::get('/{cpf}', [PessoaController::class, 'buscarPessoaPorCpf']);
+
     Route::post('/', [PessoaController::class, 'create']);
     Route::post('/{id_pessoa}/imagem', [PessoaController::class, 'cadastrarOuAtualizarImagem']);
+    Route::post('/{id_pessoa}/dependente/{id_dependente}', [PessoaDependenteController::class, 'create']);
+
     Route::put('/{id_pessoa}', [PessoaController::class, 'update']);
+
+    Route::delete('/dependente/{id_dependente}', [PessoaDependenteController::class, 'destroy']);
 });
 
 Route::group([ 'prefix' => 'funcionario' ], function () {
@@ -107,6 +113,30 @@ Route::group([ 'prefix' => 'cargo'], function () {
     Route::post('/', [CargoController::class, 'create']);
     Route::delete('/{id_cargo}', [CargoController::class, 'destroy']);
 });
+
+// Atendido
+
+Route::group([ 'prefix' => 'atendido'], function () {
+    Route::get('/', [AtendidoController::class, 'index']);
+    Route::post('/', [AtendidoController::class, 'create']);
+
+    Route::get('/tipo', [AtendidoTipoController::class, 'index']);
+    Route::get('/status', [AtendidoStatusController::class, 'index']);
+
+    Route::post('/{id}/ocorrencia', [AtendidoOcorrenciaController::class, 'criarOcorrencia']);
+
+    Route::group([ 'prefix' => '{id}/ocorrencia'], function () {
+        Route::get('/', [AtendidoOcorrenciaController::class, 'index']);
+        Route::post('/', [AtendidoOcorrenciaController::class, 'criarOcorrencia']);
+    });
+
+    Route::group([ 'prefix' => 'ocorrencia'], function () {
+        Route::get('/tipos', [AtendidoOcorrenciaController::class, 'buscarOcorrenciaTipos']);
+    });
+
+    Route::get('/{id}', [AtendidoController::class, 'atendidoPorId']);
+});
+
 Route::group(['prefix' => 'pet'], function ( ){
     Route::group(['prefix' => 'especie'], function ( ){
         Route::post('/', [EspecieController::class, 'create']);
