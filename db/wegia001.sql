@@ -18,15 +18,6 @@ DROP SCHEMA IF EXISTS `wegia` ;
 CREATE SCHEMA IF NOT EXISTS `wegia` DEFAULT CHARACTER SET utf8mb4 ;
 USE `wegia` ;
 
--- -----------------------------------------------------
--- Table `wegia`.`acao`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`acao` (
-  `id_acao` INT(11) NOT NULL AUTO_INCREMENT,
-  `descricao` VARCHAR(240) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_acao`))
-ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `wegia`.`almoxarifado`
@@ -96,15 +87,24 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pessoa_dependente` (
     FOREIGN KEY (id_dependente_pessoa) REFERENCES pessoa(id_pessoa)
 );
 
--- -----------------------------------------------------
--- Table `wegia`.`cargo`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`cargo` (
-  `id_cargo` INT(11) NOT NULL AUTO_INCREMENT,
-  `cargo` VARCHAR(30) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_cargo`),
-  UNIQUE INDEX `cargo` (`cargo` ASC))
-ENGINE = InnoDB;
+CREATE TABLE permissao (
+    id_permissao INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE perfil (
+    id_perfil INT AUTO_INCREMENT PRIMARY KEY,
+    cargo VARCHAR(100) NOT NULL,
+    nome VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE perfil_permissao (
+    id_perfil INT NOT NULL,
+    id_permissao INT NOT NULL,
+    PRIMARY KEY (id_perfil, id_permissao),
+    CONSTRAINT fk_perfil FOREIGN KEY (id_perfil) REFERENCES perfil(id_perfil) ON DELETE CASCADE,
+    CONSTRAINT fk_permissao FOREIGN KEY (id_permissao) REFERENCES permissao(id_permissao) ON DELETE CASCADE
+);
 
 
 -- -----------------------------------------------------
@@ -565,30 +565,6 @@ CREATE TABLE IF NOT EXISTS `wegia`.`recurso` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `wegia`.`permissao`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`permissao` (
-  `id_cargo` INT(11) NOT NULL,
-  `id_acao` INT(11) NOT NULL,
-  `id_recurso` INT NOT NULL,
-  PRIMARY KEY (`id_cargo`, `id_recurso`),
-  INDEX `id_acao` (`id_acao` ASC),
-  INDEX `fk_permissao_recurso1_idx` (`id_recurso` ASC),
-  CONSTRAINT `permissao_ibfk_1`
-    FOREIGN KEY (`id_cargo`)
-    REFERENCES `wegia`.`cargo` (`id_cargo`),
-  CONSTRAINT `permissao_ibfk_2`
-    FOREIGN KEY (`id_acao`)
-    REFERENCES `wegia`.`acao` (`id_acao`),
-  CONSTRAINT `fk_permissao_recurso1`
-    FOREIGN KEY (`id_recurso`)
-    REFERENCES `wegia`.`recurso` (`id_recurso`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-
 
 -- -----------------------------------------------------
 -- Table `wegia`.`modulos_visiveis`
@@ -1040,8 +1016,8 @@ CREATE TABLE IF NOT EXISTS `wegia`.`remessa` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `codigo` VARCHAR(5) NOT NULL,
   `data_emissao` DATE NULL DEFAULT NULL,
-  `data_vencimento_inicial` DATE NULL DEFAULT NULL,  
-  `data_vencimento_final` DATE NULL DEFAULT NULL,  
+  `data_vencimento_inicial` DATE NULL DEFAULT NULL,
+  `data_vencimento_final` DATE NULL DEFAULT NULL,
   `tipo_carne` INT NOT NULL,
   `quantidade_boletos` INT NOT NULL,
   `valor_unitario` DECIMAL(10,2) NULL DEFAULT NULL,
@@ -1144,7 +1120,7 @@ CREATE TABLE IF NOT EXISTS `wegia`.`atendido` (
     REFERENCES `wegia`.`atendido_status` (`idatendido_status`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB; 
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `wegia`.`atendido_docs_atendidos`
@@ -1212,7 +1188,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`atendido_ocorrencia_tipos` (
   `idatendido_ocorrencia_tipos` INT NOT NULL AUTO_INCREMENT,
-  `descricao` VARCHAR(255) NULL,	
+  `descricao` VARCHAR(255) NULL,
   PRIMARY KEY (`idatendido_ocorrencia_tipos`))
 ENGINE = InnoDB;
 
@@ -1360,13 +1336,13 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`saude_fichamedica_descricoes` (
   `id_descricao` INT NOT NULL AUTO_INCREMENT,
-  `id_fichamedica` INT(11) NOT NULL, 
-  `descricao` VARCHAR(2048) NOT NULL, 
-  PRIMARY KEY (`id_descricao`), 
-  INDEX fk_ficha_medica_descricoes_ficha_medica_idx (`id_fichamedica` ASC), 
+  `id_fichamedica` INT(11) NOT NULL,
+  `descricao` VARCHAR(2048) NOT NULL,
+  PRIMARY KEY (`id_descricao`),
+  INDEX fk_ficha_medica_descricoes_ficha_medica_idx (`id_fichamedica` ASC),
   CONSTRAINT fk_fichamedica_descricoes_fichamedica
-    FOREIGN KEY (`id_fichamedica`) REFERENCES `wegia`.`saude_fichamedica` (`id_fichamedica`) 
-    ON DELETE CASCADE 
+    FOREIGN KEY (`id_fichamedica`) REFERENCES `wegia`.`saude_fichamedica` (`id_fichamedica`)
+    ON DELETE CASCADE
     ON UPDATE CASCADE)
  ENGINE = InnoDB;
 
@@ -1390,13 +1366,13 @@ ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `wegia`.`saude_fichamedica_historico_descricoes` (
   `id_fichamedica_historico_descricao` INT NOT NULL AUTO_INCREMENT,
-  `id_fichamedica_historico` INT(11) NOT NULL, 
-  `descricao` VARCHAR(2048) NOT NULL, 
-  PRIMARY KEY (`id_fichamedica_historico_descricao`), 
-  INDEX `fk_ficha_medica_historico_descricoes_ficha_medica_idx` (`id_fichamedica_historico` ASC), 
+  `id_fichamedica_historico` INT(11) NOT NULL,
+  `descricao` VARCHAR(2048) NOT NULL,
+  PRIMARY KEY (`id_fichamedica_historico_descricao`),
+  INDEX `fk_ficha_medica_historico_descricoes_ficha_medica_idx` (`id_fichamedica_historico` ASC),
   CONSTRAINT `fk_fichamedica_historico_descricoes`
-    FOREIGN KEY (`id_fichamedica_historico`) REFERENCES `wegia`.`saude_fichamedica_historico` (`id_fichamedica_historico`) 
-    ON DELETE CASCADE 
+    FOREIGN KEY (`id_fichamedica_historico`) REFERENCES `wegia`.`saude_fichamedica_historico` (`id_fichamedica_historico`)
+    ON DELETE CASCADE
     ON UPDATE CASCADE)
  ENGINE = InnoDB;
 
@@ -1603,7 +1579,7 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pet_foto` (
     `id_pet_foto` INT NOT NULL AUTO_INCREMENT,
     `arquivo_foto_pet` LONGBLOB NOT NULL,
     `arquivo_foto_pet_nome` varchar(200) NOT NULL,
-    `arquivo_foto_pet_extensao` varchar(50) NOT NULL, 
+    `arquivo_foto_pet_extensao` varchar(50) NOT NULL,
     PRIMARY KEY (`id_pet_foto`)
 )ENGINE = InnoDB;
 
@@ -1613,7 +1589,7 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pet_foto` (
 CREATE TABLE IF NOT EXISTS `wegia`.`pet_especie` (
     `id_pet_especie` INT NOT NULL AUTO_INCREMENT,
     `descricao` VARCHAR(200) NOT NULL,
-    PRIMARY KEY (`id_pet_especie`)) 
+    PRIMARY KEY (`id_pet_especie`))
 ENGINE = InnoDB;
 
 -- --------------------------------------------------------
@@ -1648,15 +1624,15 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pet` (
     `id_pet_foto` INT NULL,
     `id_pet_especie` INT NOT NULL,
     `id_pet_raca` INT NOT NULL,
-    `id_pet_cor` INT NOT NULL, 
+    `id_pet_cor` INT NOT NULL,
     PRIMARY KEY (`id_pet`),
     CONSTRAINT `fk_pet_especie`
-     FOREIGN KEY (`id_pet_especie`) 
+     FOREIGN KEY (`id_pet_especie`)
      REFERENCES `wegia`.`pet_especie` (`id_pet_especie`),
     CONSTRAINT `fk_pet_raca`
      FOREIGN KEY (`id_pet_raca`)
      REFERENCES `wegia`.`pet_raca` (`id_pet_raca`),
-    CONSTRAINT `fk_pet_cor` 
+    CONSTRAINT `fk_pet_cor`
      FOREIGN KEY (`id_pet_cor`)
      REFERENCES `wegia`.`pet_cor` (`id_pet_cor`),
     CONSTRAINT `fk_pet_foto`
@@ -1835,7 +1811,7 @@ ENGINE = InnoDB;
 -- Table `wegia`.`pet_medicacao`
 -- --------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`pet_medicacao` (
-    `id_medicacao` INT NOT NULL AUTO_INCREMENT, 
+    `id_medicacao` INT NOT NULL AUTO_INCREMENT,
     `id_medicamento` INT NOT NULL,
     `id_pet_atendimento` INT NOT NULL,
     `data_medicacao` DATE NULL,
@@ -1843,14 +1819,14 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pet_medicacao` (
     `horario` VARCHAR(100) NULL,
     `duracao` VARCHAR(100) NULL,*/
     PRIMARY KEY (`id_medicacao`),
-    CONSTRAINT `fk_pet_medicamento` 
-     FOREIGN KEY (`id_medicamento`) 
-     REFERENCES `wegia`.`pet_medicamento` (`id_medicamento`) 
+    CONSTRAINT `fk_pet_medicamento`
+     FOREIGN KEY (`id_medicamento`)
+     REFERENCES `wegia`.`pet_medicamento` (`id_medicamento`)
      ON DELETE NO ACTION
      ON UPDATE NO ACTION,
     CONSTRAINT `fk_pet_atendimento`
-     FOREIGN KEY (`id_pet_atendimento`) 
-     REFERENCES  `wegia`.`pet_atendimento` (`id_pet_atendimento`) 
+     FOREIGN KEY (`id_pet_atendimento`)
+     REFERENCES  `wegia`.`pet_atendimento` (`id_pet_atendimento`)
      ON DELETE NO ACTION
      ON UPDATE NO ACTION
 )ENGINE = InnoDB;
@@ -1880,7 +1856,7 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pet_enfermidade`(
      REFERENCES `wegia`.`pet_ficha_medica` (`id_ficha_medica`)
      ON DELETE NO ACTION
      ON UPDATE NO ACTION,
-    CONSTRAINT `fk_pet_tipo_enfermidade_` 
+    CONSTRAINT `fk_pet_tipo_enfermidade_`
      FOREIGN KEY (`id_tipo_enfermidade`)
      REFERENCES `wegia`.`pet_tipo_enfermidade` (`id_tipo_enfermidade`)
      ON DELETE NO ACTION
@@ -1906,7 +1882,7 @@ ENGINE = InnoDB;
 
 
 -- ------------------------------------------------------
--- Table `wegia`.`aviso` 
+-- Table `wegia`.`aviso`
 -- ------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`aviso`(
   `id_aviso` INT(11) NOT NULL AUTO_INCREMENT,
@@ -1938,7 +1914,7 @@ CREATE TABLE IF NOT EXISTS `wegia` . `aviso_notificacao` (
   PRIMARY KEY (`id_aviso_notificacao`),
   FOREIGN KEY (`id_aviso`)
     REFERENCES `wegia` . `aviso` (`id_aviso`)
-    ON DELETE CASCADE, 
+    ON DELETE CASCADE,
   FOREIGN KEY (`id_funcionario`)
     REFERENCES `wegia`. `funcionario` (`id_funcionario`)
     ON DELETE CASCADE
@@ -1973,7 +1949,7 @@ declare idE int;
 insert into entrada (id_origem, id_almoxarifado, id_tipo, id_responsavel, data, hora, valor_total)
   values(id_origem, id_almoxarifado, id_tipo, id_responsavel, data, hora, valor_total);
 
-SELECT 
+SELECT
   MAX(id_entrada)
 INTO idE FROM entrada;
 
@@ -1989,16 +1965,16 @@ DELIMITER ;
 
 DELIMITER $$
 USE `wegia`$$
-CREATE PROCEDURE `cadfuncionario`(IN `nome` VARCHAR(100), IN `sobrenome` VARCHAR(100), IN `cpf` VARCHAR(40), 
-  IN `senha` VARCHAR(70), IN `sexo` CHAR(1), IN `telefone` VARCHAR(100), 
-  IN `data_nascimento` DATE, IN `imagem` LONGTEXT, IN `cep` VARCHAR(100), 
-  IN `estado` VARCHAR(50), IN `cidade` VARCHAR(40), IN `bairro` VARCHAR(40), 
-  IN `logradouro` VARCHAR(40), IN `numero_endereco` VARCHAR(100), IN `complemento` VARCHAR(50), 
-  IN `ibge` VARCHAR(20), IN `registro_geral` VARCHAR(20), IN `orgao_emissor` VARCHAR(20), 
-  IN `data_expedicao` DATE, IN `nome_pai` VARCHAR(100), IN `nome_mae` VARCHAR(100), 
-  IN `tipo_sanguineo` VARCHAR(50), IN `data_admissao` DATE, IN `pis` VARCHAR(140), 
-  IN `ctps` VARCHAR(150), IN `uf_ctps` VARCHAR(200), IN `numero_titulo` VARCHAR(150), 
-  IN `zona` VARCHAR(300), IN `secao` VARCHAR(400), IN `certificado_reservista_numero` VARCHAR(100), 
+CREATE PROCEDURE `cadfuncionario`(IN `nome` VARCHAR(100), IN `sobrenome` VARCHAR(100), IN `cpf` VARCHAR(40),
+  IN `senha` VARCHAR(70), IN `sexo` CHAR(1), IN `telefone` VARCHAR(100),
+  IN `data_nascimento` DATE, IN `imagem` LONGTEXT, IN `cep` VARCHAR(100),
+  IN `estado` VARCHAR(50), IN `cidade` VARCHAR(40), IN `bairro` VARCHAR(40),
+  IN `logradouro` VARCHAR(40), IN `numero_endereco` VARCHAR(100), IN `complemento` VARCHAR(50),
+  IN `ibge` VARCHAR(20), IN `registro_geral` VARCHAR(20), IN `orgao_emissor` VARCHAR(20),
+  IN `data_expedicao` DATE, IN `nome_pai` VARCHAR(100), IN `nome_mae` VARCHAR(100),
+  IN `tipo_sanguineo` VARCHAR(50), IN `data_admissao` DATE, IN `pis` VARCHAR(140),
+  IN `ctps` VARCHAR(150), IN `uf_ctps` VARCHAR(200), IN `numero_titulo` VARCHAR(150),
+  IN `zona` VARCHAR(300), IN `secao` VARCHAR(400), IN `certificado_reservista_numero` VARCHAR(100),
   IN `certificado_reservista_serie` VARCHAR(100), IN `id_situacao` INT,IN `id_cargo` INT)
 begin
 
@@ -2033,7 +2009,7 @@ declare idF int;
 
 SELECT MAX(id_funcionario) into idF FROM funcionario;
 
-insert into quadro_horario_funcionario(id_funcionario,escala, tipo, carga_horaria, entrada1, saida1, entrada2, saida2, total, dias_trabalhados, folga) 
+insert into quadro_horario_funcionario(id_funcionario,escala, tipo, carga_horaria, entrada1, saida1, entrada2, saida2, total, dias_trabalhados, folga)
 VALUES (idF, escala, tipo, carga_horaria, entrada1, saida1, entrada2, saida2, total, dias_trabalhados, folga);
 
 END$$
@@ -2051,7 +2027,7 @@ begin
 declare idP int;
 INSERT INTO pessoa(cpf,nome,sobrenome,sexo,telefone,data_nascimento) VALUES (strCpf,strNome,strSobrenome,strSexo,strTelefone,dateNascimento);
 select max(id_pessoa) into idP FROM pessoa;
-INSERT INTO atendido(pessoa_id_pessoa, atendido_tipo_idatendido_tipo, atendido_status_idatendido_status) VALUES (idP,intTipo,intStatus); 
+INSERT INTO atendido(pessoa_id_pessoa, atendido_tipo_idatendido_tipo, atendido_status_idatendido_status) VALUES (idP,intTipo,intStatus);
 
 END$$
 
@@ -2072,7 +2048,7 @@ declare idS int;
 insert into saida (id_destino, id_almoxarifado, id_tipo, id_responsavel, data, hora, valor_total)
   values(id_destino, id_almoxarifado, id_tipo, id_responsavel, data, hora, valor_total);
 
-SELECT 
+SELECT
   MAX(id_saida)
 INTO idS FROM saida;
 
@@ -2131,7 +2107,7 @@ BEGIN
 		declare idA int;
         INSERT INTO anexo(id_despacho, anexo, extensao, nome)
         values (id_despacho, anexo, extensao, nome);
-        
+
         SELECT max(id_anexo) into idA from anexo;
 END$$
 
@@ -2144,10 +2120,10 @@ USE `wegia`$$
 CREATE PROCEDURE `insarquivo_ocorrencia`(IN `atentido_ocorrencia_idatentido_ocorrencias` INT, IN `arquivo_nome`VARCHAR(200),  IN `arquivo_extensao` VARCHAR(200),  IN `arquivo` LONGBLOB)
 BEGIN
     declare idA int;
-        
+
         INSERT INTO atendido_ocorrencia_doc( atentido_ocorrencia_idatentido_ocorrencias, arquivo_nome, arquivo_extensao, arquivo)
         values (atentido_ocorrencia_idatentido_ocorrencias ,arquivo_nome, arquivo_extensao,arquivo);
-        
+
 END$$
 
 DELIMITER ;
@@ -2158,13 +2134,13 @@ DELIMITER ;
 DELIMITER $$
 USE `wegia`$$
 CREATE PROCEDURE `insdespacho`(IN `id_memorando` INT, IN `id_remetente` INT, IN `id_destinatario` INT, IN `texto` LONGTEXT, IN `data` TIMESTAMP)
-BEGIN 
+BEGIN
 		declare idD int;
         INSERT INTO despacho(id_memorando, id_remetente, id_destinatario, texto, data)
         values (id_memorando, id_remetente, id_destinatario, texto, data);
-	
+
         SELECT max(id_despacho) into idD from despacho;
-        
+
 END$$
 
 DELIMITER ;
@@ -2176,13 +2152,13 @@ DELIMITER ;
 DELIMITER $$
 USE `wegia`$$
 CREATE PROCEDURE `insmemorando`(IN `id_pessoa` INT, IN `id_status_memorando` INT, IN `titulo` TEXT, IN `data` VARCHAR(255))
-BEGIN 
+BEGIN
 		declare idM int;
         INSERT INTO memorando(id_pessoa, id_status_memorando, titulo, data)
         values (id_pessoa, id_status_memorando, titulo, data);
-        
+
         SELECT max(id_memorando) into idM from memorando;
-        
+
 END$$
 
 DELIMITER ;
@@ -2200,12 +2176,12 @@ declare idSJ int;
 
 INSERT INTO socio(cpf_cnpj, nome, email, telefone, tipo, data_nascimento)
 	values (cpf_cnpj, nome, email, telefone, tipo, data_nascimento);
-    
+
 select max(id) into idSJ from socio;
 
 INSERT INTO endereco(idsocio, logradouro, numero, complemento, cep, bairro, cidade, estado)
 	values (idSJ, logradouro, numero, complemento, cep, bairro, cidade, estado);
-    
+
 END$$
 
 DELIMITER ;
@@ -2217,17 +2193,17 @@ DELIMITER ;
 DELIMITER $$
 USE `wegia`$$
 CREATE PROCEDURE `registradoacao`(
-	IN `nome` VARCHAR(100), 
-    IN `sobrenome` VARCHAR(100), 
-    IN `cpf` VARCHAR(40), 
-    IN `telefone` VARCHAR(25), 
-    IN `data_nascimento` DATE, 
-    IN `cep` VARCHAR(20), 
-    IN `estado` VARCHAR(5), 
-    IN `cidade` VARCHAR(40), 
-    IN `bairro` VARCHAR(40), 
-    IN `logradouro` VARCHAR(40), 
-    IN `numero_endereco` VARCHAR(11), 
+	IN `nome` VARCHAR(100),
+    IN `sobrenome` VARCHAR(100),
+    IN `cpf` VARCHAR(40),
+    IN `telefone` VARCHAR(25),
+    IN `data_nascimento` DATE,
+    IN `cep` VARCHAR(20),
+    IN `estado` VARCHAR(5),
+    IN `cidade` VARCHAR(40),
+    IN `bairro` VARCHAR(40),
+    IN `logradouro` VARCHAR(40),
+    IN `numero_endereco` VARCHAR(11),
     IN `complemento` VARCHAR(50),
     IN `id_sociostatus` INT(11),
     IN `id_sociotipo` INT(11),
@@ -2262,17 +2238,17 @@ DELIMITER ;
 DELIMITER $$
 USE `wegia`$$
 CREATE PROCEDURE `insregras`(
-	IN `min_boleto_uni` decimal(10,2), 
-    IN `max_dias_venc` int(11), 
-    IN `juros` decimal(10,2), 
-    IN `multa` decimal(10,2), 
-    IN `max_parcela` decimal(10,2), 
-    IN `min_parcela` decimal(10,2), 
-    IN `agradecimento` longtext, 
-    IN `dias_boleto_a_vista` int(11), 
-    IN `dias_venc_carne_op1` int(11), 
-    IN `dias_venc_carne_op2` int(11), 
-    IN `dias_venc_carne_op3` int(11), 
+	IN `min_boleto_uni` decimal(10,2),
+    IN `max_dias_venc` int(11),
+    IN `juros` decimal(10,2),
+    IN `multa` decimal(10,2),
+    IN `max_parcela` decimal(10,2),
+    IN `min_parcela` decimal(10,2),
+    IN `agradecimento` longtext,
+    IN `dias_boleto_a_vista` int(11),
+    IN `dias_venc_carne_op1` int(11),
+    IN `dias_venc_carne_op2` int(11),
+    IN `dias_venc_carne_op3` int(11),
     IN `dias_venc_carne_op4` int(11),
     IN `dias_venc_carne_op5` int(11),
     IN `dias_venc_carne_op6` int(11)
@@ -2347,20 +2323,20 @@ DELIMITER ;
 DELIMITER $$
 USE `wegia`$$
 CREATE PROCEDURE `insendereco_inst`(
-    IN `nome` VARCHAR(256), 
-    IN `numero_endereco` VARCHAR(256), 
-    IN `logradouro` VARCHAR(256), 
-    IN `bairro` VARCHAR(256), 
-    IN `cidade` VARCHAR(256), 
-    IN `estado` VARCHAR(256), 
-    IN `cep` VARCHAR(256), 
-    IN `complemento` VARCHAR(256), 
-    IN `ibge` VARCHAR(256))    
+    IN `nome` VARCHAR(256),
+    IN `numero_endereco` VARCHAR(256),
+    IN `logradouro` VARCHAR(256),
+    IN `bairro` VARCHAR(256),
+    IN `cidade` VARCHAR(256),
+    IN `estado` VARCHAR(256),
+    IN `cep` VARCHAR(256),
+    IN `complemento` VARCHAR(256),
+    IN `ibge` VARCHAR(256))
 begin
 
 	insert into endereco_instituicao (nome, numero_endereco, logradouro, bairro, cidade, estado, cep, complemento, ibge)
     values (nome, numero_endereco, logradouro, bairro, cidade, estado, cep, complemento, ibge);
-   
+
 END$$
 
 DELIMITER ;
@@ -2373,9 +2349,9 @@ TRIGGER `wegia`.`tgr_ientrada_delete`
 AFTER DELETE ON `wegia`.`ientrada`
 FOR EACH ROW
 BEGIN
-  
+
     UPDATE estoque SET qtd = qtd - OLD.qtd WHERE id_produto = OLD.id_produto AND id_almoxarifado = (SELECT id_almoxarifado FROM entrada WHERE id_entrada = OLD.id_entrada);
-  
+
 END$$
 
 USE `wegia`$$
@@ -2386,9 +2362,9 @@ FOR EACH ROW
 BEGIN
 
   INSERT IGNORE INTO estoque(id_produto, id_almoxarifado, qtd) values(NEW.id_produto, (SELECT id_almoxarifado FROM entrada WHERE id_entrada = NEW.id_entrada), 0);
-  
+
     UPDATE estoque SET qtd = qtd+NEW.qtd WHERE id_produto = NEW.id_produto AND id_almoxarifado = (SELECT id_almoxarifado FROM entrada WHERE id_entrada = NEW.id_entrada);
-  
+
 END$$
 
 USE `wegia`$$
@@ -2404,10 +2380,10 @@ BEGIN
   DECLARE done INT;
   DECLARE cur CURSOR FOR SELECT id_ientrada FROM ientrada WHERE id_produto = NEW.id_produto;
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
-  
+
   SET @qtd_total := (SELECT sum(qtd) FROM ientrada WHERE id_produto = NEW.id_produto);
   SET @preco_total := 0.00;
-  
+
   OPEN cur;
       ins_loop: LOOP
           FETCH cur INTO id_media;
@@ -2421,7 +2397,7 @@ BEGIN
           SET @preco_total := (@tmp_preco_total + @preco_total);
       END LOOP;
   CLOSE cur;
-	
+
     UPDATE produto SET preco = (@preco_total / @qtd_total) WHERE id_produto = NEW.id_produto;
 END$$
 
@@ -2431,9 +2407,9 @@ TRIGGER `wegia`.`tgr_isaida_delete`
 AFTER DELETE ON `wegia`.`isaida`
 FOR EACH ROW
 BEGIN
-  
+
     UPDATE estoque SET qtd = qtd+OLD.qtd WHERE id_produto = OLD.id_produto AND id_almoxarifado = (SELECT id_almoxarifado FROM saida WHERE id_saida = OLD.id_saida);
-  
+
 END$$
 
 USE `wegia`$$
@@ -2442,9 +2418,9 @@ TRIGGER `wegia`.`tgr_isaida_insert`
 AFTER INSERT ON `wegia`.`isaida`
 FOR EACH ROW
 BEGIN
-  
+
     UPDATE estoque SET qtd = qtd-NEW.qtd WHERE id_produto = NEW.id_produto AND id_almoxarifado = (SELECT id_almoxarifado FROM saida WHERE id_saida = NEW.id_saida);
-  
+
 END$$
 
 

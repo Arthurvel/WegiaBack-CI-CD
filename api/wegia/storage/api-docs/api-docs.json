@@ -4307,6 +4307,359 @@
                 ]
             }
         },
+        "/pet/ficha-medica/atendimento/{id_pet_atendimento}/medicacao": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar a Medicacao por Atendimento",
+                "operationId": "a25b0711b8ab234865b6265a3fd3bfc4",
+                "parameters": [
+                    {
+                        "name": "id_pet_atendimento",
+                        "in": "path",
+                        "description": "ID do Atendimento do Pet",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de medicamentos por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastrar a Medicacao",
+                "operationId": "66fd8837000a3034b838d80bf587708b",
+                "parameters": [
+                    {
+                        "name": "id_pet_atendimento",
+                        "in": "path",
+                        "description": "ID da Medicacao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_medicamento",
+                                    "data_medicacao"
+                                ],
+                                "properties": {
+                                    "id_medicamento": {
+                                        "description": "Id do Medicamento",
+                                        "type": "integer"
+                                    },
+                                    "data_medicacao": {
+                                        "description": "Data da Medicacao",
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/ficha-medica/atendimento/medicacao/{id_medicacao}": {
+            "delete": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Deletar a Medicacao",
+                "operationId": "c7983356164dcd049606825990bc0802",
+                "parameters": [
+                    {
+                        "name": "id_medicacao",
+                        "in": "path",
+                        "description": "ID da Medicacao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/ficha-medica/atendimento/medicacao/medicamento": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar os todos os Medicamentos",
+                "operationId": "2e82d44008ac786fb9cbc1a9550d7e83",
+                "responses": {
+                    "200": {
+                        "description": "OpeRacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastrar o Medicamento",
+                "operationId": "11b41de96138e51bb66f061d0fee93cb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome_medicamento",
+                                    "descricao_medicamento",
+                                    "aplicacao"
+                                ],
+                                "properties": {
+                                    "nome_medicamento": {
+                                        "description": "Nome do Medicamento",
+                                        "type": "string"
+                                    },
+                                    "descricao_medicamento": {
+                                        "description": "Descricao do Medicamento",
+                                        "type": "string"
+                                    },
+                                    "aplicacao": {
+                                        "description": "Aplicacao do Medimento",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/ficha-medica/atendimento/medicacao/medicamento/{id_medicamento}": {
+            "delete": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Deletar o Medicamento",
+                "operationId": "6e06430a6cfe68cd7a461cd436ff8fb3",
+                "parameters": [
+                    {
+                        "name": "id_medicamento",
+                        "in": "path",
+                        "description": "ID do Medicamento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/pet/raca": {
             "get": {
                 "tags": [
