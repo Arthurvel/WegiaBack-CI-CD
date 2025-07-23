@@ -6,7 +6,7 @@ use Ramsey\Uuid\Type\Integer;
 
 class AtualizarAtendimentoDTO
 {
-    public ?string $data_atendimento ; 
+    public ?string $data_atendimento ;
     public ?string $descricao;
 
     public function __construct(
@@ -19,7 +19,7 @@ class AtualizarAtendimentoDTO
 
     public static function fromArray(array $dados): self
     {
-        return new self(    
+        return new self(
             $dados['data_atendimento'] ?? null,
             $dados['descricao'] ?? null,
         );

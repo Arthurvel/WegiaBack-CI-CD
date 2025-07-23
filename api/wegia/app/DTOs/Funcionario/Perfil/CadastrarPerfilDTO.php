@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTOs\Perfil;
+namespace App\DTOs\Funcionario\Perfil;
 
 use App\DTOs\BaseDTO;
 

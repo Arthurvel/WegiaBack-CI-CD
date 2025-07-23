@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Atendido\AtendidoController;
 use App\Http\Controllers\Atendido\AtendidoOcorrenciaController;
 use App\Http\Controllers\Atendido\AtendidoStatusController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PessoaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CargoController;
@@ -13,10 +13,13 @@ use App\Http\Controllers\Funcionario\FuncionarioDocumentoController;
 use App\Http\Controllers\Funcionario\FuncionarioInfoController;
 use App\Http\Controllers\Funcionario\FuncionarioQuadroHorarioController;
 use App\Http\Controllers\Funcionario\FuncionarioRemuneracaoController;
+use App\Http\Controllers\Funcionario\Perfil\FuncionarioPerfilController;
 use App\Http\Controllers\Pet\AtendimentoController;
+use App\Http\Controllers\Pet\FichaMedicaController;
+use App\Http\Controllers\Pet\MedicacaoController;
+use App\Http\Controllers\Pet\MedicamentoController;
 use App\Http\Controllers\Pet\CorController;
 use App\Http\Controllers\Pet\EspecieController;
-use App\Http\Controllers\Pet\FichaMedicaController;
 use App\Http\Controllers\Pet\RacaController;
 use App\Http\Controllers\SituacaoController;
 use App\Http\Controllers\UploadController;
@@ -60,6 +63,14 @@ Route::group([ 'prefix' => 'funcionario' ], function () {
     Route::get('/{id_funcionario}/outra-info', [FuncionarioInfoController::class, 'buscarInfosPorIdFuncionario']);
     Route::post('/{id_funcionario}/outra-info/{id_funcionario_lista_info}', [FuncionarioInfoController::class, 'create']);
     Route::delete('/outra-info/{id_funcionario_outrasinfo}', [FuncionarioInfoController::class, 'destroy']);
+
+    Route::group([ 'prefix' => 'perfil' ], function () {
+        Route::get('/', [FuncionarioPerfilController::class, 'buscarPerfis']);
+        Route::get('/{id}/permissao', [FuncionarioPerfilController::class, 'buscarPermissoesDoPerfil']);
+        Route::post('/', [FuncionarioPerfilController::class, 'cadastrarPerfil']);
+        Route::post('/{id}/permissao', [FuncionarioPerfilController::class, 'cadastrarPermissao']);
+        Route::put('/{id}', [FuncionarioPerfilController::class, 'atualizarPerfil']);
+    });
 
     Route::group([ 'prefix' => 'lista-info' ], function () {
         Route::get('/', [FuncionarioInfoController::class, 'pegarListaInfo']);
@@ -146,11 +157,19 @@ Route::group(['prefix' => 'pet'], function ( ){
         Route::get('/', [RacaController::class, 'index']);
     });
     Route::post('/{id_pet}/ficha-medica', [FichaMedicaController::class, 'create']);
-    Route::put('/ficha-medica/{id_ficha_medica}', [FichaMedicaController::class, 'update']);
     Route::get('/{id_pet}/ficha-medica', [FichaMedicaController::class, 'index']);
 
-    Route::post('/ficha-medica/{id_ficha_medica}/atendimento', [AtendimentoController::class, 'create']);
-    Route::delete('/ficha-medica/atendimento/{id_atendimento}', [AtendimentoController::class, 'delete']);
-    Route::put('/ficha-medica/atendimento/{id_atendimento}', [AtendimentoController::class, 'update']);
-
+    Route::group(['prefix' => 'ficha-medica'], function ( ){
+        Route::put('/{id_ficha_medica}', [FichaMedicaController::class, 'update']);
+        Route::post('/{id_ficha_medica}/atendimento', [AtendimentoController::class, 'create']);
+        Route::delete('/atendimento/{id_atendimento}', [AtendimentoController::class, 'delete']);
+        Route::put('/atendimento/{id_atendimento}', [AtendimentoController::class, 'update']);
+        Route::get('/{id_ficha_medica}/atendimento', [AtendimentoController::class, 'index']);
+        Route::post('/atendimento/{id_pet_atendimento}/medicacao', [MedicacaoController::class, 'create']);
+        Route::delete('/atendimento/medicacao/{id_medicacao}', [MedicacaoController::class, 'delete']);
+        Route::get('/atendimento/{id_pet_atendimento}/medicacao', [MedicacaoController::class, 'index']);
+        Route::post('/atendimento/medicacao/medicamento', [MedicamentoController::class, 'create']);
+        Route::delete('/atendimento/medicacao/medicamento/{id_medicamento}', [MedicamentoController::class, 'delete']);
+        Route::get('/atendimento/medicacao/medicamento', [MedicamentoController::class, 'index']);
+    });
 });

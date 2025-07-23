@@ -23,4 +23,14 @@ class BaseDTO
         $propriedades = get_object_vars($this);
         return $propriedades;
     }
+
+    public function toArrayUpdate(): array
+    {
+        $propriedades = get_object_vars($this);
+
+        return array_filter($propriedades, function ($valor) {
+            return !is_null($valor);
+        });
+    }
+
 }

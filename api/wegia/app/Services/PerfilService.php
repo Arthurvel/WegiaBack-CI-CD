@@ -2,22 +2,30 @@
 
 namespace App\Services;
 
-use App\DTOs\Perfil\CadastrarPerfilDTO;
 use App\Repositories\PerfilRepository;
+use App\Services\Base\BaseService;
+use App\DTOs\Funcionario\Perfil\CadastrarPerfilDTO;
+use App\DTOs\Funcionario\Perfil\AtualizarPerfilDTO;
+use App\DTOs\Funcionario\Perfil\SincronizarPermissaoDTO;
 
-class PerfilService
+/**
+ * @extends BaseService<CadastrarPerfilDTO, AtualizarPerfilDTO>
+ */
+class PerfilService extends BaseService
 {
-    private $perfilRepository;
+  public function __construct(PerfilRepository $repository)
+  {
+      parent::__construct($repository);
+  }
 
-    public function __construct(
-      PerfilRepository $perfilRepository
-    )
-    {
-        $this->perfilRepository = $perfilRepository;
-    }
+  public function cadastrarPermissao(int $id, SincronizarPermissaoDTO $dto)
+  {
+    return $this->repository->sincronizarPermissao($id, $dto);
+  }
 
-    public function cadastrarPerfil(CadastrarPerfilDTO $dto)
-    {
-        return $this->perfilRepository->cadastrarPerfil($dto);
-    }
+  public function buscarPorIdComPermissoes(int $id)
+  {
+    return $this->repository->buscarPorIdComPermissoes($id);
+  }
+
 }

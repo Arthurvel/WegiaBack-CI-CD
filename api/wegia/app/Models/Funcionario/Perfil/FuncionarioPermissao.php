@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\Perfil;
+namespace App\Models\Funcionario\Perfil;
 
 use App\Models\BaseModel\BaseModel;
 
-class PerfilPermissao extends BaseModel
+class FuncionarioPermissao extends BaseModel
 {
 
     protected $table = 'perfil_permissao';

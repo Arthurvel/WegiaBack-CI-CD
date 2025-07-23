@@ -23,27 +23,27 @@ class EspecieController extends BaseController
         $this->petService = $petService;
     }
 
-    /**
-     * @OA\Post(
-     *     path="/pet/especie",
-     *     summary="Cadastrar as Especies",
-     *     tags={"Pet"},
-     *     security={{"bearerAuth": {}}},
-     *  @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"descricao"},
-     *             @OA\Property(property="descricao", type="string", description="Campo descrição")
-     *         )
-     *     ),
-     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
-     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
-     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
-     * )
+   /**
+    * @OA\Post(
+    *     path="/pet/especie",
+    *     summary="Cadastrar as Espécies",
+    *     tags={"Pet"},
+    *     security={{"bearerAuth": {}}},
+    *     @OA\RequestBody(
+    *         required=true,
+    *         @OA\JsonContent(
+    *             required={"descricao"},
+    *             @OA\Property(property="descricao", type="string", description="Campo descrição")
+    *         )
+    *     ),
+    *     @OA\Response(response="200", description="Operação realizada com sucesso!", @OA\JsonContent()),
+    *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
+    *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
+    * )
     */
     public function create(Request $request):JsonResponse
     {
-        try{ 
+        try{
             $this->validarRequest(
                 $request->all(),
                 CriarEspecieValidation::rules(),
@@ -68,12 +68,12 @@ class EspecieController extends BaseController
      * )
     */
     public function index() : JsonResponse
-    {   
+    {
         try {
                 $especie = $this->petService->pegarEspecie();
                     return  $this->sucessoResponse($especie);
             } catch (Exception $e) {
                     return $this->errorResponse($e);
-        } 
+        }
     }
 }

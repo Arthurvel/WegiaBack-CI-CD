@@ -7,6 +7,7 @@ use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 use App\Services\PetService;
 use App\Validations\Pet\AtualizarAtendimentoValidation;
+use App\Validations\Pet\BuscarAtendimentoValidation;
 use App\Validations\Pet\CriarAtendimentoValidation;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -53,9 +54,9 @@ class AtendimentoController extends BaseController
     */
     public function create(int $id_ficha_medica, Request $request):JsonResponse
     {
-        try{ 
+        try{
             $this->validarRequest(
-                [   
+                [
                     ...$request->all(),
                     'id_ficha_medica' => $id_ficha_medica
                 ],
@@ -69,7 +70,8 @@ class AtendimentoController extends BaseController
 
         }
     }
-    
+
+
     /**
      * @OA\Delete(
      *     path="/pet/ficha-medica/atendimento/{id_atendimento}",
@@ -90,7 +92,7 @@ class AtendimentoController extends BaseController
     */
     public function delete(int $id_atendimento):JsonResponse
     {
-        try{ 
+        try{
             $deletarAtendimento=$this->petService->deletarAtendimento($id_atendimento);
             return $this->sucessoResponse($deletarAtendimento,200);
         }catch(Exception $e) {
@@ -126,8 +128,8 @@ class AtendimentoController extends BaseController
         try {
             $this->validarRequest(
                 [
-                    ...$request->all(),  
-                    'id_atendimento' => $id_atendimento  
+                    ...$request->all(),
+                    'id_atendimento' => $id_atendimento
                 ],
                 AtualizarAtendimentoValidation::rules(),
                 AtualizarAtendimentoValidation::messages()
@@ -136,9 +138,78 @@ class AtendimentoController extends BaseController
             $resultado = $this->petService->atualizarAtendimento($request->all(), $id_atendimento);
 
             return $this->sucessoResponse($resultado);
-            
+
         } catch (Exception $e) {
             return $this->errorResponse(null, 500, $e->getMessage());
-        } 
+        }
+    }
+    /**
+     * @OA\Get(
+     *     path="/pet/ficha-medica/{id_ficha_medica}/atendimento",
+     *     summary="Buscar o atendimento por Ficha Medica",
+     *     tags={"Pet"},
+     *     security={{"bearerAuth": {}}},
+     *      @OA\Parameter(
+     *         name="id_ficha_medica",
+     *         in="path",
+     *         description="ID da Ficha Medica do Pet",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *       @OA\Parameter(
+     *         name="buscar",
+     *         in="query",
+     *         description="Campo para buscar(data_atendimento, descricao)",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="ordenacao",
+     *         in="query",
+     *         description="Campo para ordenar (data_atendimento, descricao)",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="tipoOrdenacao",
+     *         in="query",
+     *         description="Tipo de ordenação",
+     *         required=false,
+     *         @OA\Schema(type="string", default="ASC")
+     *     ),
+     *     @OA\Parameter(
+     *         name="itensPorPagina",
+     *         in="query",
+     *         description="Quantidade de atendimentos por página",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=10)
+     *     ),
+     *     @OA\Parameter(
+     *         name="pagina",
+     *         in="query",
+     *         description="Número da página",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=1)
+     *     ),
+     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
+     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
+     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
+     * )
+    */
+    public function index(Request $request, int $id_ficha_medica) : JsonResponse
+    {
+        try {
+            $this->validarRequest(
+                [
+                    ...$request->all(),
+                    'id_ficha_medica' => $id_ficha_medica
+                ],
+                BuscarAtendimentoValidation::rules(),
+                BuscarAtendimentoValidation::messages()
+            );
+            $atendimento = $this->petService->pegarAtendimentoPorFichaMedica($id_ficha_medica, $request->all());
+            return  $this->sucessoResponse($atendimento);
+        }catch (Exception $e) {
+            return $this->errorResponse($e);
+        }
     }
 }
