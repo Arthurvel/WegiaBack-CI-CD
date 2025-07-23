@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Funcionario;
 
 use App\Models\Funcionario\Perfil\FuncionarioPerfil;
 use App\Repositories\Base\BaseRepository;

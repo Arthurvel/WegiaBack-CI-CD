@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Funcionario;
 
-use App\Repositories\PerfilRepository;
+use App\Repositories\Funcionario\PerfilRepository;
 use App\Services\Base\BaseService;
 use App\DTOs\Funcionario\Perfil\CadastrarPerfilDTO;
 use App\DTOs\Funcionario\Perfil\AtualizarPerfilDTO;

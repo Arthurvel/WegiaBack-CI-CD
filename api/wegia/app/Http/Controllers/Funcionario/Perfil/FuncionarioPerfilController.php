@@ -6,7 +6,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Funcionario\PerfilResource;
-use App\Services\PerfilService;
+use App\Services\Funcionario\PerfilService;
 use App\DTOs\Funcionario\Perfil\CadastrarPerfilDTO;
 use App\DTOs\Funcionario\Perfil\AtualizarPerfilDTO;
 use App\DTOs\Funcionario\Perfil\SincronizarPermissaoDTO;
