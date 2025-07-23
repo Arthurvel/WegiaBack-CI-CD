@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Atendido\AtendidoController;
 use App\Http\Controllers\Atendido\AtendidoOcorrenciaController;
 use App\Http\Controllers\Atendido\AtendidoStatusController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PessoaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CargoController;
@@ -13,6 +13,7 @@ use App\Http\Controllers\Funcionario\FuncionarioDocumentoController;
 use App\Http\Controllers\Funcionario\FuncionarioInfoController;
 use App\Http\Controllers\Funcionario\FuncionarioQuadroHorarioController;
 use App\Http\Controllers\Funcionario\FuncionarioRemuneracaoController;
+use App\Http\Controllers\Funcionario\Perfil\FuncionarioPerfilController;
 use App\Http\Controllers\Pet\AtendimentoController;
 use App\Http\Controllers\Pet\FichaMedicaController;
 use App\Http\Controllers\Pet\MedicacaoController;
@@ -62,6 +63,14 @@ Route::group([ 'prefix' => 'funcionario' ], function () {
     Route::get('/{id_funcionario}/outra-info', [FuncionarioInfoController::class, 'buscarInfosPorIdFuncionario']);
     Route::post('/{id_funcionario}/outra-info/{id_funcionario_lista_info}', [FuncionarioInfoController::class, 'create']);
     Route::delete('/outra-info/{id_funcionario_outrasinfo}', [FuncionarioInfoController::class, 'destroy']);
+
+    Route::group([ 'prefix' => 'perfil' ], function () {
+        Route::get('/', [FuncionarioPerfilController::class, 'buscarPerfis']);
+        Route::get('/{id}/permissao', [FuncionarioPerfilController::class, 'buscarPermissoesDoPerfil']);
+        Route::post('/', [FuncionarioPerfilController::class, 'cadastrarPerfil']);
+        Route::post('/{id}/permissao', [FuncionarioPerfilController::class, 'cadastrarPermissao']);
+        Route::put('/{id}', [FuncionarioPerfilController::class, 'atualizarPerfil']);
+    });
 
     Route::group([ 'prefix' => 'lista-info' ], function () {
         Route::get('/', [FuncionarioInfoController::class, 'pegarListaInfo']);
