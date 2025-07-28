@@ -89,7 +89,17 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pessoa_dependente` (
 
 CREATE TABLE permissao (
     id_permissao INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL
+    nome VARCHAR(100) NOT NULL,
+    categoria ENUM(
+        'Pessoa',
+        'Pet',
+        'Material',
+        'Memorando',
+        'Socios',
+        'Saude',
+        'Contribuição',
+        'Configuração'
+    ) NOT NULL
 );
 
 CREATE TABLE perfil (

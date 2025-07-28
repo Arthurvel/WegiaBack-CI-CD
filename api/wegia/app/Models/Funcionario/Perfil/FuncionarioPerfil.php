@@ -3,7 +3,7 @@
 namespace App\Models\Funcionario\Perfil;
 
 use App\Models\BaseModel\BaseModel;
-use App\Models\Permissao;
+use App\Models\Funcionario\Perfil\FuncionarioPermissao;
 use App\Models\Funcionario\Funcionario;
 
 class FuncionarioPerfil extends BaseModel
@@ -23,7 +23,7 @@ class FuncionarioPerfil extends BaseModel
     public function permissoes()
     {
         return $this->belongsToMany(
-            Permissao::class,
+            FuncionarioPermissao::class,
             'perfil_permissao',
             'id_perfil',
             'id_permissao'

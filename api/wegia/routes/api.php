@@ -14,6 +14,7 @@ use App\Http\Controllers\Funcionario\FuncionarioInfoController;
 use App\Http\Controllers\Funcionario\FuncionarioQuadroHorarioController;
 use App\Http\Controllers\Funcionario\FuncionarioRemuneracaoController;
 use App\Http\Controllers\Funcionario\Perfil\FuncionarioPerfilController;
+use App\Http\Controllers\Funcionario\Perfil\FuncionarioPermissaoController;
 use App\Http\Controllers\Pet\AtendimentoController;
 use App\Http\Controllers\Pet\FichaMedicaController;
 use App\Http\Controllers\Pet\MedicacaoController;
@@ -70,6 +71,10 @@ Route::group([ 'prefix' => 'funcionario' ], function () {
         Route::post('/', [FuncionarioPerfilController::class, 'cadastrarPerfil']);
         Route::post('/{id}/permissao', [FuncionarioPerfilController::class, 'cadastrarPermissao']);
         Route::put('/{id}', [FuncionarioPerfilController::class, 'atualizarPerfil']);
+    });
+
+    Route::group([ 'prefix' => 'permissao' ], function () {
+        Route::get('/', [FuncionarioPermissaoController::class, 'buscarPermissao']);
     });
 
     Route::group([ 'prefix' => 'lista-info' ], function () {
