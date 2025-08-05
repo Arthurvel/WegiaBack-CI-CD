@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/memorando",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Memorando\\": "app/",
+            "Modules\\Memorando\\Database\\Factories\\": "database/factories/",
+            "Modules\\Memorando\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Memorando\\Tests\\": "tests/"
+        }
+    }
+}

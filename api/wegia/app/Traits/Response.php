@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Traits;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
@@ -16,8 +17,8 @@ trait Response
      * @param int $statusCode
      * @return JsonResponse
     */
-    protected function sucessoResponse($data, int $statusCode = 200,  string $message = 'Operação realizada com sucesso!'): JsonResponse 
-    
+    protected function sucessoResponse($data, int $statusCode = 200,  string $message = 'Operação realizada com sucesso!'): JsonResponse
+
     {
         return response()->json([
             'status' => 'success',
@@ -38,7 +39,7 @@ trait Response
     {
         $status = $statusCode;
         $message = $messageError;
-        
+
         if ($exception instanceof ModelNotFoundException) {
             $message = 'Não encontrado';
             $status = 404;
@@ -47,6 +48,11 @@ trait Response
         if ($exception instanceof ValidationException) {
             $message = $exception->validator->getMessageBag()->getMessages();
             $status = 422;
+        }
+
+        if($exception instanceof AuthorizationException) {
+            $message = $exception->getMessage();
+            $status = 403;
         }
 
         return response()->json([

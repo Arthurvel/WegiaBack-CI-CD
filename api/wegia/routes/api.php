@@ -52,6 +52,7 @@ Route::group([ 'prefix' => 'pessoa' ], function () {
 
 Route::group([ 'prefix' => 'funcionario' ], function () {
     Route::get('/', [FuncionarioController::class, 'index']);
+    Route::get('/todos', [FuncionarioController::class, 'buscarTodos']);
     Route::post('/', [FuncionarioController::class, 'create']);
 
     Route::get('/{id_funcionario}/documento', [FuncionarioDocumentoController::class, 'pegarDocumentosDeUmFuncionario']);

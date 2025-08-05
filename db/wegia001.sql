@@ -116,7 +116,6 @@ CREATE TABLE perfil_permissao (
     CONSTRAINT fk_permissao FOREIGN KEY (id_permissao) REFERENCES permissao(id_permissao) ON DELETE CASCADE
 );
 
-
 -- -----------------------------------------------------
 -- Table `wegia`.`situacao`
 -- -----------------------------------------------------
@@ -132,36 +131,37 @@ ENGINE = InnoDB;
 -- Table `wegia`.`funcionario`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`funcionario` (
-  `id_funcionario` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_pessoa` INT(11) NOT NULL,
-  `id_cargo` INT(11) NOT NULL,
-  `id_situacao` INT(11) NOT NULL,
-  `data_admissao` DATE NOT NULL,
-  `pis` VARCHAR(140) NULL DEFAULT NULL,
-  `ctps` VARCHAR(150) NOT NULL,
-  `uf_ctps` VARCHAR(20) NULL DEFAULT NULL,
-  `numero_titulo` VARCHAR(150) NULL DEFAULT NULL,
-  `zona` VARCHAR(30) NULL DEFAULT NULL,
-  `secao` VARCHAR(40) NULL DEFAULT NULL,
-  `certificado_reservista_numero` VARCHAR(100) NULL DEFAULT NULL,
-  `certificado_reservista_serie` VARCHAR(100) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_funcionario`),
-  INDEX `id_pessoa` (`id_pessoa` ASC),
-  INDEX `fk_funcionario_cargo1_idx` (`id_cargo` ASC),
-  INDEX `fk_funcionario_situacao1_idx` (`id_situacao` ASC),
-  CONSTRAINT `funcionario_ibfk_1`
+    `id_funcionario` INT(11) NOT NULL AUTO_INCREMENT,
+    `id_pessoa` INT(11) NOT NULL,
+    `id_perfil` INT(11) NOT NULL,
+    `id_situacao` INT(11) NOT NULL,
+    `data_admissao` DATE NOT NULL,
+    `pis` VARCHAR(140) NULL DEFAULT NULL,
+    `ctps` VARCHAR(150) NOT NULL,
+    `uf_ctps` VARCHAR(20) NULL DEFAULT NULL,
+    `numero_titulo` VARCHAR(150) NULL DEFAULT NULL,
+    `zona` VARCHAR(30) NULL DEFAULT NULL,
+    `secao` VARCHAR(40) NULL DEFAULT NULL,
+    `certificado_reservista_numero` VARCHAR(100) NULL DEFAULT NULL,
+    `certificado_reservista_serie` VARCHAR(100) NULL DEFAULT NULL,
+    PRIMARY KEY (`id_funcionario`),
+    INDEX `id_pessoa` (`id_pessoa` ASC),
+    INDEX `fk_funcionario_perfil1_idx` (`id_perfil` ASC),
+    INDEX `fk_funcionario_situacao1_idx` (`id_situacao` ASC),
+    CONSTRAINT `funcionario_ibfk_1`
     FOREIGN KEY (`id_pessoa`)
     REFERENCES `wegia`.`pessoa` (`id_pessoa`),
-  CONSTRAINT `fk_funcionario_cargo1`
-    FOREIGN KEY (`id_cargo`)
-    REFERENCES `wegia`.`cargo` (`id_cargo`)
+    CONSTRAINT `fk_funcionario_perfil1`
+    FOREIGN KEY (`id_perfil`)
+    REFERENCES `wegia`.`perfil` (`id_perfil`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_funcionario_situacao1`
+    CONSTRAINT `fk_funcionario_situacao1`
     FOREIGN KEY (`id_situacao`)
     REFERENCES `wegia`.`situacao` (`id_situacao`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE
+    )
 ENGINE = InnoDB;
 
 
@@ -185,36 +185,21 @@ CREATE TABLE IF NOT EXISTS `wegia`.`almoxarife` (
     REFERENCES `wegia`.`almoxarifado` (`id_almoxarifado`))
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `wegia`.`status_memorando`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`status_memorando` (
-  `id_status_memorando` INT(11) NOT NULL AUTO_INCREMENT,
-  `status_atual` VARCHAR(60) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_status_memorando`))
-ENGINE = InnoDB;
-
-
 -- -----------------------------------------------------
 -- Table `wegia`.`memorando`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`memorando` (
-  `id_memorando` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_pessoa` INT(11) NOT NULL,
-  `id_status_memorando` INT(11) NULL DEFAULT NULL,
-  `titulo` TEXT NULL DEFAULT NULL,
-  `data` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_memorando`),
-  INDEX `id_pessoa` (`id_pessoa` ASC),
-  INDEX `id_status_memorando` (`id_status_memorando` ASC),
-  CONSTRAINT `memorando_ibfk_1`
+    `id_memorando` INT(11) NOT NULL AUTO_INCREMENT,
+    `id_pessoa` INT(11) NOT NULL,
+    `status_memorando` ENUM('Ativo', 'Lido', 'Não Lido', 'Importante', 'Pendente', 'Arquivado') NOT NULL DEFAULT 'Pendente',
+    `titulo` TEXT NULL DEFAULT NULL,
+    `data` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id_memorando`),
+    INDEX `id_pessoa` (`id_pessoa` ASC),
+    CONSTRAINT `memorando_ibfk_1`
     FOREIGN KEY (`id_pessoa`)
-    REFERENCES `wegia`.`pessoa` (`id_pessoa`),
-  CONSTRAINT `memorando_ibfk_2`
-    FOREIGN KEY (`id_status_memorando`)
-    REFERENCES `wegia`.`status_memorando` (`id_status_memorando`))
-ENGINE = InnoDB;
+    REFERENCES `wegia`.`pessoa` (`id_pessoa`)
+) ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -249,7 +234,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `wegia`.`anexo` (
   `id_anexo` INT(11) NOT NULL AUTO_INCREMENT,
   `id_despacho` INT(11) NOT NULL,
-  `anexo` LONGBLOB NULL DEFAULT NULL,
+  `anexo` VARCHAR(100) NOT NULL,
   `extensao` VARCHAR(256) NOT NULL,
   `nome` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`id_anexo`),
@@ -258,6 +243,21 @@ CREATE TABLE IF NOT EXISTS `wegia`.`anexo` (
     FOREIGN KEY (`id_despacho`)
     REFERENCES `wegia`.`despacho` (`id_despacho`))
 ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- View para consultar o utlimo despacho por memorando
+-- -----------------------------------------------------
+
+CREATE OR REPLACE VIEW view_ultimo_despacho_por_memorando AS
+SELECT d.*, m.titulo, m.status_memorando, m.id_pessoa as criado_por, p.nome as origem
+FROM despacho d
+         JOIN (
+    SELECT id_memorando, MAX(data) AS max_data
+    FROM despacho
+    GROUP BY id_memorando
+) latest ON d.id_memorando = latest.id_memorando AND d.data = latest.max_data
+         JOIN memorando m ON m.id_memorando = d.id_memorando
+         JOIN pessoa p ON p.id_pessoa = d.id_remetente;
 
 -- -----------------------------------------------------
 -- Table `wegia`.`campo_imagem`
@@ -2150,24 +2150,6 @@ BEGIN
         values (id_memorando, id_remetente, id_destinatario, texto, data);
 
         SELECT max(id_despacho) into idD from despacho;
-
-END$$
-
-DELIMITER ;
-
--- -----------------------------------------------------
--- procedure insmemorando
--- -----------------------------------------------------
-
-DELIMITER $$
-USE `wegia`$$
-CREATE PROCEDURE `insmemorando`(IN `id_pessoa` INT, IN `id_status_memorando` INT, IN `titulo` TEXT, IN `data` VARCHAR(255))
-BEGIN
-		declare idM int;
-        INSERT INTO memorando(id_pessoa, id_status_memorando, titulo, data)
-        values (id_pessoa, id_status_memorando, titulo, data);
-
-        SELECT max(id_memorando) into idM from memorando;
 
 END$$
 

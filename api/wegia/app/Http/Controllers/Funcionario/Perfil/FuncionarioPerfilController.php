@@ -37,6 +37,7 @@ class FuncionarioPerfilController extends BaseController
      *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
      *         required=true,
+     *         request="PerfilBody",
      *         @OA\JsonContent(ref="#/components/schemas/CadastrarFuncionarioPerfilValidation")
      *     ),
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
