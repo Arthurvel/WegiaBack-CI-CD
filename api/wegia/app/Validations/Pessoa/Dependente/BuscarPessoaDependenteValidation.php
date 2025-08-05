@@ -6,7 +6,7 @@ use App\Models\Pessoa\PessoaParentescoEnum;
 use App\Rules\ValidarPessoaDependente;
 use Illuminate\Validation\Rule;
 
-class CriarPessoaDependenteValidation
+class BuscarPessoaDependenteValidation
 {
     public static function rules($pessoaId = null)
     {

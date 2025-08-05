@@ -1,6 +1,6 @@
 #!/bin/sh
 
-php artisan l5-swagger:generate
+php artisan l5-swagger:generate --all
 
 php artisan migrate --force
 

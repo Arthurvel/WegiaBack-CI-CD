@@ -872,6 +872,57 @@
                 ]
             }
         },
+        "/funcionario/todos": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar por todos os funcionarios",
+                "operationId": "4f94ae0615d898f77770d17efe77df68",
+                "parameters": [
+                    {
+                        "name": "permissao",
+                        "in": "query",
+                        "description": "Nome da permissao",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/funcionario": {
             "get": {
                 "tags": [
