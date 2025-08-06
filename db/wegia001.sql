@@ -1894,43 +1894,21 @@ ENGINE = InnoDB;
 -- ------------------------------------------------------
 -- Table `wegia`.`aviso`
 -- ------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`aviso`(
-  `id_aviso` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_funcionario_aviso` INT(11) NOT NULL,
-  `id_pessoa_atendida` INT(11) NOT NULL,
-  `descricao` VARCHAR(512) NOT NULL,
-  `data` DATETIME NOT NULL,
-  PRIMARY KEY(`id_aviso`),
-  FOREIGN KEY(`id_funcionario_aviso`)
-    REFERENCES `wegia`.`funcionario` (`id_funcionario`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  FOREIGN KEY (`id_pessoa_atendida`)
-    REFERENCES `wegia`.`pessoa` (`id_pessoa`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
 
-ENGINE = InnoDB;
-
--- ------------------------------------------------------
--- Table `wegia` . `aviso_notificacao`
--- ------------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS `wegia` . `aviso_notificacao` (
-  `id_aviso_notificacao` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_aviso` INT(11) NOT NULL,
-  `id_funcionario` INT(11) NOT NULL,
-  `status` BOOLEAN NOT NULL,
-  PRIMARY KEY (`id_aviso_notificacao`),
-  FOREIGN KEY (`id_aviso`)
-    REFERENCES `wegia` . `aviso` (`id_aviso`)
-    ON DELETE CASCADE,
-  FOREIGN KEY (`id_funcionario`)
-    REFERENCES `wegia`. `funcionario` (`id_funcionario`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-
-ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `wegia`.`aviso` (
+    `id_aviso` INT(11) NOT NULL AUTO_INCREMENT,
+    `id_pessoa` INT(11) NOT NULL,
+    `titulo` VARCHAR(255) NOT NULL,
+    `descricao` TEXT NOT NULL,
+    `data_criacao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `nivel` ENUM('info', 'alerta', 'erro') NOT NULL DEFAULT 'info',
+    `ativo` BOOLEAN NOT NULL DEFAULT TRUE,
+    PRIMARY KEY (`id_aviso`),
+    FOREIGN KEY (`id_pessoa`)
+        REFERENCES `wegia`.`pessoa` (`id_pessoa`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE = InnoDB;
 
 -- ########################### PROCEDURES #################### --
 
@@ -2415,10 +2393,33 @@ BEGIN
 
 END$$
 
+DELIMITER ;
 
+CREATE TRIGGER tr_despacho_aviso
+    AFTER INSERT ON despacho
+    FOR EACH ROW
+BEGIN
+    DECLARE memorando_titulo TEXT;
 
+    SELECT titulo INTO memorando_titulo
+    FROM memorando
+    WHERE id_memorando = NEW.id_memorando;
 
-
+    INSERT INTO aviso (
+        id_pessoa,
+        titulo,
+        descricao,
+        nivel,
+        ativo
+    ) VALUES (
+        NEW.id_destinatario,
+        memorando_titulo,
+        CONCAT('Você recebeu um novo despacho do memorando: "', memorando_titulo, '"'),
+        'info',
+        1
+    );
+END;
+//
 
 DELIMITER ;
 
