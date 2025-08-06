@@ -79,8 +79,8 @@ class AuthController extends BaseController
 
             $pessoa = $this->pessoaService->buscarPessoaPorCpfSemFormatacao($request->cpf);
 
-            if ($pessoa && $pessoa->validarSenha($request->senha)) {    
-            
+            if ($pessoa && $pessoa->validarSenha($request->senha)) {
+
                 return $this->sucessoResponse([
                     'pessoa' => $pessoa,
                     'token' => $this->authService->gerarToken($pessoa)
@@ -89,9 +89,9 @@ class AuthController extends BaseController
 
             return $this->errorResponse(null, 401, 'CPF ou senha incorretos');
         } catch (\Exception $e) {
-            return $this->errorResponse($e);
+            return $this->errorResponse(null, 500, $e->getMessage());
         }
-                
+
     }
 
     /**
@@ -109,7 +109,7 @@ class AuthController extends BaseController
      *         description="Define o tipo de conteúdo aceito",
      *         @OA\Schema(type="string", default="application/json")
      *     ),
-     * 
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Usuário não autorizado (token invalido)",
@@ -132,10 +132,10 @@ class AuthController extends BaseController
      *     ),
      * )
      */
-    public function logout(Request $request) 
+    public function logout(Request $request)
     {
         try {
-            $revogado = $this->authService->revogarToken($request->user());            
+            $revogado = $this->authService->revogarToken($request->user());
 
             return $this->sucessoResponse($revogado);
         } catch (\Exception $e) {

@@ -26,6 +26,7 @@ use App\Http\Controllers\SituacaoController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\Atendido\AtendidoTipoController;
 use App\Http\Controllers\Pessoa\PessoaDependenteController;
+use App\Http\Controllers\AvisoController;
 
 Route::get('/upload/{path}', [UploadController::class, 'retornarImagem'])
     ->where('path', '.*')
@@ -34,6 +35,12 @@ Route::get('/upload/{path}', [UploadController::class, 'retornarImagem'])
 Route::group([ 'prefix' => 'auth' ], function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/logout', [AuthController::class, 'logout']);
+});
+
+Route::group([ 'prefix' => 'aviso' ], function () {
+    Route::get('/', [AvisoController::class, 'index']);
+    Route::get('/{id}', [AvisoController::class, 'buscarPorId']);
+    Route::put('/{id}', [AvisoController::class, 'desativar']);
 });
 
 Route::group([ 'prefix' => 'pessoa' ], function () {
@@ -52,6 +59,7 @@ Route::group([ 'prefix' => 'pessoa' ], function () {
 
 Route::group([ 'prefix' => 'funcionario' ], function () {
     Route::get('/', [FuncionarioController::class, 'index']);
+    Route::get('/todos', [FuncionarioController::class, 'buscarTodos']);
     Route::post('/', [FuncionarioController::class, 'create']);
 
     Route::get('/{id_funcionario}/documento', [FuncionarioDocumentoController::class, 'pegarDocumentosDeUmFuncionario']);

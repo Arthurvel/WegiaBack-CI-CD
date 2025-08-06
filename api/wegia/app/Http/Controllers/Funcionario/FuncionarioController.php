@@ -33,6 +33,35 @@ class FuncionarioController extends BaseController
 
     /**
      * @OA\Get(
+     *     path="/funcionario/todos",
+     *     summary="Buscar por todos os funcionarios",
+     *     tags={"Funcionario"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *          name="permissao",
+     *          in="query",
+     *          description="Nome da permissao",
+     *          required=false,
+     *          @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
+     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
+     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
+     * )
+     */
+    public function buscarTodos(Request $request) : JsonResponse
+    {
+        try {
+            $funcionario = $this->funcionarioService->buscarTodos($request->query('permissao'));
+
+            return $this->sucessoResponse($funcionario);
+        } catch (Exception $e) {
+            return $this->errorResponse(null,500,$e->getMessage());
+        }
+    }
+
+    /**
+     * @OA\Get(
      *     path="/funcionario",
      *     summary="Buscar os funcionarios",
      *     tags={"Funcionario"},
@@ -131,7 +160,7 @@ class FuncionarioController extends BaseController
             return $this->errorResponse($e);
         }
     }
-    
+
     /**
      * @OA\Post(
      *     path="/funcionario",
@@ -178,10 +207,10 @@ class FuncionarioController extends BaseController
             $resultado = $this->funcionarioService->cadastrarFuncionario($request->all());
 
             return $this->sucessoResponse($resultado);
-            
+
         } catch (Exception $e) {
             return $this->errorResponse($e);
-        } 
+        }
     }
 
     /**
@@ -230,9 +259,9 @@ class FuncionarioController extends BaseController
             $resultado = $this->funcionarioService->atualizarFuncionario($request->all(), $id_funcionario);
 
             return $this->sucessoResponse($resultado);
-            
+
         } catch (Exception $e) {
             return $this->errorResponse($e);
-        } 
+        }
     }
 }

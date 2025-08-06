@@ -98,8 +98,6 @@ INSERT INTO `socio_status` (`id_sociostatus`, `status`) VALUES
 INSERT INTO `socio_tag` (`tag`) VALUES
 ('Solicitante');
 
-INSERT INTO `status_memorando` (`status_atual`) VALUES ('Ativo'), ('Lido'), ('Não Lido'), ('Importante'), ('Pendente'), ('Arquivado');
-
 INSERT INTO `unidade` (`descricao_unidade`) VALUES ('Quilo'), ('Litro'), ('Metro'), ('Pacote'), ('Unidade');
 
 INSERT INTO `acao` (`id_acao`, `descricao`) VALUES

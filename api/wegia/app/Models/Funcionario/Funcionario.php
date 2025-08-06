@@ -6,7 +6,7 @@ use App\Models\BaseModel\BaseModel;
 use App\Models\Cargo;
 use App\Models\Pessoa;
 use App\Models\Situacao;
-use App\Models\Perfil\Perfil;
+use App\Models\Funcionario\Perfil\FuncionarioPerfil;
 
 class Funcionario extends BaseModel
 {
@@ -55,6 +55,6 @@ class Funcionario extends BaseModel
 
     public function perfil()
     {
-        return $this->belongsTo(Perfil::class, 'id_perfil', 'id_perfil');
+        return $this->belongsTo(FuncionarioPerfil::class, 'id_perfil', 'id_perfil');
     }
 }

@@ -1,0 +1,11 @@
+{
+    "name": "Memorando",
+    "alias": "memorando",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Memorando\\Providers\\MemorandoServiceProvider"
+    ],
+    "files": []
+}
