@@ -4,6 +4,7 @@ namespace Modules\Memorando\app\Repositories;
 
 use App\Repositories\Base\BaseRepository;
 use Modules\Memorando\app\Models\Despacho;
+use Modules\Memorando\app\Models\Views\DestinatarioAtual;
 
 class DespachoRepository extends BaseRepository
 {
