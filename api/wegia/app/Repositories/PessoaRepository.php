@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\DTOs\Pessoa\CadastrarPessoaDependenteDTO;
 use App\DTOs\Pessoa\PessoaAtualizarDTO;
+use App\DTOs\Pessoa\PessoaAtualizarSenhaDTO;
 use App\Models\Pessoa;
 use App\Models\Pessoa\PessoaDependente;
 
@@ -14,14 +15,14 @@ class PessoaRepository
     {
         return Pessoa::create($pessoa);
     }
-    
+
     public function cadastrarOuAtualizarPessoa(array $dados): Pessoa
     {
         return Pessoa::updateOrCreate(
             ['cpf' => $dados['cpf']],
             $dados
         );
-    
+
     }
 
     public function buscarPessoaPorCpf(string $cpf) : Pessoa
@@ -36,6 +37,13 @@ class PessoaRepository
         $pessoaEncontrada->update($pessoa->toArray());
 
         return $pessoaEncontrada;
+    }
+
+    public function mudarSenha(PessoaAtualizarSenhaDTO $dto)
+    {
+        $pessoa = $this->buscarPessoaPorId($dto->id_pessoa);
+
+        return $pessoa->update(["senha" => $dto->senha] );
     }
 
     public function buscarPessoaPorId(int $id): Pessoa
@@ -71,12 +79,12 @@ class PessoaRepository
                 })->orWhere('parentesco', 'like', "%{$buscar}%");
             })
             ->when(!is_null($ordenacao), function ($q) use ($ordenacao, $tipoOrdenacao) {
-        
+
                 if($ordenacao == 'nome') {
                     return $q->join('pessoa', 'pessoa_dependente.id_dependente_pessoa', '=', 'pessoa.id_pessoa')
                         ->orderBy("pessoa.{$ordenacao}", $tipoOrdenacao);
-                } 
-        
+                }
+
                 return $q->orderBy("pessoa_dependente.{$ordenacao}", $tipoOrdenacao);
             })
             ->paginate($itensPorPagina, ['*'], 'page', $pagina);
