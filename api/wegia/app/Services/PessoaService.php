@@ -5,6 +5,7 @@ namespace App\Services;
 use App\DTOs\PaginacaoDTO;
 use App\DTOs\Pessoa\CadastrarPessoaDependenteDTO;
 use App\DTOs\Pessoa\PessoaAtualizarDTO;
+use App\DTOs\Pessoa\PessoaAtualizarSenhaDTO;
 use App\DTOs\Pessoa\PessoaDependenteDTO;
 use App\DTOs\Pessoa\PessoaDTO;
 use App\Helpers\UploadSeguroHelper;
@@ -14,16 +15,16 @@ use App\Models\Pessoa\PessoaDependente;
 
 class PessoaService
 {
-    private $pessoaRepository;
+    private PessoaRepository $pessoaRepository;
 
     public function __construct(PessoaRepository $pessoaRepository)
     {
         $this->pessoaRepository = $pessoaRepository;
     }
 
-    public function cadastrarPessoa(array $pessoa) : Pessoa
+    public function cadastrarPessoa(array $pessoa): Pessoa
     {
-        if(!empty($pessoa['imagem'])) {
+        if (!empty($pessoa['imagem'])) {
             $url = UploadSeguroHelper::salvarImagem($pessoa['imagem'], 'pessoa');
             $pessoa['imagem'] = $url;
         }
@@ -31,25 +32,30 @@ class PessoaService
         return $this->pessoaRepository->cadastrarPessoa($pessoa);
     }
 
-    public function buscarPessoaPorCpf(string $cpf) : PessoaDTO
+    public function buscarPessoaPorCpf(string $cpf): PessoaDTO
     {
         $pessoa = $this->pessoaRepository->buscarPessoaPorCpf($cpf);
 
         return PessoaDTO::fromArray($pessoa->toArray());
     }
 
-    public function buscarPessoaPorCpfSemFormatacao(string $cpf) : Pessoa
+    public function buscarPessoaPorCpfSemFormatacao(string $cpf): Pessoa
     {
         return $this->pessoaRepository->buscarPessoaPorCpf($cpf);
     }
 
-    public function atualizarPessoa(array $pessoa, int $id) : array
+    public function atualizarPessoa(array $pessoa, int $id): array
     {
         $pessoaAtualizaDTO = PessoaAtualizarDTO::fromArray($pessoa);
 
         $pessoaAtualizada = $this->pessoaRepository->atualizarPessoa($pessoaAtualizaDTO, $id);
-    
+
         return PessoaDTO::fromArray($pessoaAtualizada->toArray())->toArray();
+    }
+
+    public function mudarSenha(PessoaAtualizarSenhaDTO $dto)
+    {
+        return $this->pessoaRepository->mudarSenha($dto);
     }
 
     public function cadastrarOuAtualizarImagem(array $dados, String $id_pessoa)
@@ -75,7 +81,7 @@ class PessoaService
             $dependentes->lastPage(),
             $dependentes->total(),
             $dependentes->perPage()
-        ); 
+        );
     }
 
     public function criarParentesco(array $dados, String $id_pessoa, int $id_dependente) : PessoaDependente

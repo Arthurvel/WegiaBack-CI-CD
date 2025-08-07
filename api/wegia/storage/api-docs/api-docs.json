@@ -4154,6 +4154,39 @@
                 ]
             }
         },
+        "/pessoa/senha": {
+            "put": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Atualiza a propria senha",
+                "operationId": "1769f547c4996f9c0895656c7a5148dc",
+                "requestBody": {},
+                "responses": {
+                    "204": {
+                        "description": "Pessoa atualizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/pessoa/logada": {
             "get": {
                 "tags": [
@@ -5585,6 +5618,23 @@
                             2,
                             3
                         ]
+                    }
+                },
+                "type": "object"
+            },
+            "PessoaMudarSenhaValidation": {
+                "required": [
+                    "senha",
+                    "confirmar_senha"
+                ],
+                "properties": {
+                    "senha": {
+                        "description": "Senha",
+                        "type": "string"
+                    },
+                    "confirmar_senha": {
+                        "description": "Confirmar Senha",
+                        "type": "string"
                     }
                 },
                 "type": "object"
