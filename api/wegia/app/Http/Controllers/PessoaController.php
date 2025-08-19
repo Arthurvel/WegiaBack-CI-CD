@@ -246,7 +246,8 @@ class PessoaController extends BaseController
      *     tags={"Pessoa"},
      *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
-     *              @OA\Schema(ref="#/components/schemas/PessoaMudarSenhaValidation")
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/PessoaMudarSenhaValidation")
      *     ),
      *     @OA\Response(
      *         response=204,
