@@ -5,6 +5,20 @@ INSERT INTO `pessoa` (`id_pessoa`, `cpf`, `senha`, `nome`) VALUES (NULL, 'admin'
 INSERT INTO `cargo`(`id_cargo`, `cargo`) VALUES (1,'Administrador');
 INSERT INTO `cargo`(`id_cargo`, `cargo`) VALUES (2,'Sem cargo definido');
 
+INSERT INTO `parentesco` (`id_parentesco`, `descricao`) VALUES 
+(1, 'Companheiro(a)'),
+(2, 'Cônjuge'),
+(3, 'Enteado(a)'),
+(4, 'Ex-cônjuge'),
+(5, 'Filho(a)'),
+(6, 'Irmão(ã)'),
+(7, 'Neto(a)'),
+(8, 'Pais'),
+(9, 'Outra relação de dependência'),
+(10, 'Filho(a)'),
+(11, 'Irmão(ã)'),
+(12, 'Neto(a)'),
+
 INSERT INTO `situacao` (`situacoes`) VALUES ('Ativo'), ('Inativo');
 
 INSERT INTO `funcionario` (`id_pessoa`, `id_cargo`, `id_situacao`, `data_admissao`, `pis`, `ctps`, `uf_ctps`, `numero_titulo`, `zona`, `secao`, `certificado_reservista_numero`, `certificado_reservista_serie`) VALUES ('1', '1', '1', '2020-06-03', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL);
@@ -83,8 +97,6 @@ INSERT INTO `socio_status` (`id_sociostatus`, `status`) VALUES
 
 INSERT INTO `socio_tag` (`tag`) VALUES
 ('Solicitante');
-
-INSERT INTO `status_memorando` (`status_atual`) VALUES ('Ativo'), ('Lido'), ('Não Lido'), ('Importante'), ('Pendente'), ('Arquivado');
 
 INSERT INTO `unidade` (`descricao_unidade`) VALUES ('Quilo'), ('Litro'), ('Metro'), ('Pacote'), ('Unidade');
 
@@ -194,24 +206,13 @@ INSERT INTO `funcionario_docfuncional`(`id_docfuncional`, `nome_docfuncional`) V
 (13, 'Exame Admissional'),
 (14, 'Registro Profissional');
 
-INSERT INTO `funcionario_dependente_parentesco` (`id_parentesco`, `descricao`) VALUES 
-(1, 'Companheiro(a)'),
-(2, 'Cônjuge'),
-(3, 'Enteado(a)'),
-(4, 'Ex-cônjuge'),
-(5, 'Filho(a)'),
-(6, 'Irmão(ã)'),
-(7, 'Neto(a)'),
-(8, 'Pais'),
-(9, 'Outra relação de dependência');
-
-INSERT INTO `funcionario_docdependentes` (id_docdependentes,nome_docdependente) VALUES 
-(1, 'Certidão de Casamento'),
-(2, 'Certidão de Nascimento'),
-(3, 'Carteira do SUS'),
-(4, 'Carteira de Vacinação'),
-(5, 'Comprovante de Matrícula Escolar'),
-(6, 'CPF');
+--INSERT INTO `funcionario_docdependentes` (id_docdependentes,nome_docdependente) VALUES 
+--(1, 'Certidão de Casamento'),
+--(2, 'Certidão de Nascimento'),
+--(3, 'Carteira do SUS'),
+--(4, 'Carteira de Vacinação'),
+--(5, 'Comprovante de Matrícula Escolar'),
+--(6, 'CPF');
 
 INSERT INTO `atendido_docs_atendidos` (`idatendido_docs_atendidos`, `descricao`) VALUES 
 (1, 'Carteira de Identidade'),
@@ -219,13 +220,6 @@ INSERT INTO `atendido_docs_atendidos` (`idatendido_docs_atendidos`, `descricao`)
 (3, 'Carteira do SUS'),
 (4, 'Certidão de Nascimento'),
 (5, 'Plano de saúde');
-
-INSERT INTO `atendido_parentesco` (`idatendido_parentesco`, `parentesco`) VALUES 
-(1, 'Pais'),
-(2, 'Filho(a)'),
-(3, 'Irmão(ã)'),
-(4, 'Neto(a)'),
-(5, 'Responsável');
 
 INSERT INTO `atendido_ocorrencia_tipos` (`idatendido_ocorrencia_tipos`, `descricao`) VALUES
 (1, 'Acolhimento'),

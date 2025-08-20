@@ -12,6 +12,565 @@
         }
     ],
     "paths": {
+        "/atendido": {
+            "get": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Buscar os Atendidos",
+                "operationId": "3796b9d1a57bae33208566688597ca1a",
+                "parameters": [
+                    {
+                        "name": "id_status",
+                        "in": "query",
+                        "description": "Id do status do atendido",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Nome ou CPF do atendido para busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo para ordenar (nome e cpf)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "ASC"
+                        }
+                    },
+                    {
+                        "name": "with",
+                        "in": "query",
+                        "description": "Separados por virgula",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Cadastrar um novo Atendido",
+                "operationId": "ca7f52a2de8c57458f463f71fb521175",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pessoa_id_pessoa",
+                                    "atendido_tipo_idatendido_tipo",
+                                    "atendido_status_idatendido_status"
+                                ],
+                                "properties": {
+                                    "pessoa_id_pessoa": {
+                                        "description": "id da pessoa",
+                                        "type": "integer"
+                                    },
+                                    "atendido_tipo_idatendido_tipo": {
+                                        "description": "id do tipo do atendido",
+                                        "type": "integer"
+                                    },
+                                    "atendido_status_idatendido_status": {
+                                        "description": "id do status do atendido",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cadastro realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/atendido/{id}": {
+            "get": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Buscar Atendido por ID",
+                "operationId": "b96e52ff6cbef9a6cc4e1cd2750fcd92",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id do  atendido",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "with",
+                        "in": "query",
+                        "description": "Separados por virgula",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/atendido/{id}/ocorrencia": {
+            "get": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Buscar as ocorrencias de um atendido",
+                "operationId": "f77bec2b66a3e4fe7020fc97fa4581c6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id do atendido",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "id_tipo",
+                        "in": "query",
+                        "description": "Id do tipo de ocorrencia",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Nome, CPF ou Cargo do funcionário para busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo para ordenar (nome, cpf, cargo)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "ASC"
+                        }
+                    },
+                    {
+                        "name": "with",
+                        "in": "query",
+                        "description": "Separados por virgula",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de funcionários por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Adicionar uma nova ocorrencia",
+                "operationId": "648a01471182e3c2a9db9b09ed7205ea",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do atendido",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Dados do documento a ser enviado",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "arquivo": {
+                                        "description": "Arquivo a ser enviado (PDF, JPG, PNG)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "atendido_ocorrencia_tipos_idatendido_ocorrencia_tipos": {
+                                        "description": "ID do tipo do atendido",
+                                        "type": "integer"
+                                    },
+                                    "funcionario_id_funcionario": {
+                                        "description": "ID do funcionario que esta atendendo",
+                                        "type": "integer"
+                                    },
+                                    "data": {
+                                        "description": "Data da ocorrencia",
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "descricao": {
+                                        "description": "Descricao da ocorrencia",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/atendido/ocorrencia/tipos": {
+            "get": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Buscar Atendido por ID",
+                "operationId": "196ed7c7355ba8aa929802b487ae1337",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/atendido/status": {
+            "get": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Buscar os todos os status de atendimento",
+                "operationId": "631e66eaa31699e908c335a3bae75efe",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/atendido/tipo": {
+            "get": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Buscar os todos os tipos de atendimento",
+                "operationId": "5e3017567978a9ccd612aa7cd410d431",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/auth/login": {
             "post": {
                 "tags": [
@@ -154,6 +713,189 @@
                                 }
                             }
                         }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/aviso": {
+            "get": {
+                "tags": [
+                    "Aviso"
+                ],
+                "summary": "Buscar os avisos daquele usuário",
+                "operationId": "c7fbcda6d47ac8a4d302a1f08b80d89e",
+                "parameters": [
+                    {
+                        "name": "ativo",
+                        "in": "query",
+                        "description": "Filtra se o aviso está ativo (true ou false)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "true",
+                                "false"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "titulo",
+                        "in": "query",
+                        "description": "Filtra avisos pelo título",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "nivel",
+                        "in": "query",
+                        "description": "Filtra avisos pelo nível",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "info",
+                                "alerta",
+                                "erro"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página para paginação",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/aviso/{id}": {
+            "get": {
+                "tags": [
+                    "Aviso"
+                ],
+                "summary": "Buscar os avisos daquele usuário",
+                "operationId": "93b34720d67797f93668289a2bd6da64",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id do aviso",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Aviso"
+                ],
+                "summary": "Atualizar o status do id",
+                "operationId": "0d592158166c2765c890a12c85535663",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id do aviso",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
                     }
                 },
                 "security": [
@@ -313,6 +1055,57 @@
                 ]
             }
         },
+        "/funcionario/todos": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar por todos os funcionarios",
+                "operationId": "4f94ae0615d898f77770d17efe77df68",
+                "parameters": [
+                    {
+                        "name": "permissao",
+                        "in": "query",
+                        "description": "Nome da permissao",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/funcionario": {
             "get": {
                 "tags": [
@@ -415,7 +1208,7 @@
                 "tags": [
                     "Funcionario"
                 ],
-                "summary": "Cadastrar um novo funcionario",
+                "summary": "Cadastrar uma novo funcionario",
                 "operationId": "2445a67eb3618df3da075fbc7a755b2d",
                 "requestBody": {
                     "required": true,
@@ -2358,6 +3151,551 @@
                 ]
             }
         },
+        "/funcionario/perfil": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar um perfil",
+                "operationId": "1e205dbc51334fe2c17e661dd0a49c66",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Cadastra um perfil",
+                "operationId": "31b5a45147808278f547b4080686c336",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CadastrarFuncionarioPerfilValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/perfil/{id}/permissao": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar as permissoes de um perfil",
+                "operationId": "f2202a207a3bbf477f0606d2e0f0e6e7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do perfil",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar um perfil",
+                "operationId": "7c4a9ab8d130f5f4f4053a5977edc4c5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do perfil",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SincronizarFuncionarioPerfilPermissaoValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/perfil/{id}": {
+            "put": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar um perfil",
+                "operationId": "3a943eecca2ff7e9c98bce09662a3dad",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do perfil",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AtualizarFuncionarioPerfilValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/funcionario/permissao": {
+            "get": {
+                "tags": [
+                    "Funcionario"
+                ],
+                "summary": "Buscar todas as permissoes",
+                "operationId": "9302692abbcbee4ed2b16a26f37cb86d",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pessoa/{id_pessoa}/dependente": {
+            "get": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Buscar dependentes de uma pessoa",
+                "operationId": "266eb983d0dc12cdfc99b4dad9649947",
+                "parameters": [
+                    {
+                        "name": "id_pessoa",
+                        "in": "path",
+                        "description": "Id da pessoa",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Nome e tipo de dependencia para busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "with",
+                        "in": "query",
+                        "description": "Nome e tipo de dependencia para busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo para ordenar (Nome e parentesco)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "ASC"
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de funcionários por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pessoa/{id_pessoa}/dependente/{id_dependente}": {
+            "post": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Cadastrar um novo dependente",
+                "operationId": "3477dd49da8416e53b5f079360ccdd2f",
+                "parameters": [
+                    {
+                        "name": "id_pessoa",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "id_dependente",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "parentesco"
+                                ],
+                                "properties": {
+                                    "parentesco": {
+                                        "description": "Tipo de parentesco",
+                                        "type": "string",
+                                        "enum": [
+                                            "Companheiro(a)",
+                                            "Cônjuge",
+                                            "Enteado(a)",
+                                            "Ex-cônjuge",
+                                            "Filho(a)",
+                                            "Irmão(ã)",
+                                            "Neto(a)",
+                                            "Pais",
+                                            "Outra relação de dependência"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cadastro realizado com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pessoa/dependente/{id_dependente}": {
+            "delete": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Deletar um dependente",
+                "operationId": "9f09f36744208adfc6042c497657e7b2",
+                "parameters": [
+                    {
+                        "name": "id_dependente",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Cadastro realizado com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/pessoa": {
             "post": {
                 "tags": [
@@ -2816,6 +4154,39 @@
                 ]
             }
         },
+        "/pessoa/senha": {
+            "put": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Atualiza a propria senha",
+                "operationId": "1769f547c4996f9c0895656c7a5148dc",
+                "requestBody": {},
+                "responses": {
+                    "204": {
+                        "description": "Pessoa atualizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/pessoa/logada": {
             "get": {
                 "tags": [
@@ -2823,6 +4194,18 @@
                 ],
                 "summary": "Retorna a pessoa autenticado",
                 "operationId": "98a035012ccaa2b2292da2dcc34a52d7",
+                "parameters": [
+                    {
+                        "name": "with",
+                        "in": "query",
+                        "description": "Separados por virgula",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Usuário retornado com sucesso",
@@ -3006,6 +4389,1036 @@
                 ]
             }
         },
+        "/pet/ficha-medica/{id_ficha_medica}/atendimento": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar o atendimento por Ficha Medica",
+                "operationId": "cba97b180deabde461e2d0b1d5d64471",
+                "parameters": [
+                    {
+                        "name": "id_ficha_medica",
+                        "in": "path",
+                        "description": "ID da Ficha Medica do Pet",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Campo para buscar(data_atendimento, descricao)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo para ordenar (data_atendimento, descricao)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "ASC"
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de atendimentos por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastrar o Atendimento",
+                "operationId": "530c86bc61d82794e19719df3f4e5745",
+                "parameters": [
+                    {
+                        "name": "id_ficha_medica",
+                        "in": "path",
+                        "description": "ID da Ficha Medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "data_atendimento",
+                                    "descricao"
+                                ],
+                                "properties": {
+                                    "data_atendimento": {
+                                        "description": "Data do Atendimento",
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "descricao": {
+                                        "description": "Descricao",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/ficha-medica/atendimento/{id_atendimento}": {
+            "put": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Atualizar um atendimento",
+                "operationId": "ca8f62cba4248bad27eb9ef98b1b42ee",
+                "parameters": [
+                    {
+                        "name": "id_atendimento",
+                        "in": "path",
+                        "description": "ID do Atendimento",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "data_atendimento": {
+                                        "description": "Data do Atendimento",
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "descricao": {
+                                        "description": "Descricao",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Atendimento atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Deletar o Atendimento",
+                "operationId": "e2cb0f97e6e3a468170e3e475f61f075",
+                "parameters": [
+                    {
+                        "name": "id_atendimento",
+                        "in": "path",
+                        "description": "ID do Atendimento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/especie": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar os todas as especies",
+                "operationId": "e57d4f2cbd86c0b7cf8caecd9a72b665",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastrar as Espécies",
+                "operationId": "c11392fe6eb3d010a9c23dd075281c16",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "descricao"
+                                ],
+                                "properties": {
+                                    "descricao": {
+                                        "description": "Campo descrição",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/{id_pet}/ficha-medica": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar a ficha medica do Pet",
+                "operationId": "a5a7f70d7952b873c69a150bf6371964",
+                "parameters": [
+                    {
+                        "name": "id_pet",
+                        "in": "path",
+                        "description": "ID do Pet",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastrar a Ficha Medica",
+                "operationId": "f773c387cf1f4e571c542b6d1a9722e9",
+                "parameters": [
+                    {
+                        "name": "id_pet",
+                        "in": "path",
+                        "description": "ID do Pet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "castrado",
+                                    "necessidades_especiais"
+                                ],
+                                "properties": {
+                                    "castrado": {
+                                        "description": "Castrado",
+                                        "type": "string"
+                                    },
+                                    "necessidades_especiais": {
+                                        "description": "Necessidades Especiais",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/ficha-medica/{id_ficha_medica}": {
+            "put": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Atualizar uma ficha médica de um pet",
+                "operationId": "9d3ff6a1725a255d7c5842a2e0f9c0b7",
+                "parameters": [
+                    {
+                        "name": "id_ficha_medica",
+                        "in": "path",
+                        "description": "ID da Ficha Medica",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "castrado": {
+                                        "description": "Castrado(s,n)",
+                                        "type": "string"
+                                    },
+                                    "necessidades_especiais": {
+                                        "description": "Necessidades Especiais",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ficha Medica atualizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/ficha-medica/atendimento/{id_pet_atendimento}/medicacao": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar a Medicacao por Atendimento",
+                "operationId": "a25b0711b8ab234865b6265a3fd3bfc4",
+                "parameters": [
+                    {
+                        "name": "id_pet_atendimento",
+                        "in": "path",
+                        "description": "ID do Atendimento do Pet",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de medicamentos por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastrar a Medicacao",
+                "operationId": "66fd8837000a3034b838d80bf587708b",
+                "parameters": [
+                    {
+                        "name": "id_pet_atendimento",
+                        "in": "path",
+                        "description": "ID da Medicacao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_medicamento",
+                                    "data_medicacao"
+                                ],
+                                "properties": {
+                                    "id_medicamento": {
+                                        "description": "Id do Medicamento",
+                                        "type": "integer"
+                                    },
+                                    "data_medicacao": {
+                                        "description": "Data da Medicacao",
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/ficha-medica/atendimento/medicacao/{id_medicacao}": {
+            "delete": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Deletar a Medicacao",
+                "operationId": "c7983356164dcd049606825990bc0802",
+                "parameters": [
+                    {
+                        "name": "id_medicacao",
+                        "in": "path",
+                        "description": "ID da Medicacao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/ficha-medica/atendimento/medicacao/medicamento": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar os todos os Medicamentos",
+                "operationId": "2e82d44008ac786fb9cbc1a9550d7e83",
+                "responses": {
+                    "200": {
+                        "description": "OpeRacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastrar o Medicamento",
+                "operationId": "11b41de96138e51bb66f061d0fee93cb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome_medicamento",
+                                    "descricao_medicamento",
+                                    "aplicacao"
+                                ],
+                                "properties": {
+                                    "nome_medicamento": {
+                                        "description": "Nome do Medicamento",
+                                        "type": "string"
+                                    },
+                                    "descricao_medicamento": {
+                                        "description": "Descricao do Medicamento",
+                                        "type": "string"
+                                    },
+                                    "aplicacao": {
+                                        "description": "Aplicacao do Medimento",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/ficha-medica/atendimento/medicacao/medicamento/{id_medicamento}": {
+            "delete": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Deletar o Medicamento",
+                "operationId": "6e06430a6cfe68cd7a461cd436ff8fb3",
+                "parameters": [
+                    {
+                        "name": "id_medicamento",
+                        "in": "path",
+                        "description": "ID do Medicamento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/raca": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar os todas as Racas",
+                "operationId": "68514a8ce62f290d83e00b382a376d00",
+                "responses": {
+                    "200": {
+                        "description": "OpeRacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastrar as racas",
+                "operationId": "bef295c1a7a472ac4b392e8e1c25b894",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "descricao"
+                                ],
+                                "properties": {
+                                    "descricao": {
+                                        "description": "Campo descrição",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OpeRacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/situacao": {
             "get": {
                 "tags": [
@@ -3158,6 +5571,75 @@
         }
     },
     "components": {
+        "schemas": {
+            "AtualizarFuncionarioPerfilValidation": {
+                "properties": {
+                    "cargo": {
+                        "description": "Nome do cargo",
+                        "type": "string"
+                    },
+                    "nome": {
+                        "description": "Nome do perfil",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "CadastrarFuncionarioPerfilValidation": {
+                "required": [
+                    "cargo",
+                    "nome"
+                ],
+                "properties": {
+                    "cargo": {
+                        "description": "Nome do cargo",
+                        "type": "string"
+                    },
+                    "nome": {
+                        "description": "Nome do perfil",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SincronizarFuncionarioPerfilPermissaoValidation": {
+                "required": [
+                    "permissoes"
+                ],
+                "properties": {
+                    "permissoes": {
+                        "description": "IDs das permissões que devem ser associadas ao perfil",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "example": [
+                            1,
+                            2,
+                            3
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "PessoaMudarSenhaValidation": {
+                "required": [
+                    "senha",
+                    "confirmar_senha"
+                ],
+                "properties": {
+                    "senha": {
+                        "description": "Senha",
+                        "type": "string"
+                    },
+                    "confirmar_senha": {
+                        "description": "Confirmar Senha",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",
@@ -3168,8 +5650,16 @@
     },
     "tags": [
         {
+            "name": "Atendido",
+            "description": "Operações relacionadas dos atendidos"
+        },
+        {
             "name": "Auth",
             "description": "Operações relacionadas a autenticação"
+        },
+        {
+            "name": "Aviso",
+            "description": "Operações relacionadas aos Avisos"
         },
         {
             "name": "Cargo",
@@ -3186,6 +5676,10 @@
         {
             "name": "Situacao",
             "description": "Operações relacionadas a Situacao"
+        },
+        {
+            "name": "Pet",
+            "description": "Pet"
         }
     ]
 }

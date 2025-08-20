@@ -49,6 +49,16 @@ class FuncionarioService
         $this->funcionarioRepository = $funcionarioRepository;
     }
 
+    public function buscarTodos(String $permissao)
+    {
+        $funcionarios = $this->funcionarioRepository->buscarTodos($permissao);
+
+        $funcionariosDTO = $funcionarios->map(function ($funcionario) {
+            return FuncionarioDTO::fromArray($funcionario->toArray());
+        })->toArray();
+
+        return $funcionariosDTO;
+    }
     public function pegarFuncionarios(array $parametros = []) : PaginacaoDTO
     {
         $funcionarios = $this->funcionarioRepository->pegarFuncionarios($parametros);
@@ -85,7 +95,7 @@ class FuncionarioService
             }
 
             $pessoaDTO = PessoaCadastrarDTO::fromArray($dados)->toArray();
-            
+
 
             $pessoa = $this->pessoaRepository->cadastrarOuAtualizarPessoa($pessoaDTO);
 
@@ -100,7 +110,7 @@ class FuncionarioService
             return $funcionario;
         } catch (Exception $e) {
             DB::rollBack();
-            throw $e; 
+            throw $e;
         }
     }
 
@@ -302,7 +312,7 @@ class FuncionarioService
 
             return $depentende;
         } catch (Exception $e) {
-            throw $e; 
+            throw $e;
         }
     }
 

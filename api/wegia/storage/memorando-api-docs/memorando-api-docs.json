@@ -1,0 +1,621 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Memorando",
+        "description": "Documentação da API Wegia",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "Servidor Local"
+        }
+    ],
+    "paths": {
+        "/despacho": {
+            "get": {
+                "tags": [
+                    "Despacho"
+                ],
+                "summary": "Buscar os despachos agrupados por memorando",
+                "operationId": "d09e1feced39dad090dd39fb8ab6f541",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo para ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo da ordenação (ASC ou DESC)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status do memorando",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Ativo",
+                                "Lido",
+                                "Não Lido",
+                                "Importante",
+                                "Pendente",
+                                "Arquivado"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Itens por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Despacho cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/despacho/memorando/{id}": {
+            "post": {
+                "tags": [
+                    "Despacho"
+                ],
+                "summary": "Cadastra um despacho a partir de um memorando",
+                "operationId": "96d0d27970954418f109a1dd56220e7b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id do Memorando",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DespachoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Despacho cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/memorando": {
+            "get": {
+                "tags": [
+                    "Memorando"
+                ],
+                "summary": "Buscar todos os memorandos",
+                "operationId": "5b28c48461eaa0bab1585377298c0315",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo para ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo da ordenação (ASC ou DESC)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status do memorando",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Ativo",
+                                "Lido",
+                                "Não Lido",
+                                "Importante",
+                                "Pendente",
+                                "Arquivado"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "destinatario",
+                        "in": "query",
+                        "description": "Filtrar por memorandos onde sou o destinatário",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "remetente",
+                        "in": "query",
+                        "description": "Filtrar por memorandos onde sou o remetente",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Itens por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Memorando"
+                ],
+                "summary": "Cadastra um memorando",
+                "operationId": "96add7261a0c9ad56a34125571f9913a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MemorandoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Memorando cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/memorando/participados": {
+            "get": {
+                "tags": [
+                    "Memorando"
+                ],
+                "summary": "Buscar todos os memorandos participados por usuario logado",
+                "operationId": "e4596c806e7cfaa65262d34103b02435",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo para ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo da ordenação (ASC ou DESC)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status do memorando",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Ativo",
+                                "Lido",
+                                "Não Lido",
+                                "Importante",
+                                "Pendente",
+                                "Arquivado"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Itens por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/memorando/{id}": {
+            "get": {
+                "tags": [
+                    "Memorando"
+                ],
+                "summary": "Buscar um memorando pelo id",
+                "operationId": "672b04e6445ff09989cc0123fc173d81",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id do memorando",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Memorando"
+                ],
+                "summary": "Atualizar um memorando",
+                "operationId": "b297d3640c6918f63567b484ee66981d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id do Memorando",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MemorandoAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "DespachoCadastrarValidation": {
+                "required": [
+                    "id_destinatario",
+                    "texto"
+                ],
+                "properties": {
+                    "id_destinatario": {
+                        "description": "id do destinatario",
+                        "type": "string"
+                    },
+                    "texto": {
+                        "description": "Texto do despacho",
+                        "type": "string"
+                    },
+                    "anexos[]": {
+                        "description": "Arquivos opcionais (jpeg, jpg, png, máx. 5MB cada)",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "binary"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "MemorandoAtualizarValidation": {
+                "required": [
+                    "status_memorando"
+                ],
+                "properties": {
+                    "status_memorando": {
+                        "description": "id do destinatario",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "MemorandoCadastrarValidation": {
+                "required": [
+                    "titulo",
+                    "texto",
+                    "id_destinatario"
+                ],
+                "properties": {
+                    "id_destinatario": {
+                        "description": "id do destinatario",
+                        "type": "string"
+                    },
+                    "titulo": {
+                        "description": "Título do memorando",
+                        "type": "string"
+                    },
+                    "texto": {
+                        "description": "Texto do memorando",
+                        "type": "string"
+                    },
+                    "anexos[]": {
+                        "description": "Arquivos opcionais (jpeg, jpg, png, máx. 5MB cada)",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "binary"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Despacho",
+            "description": "Operações relacionadas ao Modulo de Memorando"
+        },
+        {
+            "name": "Memorando",
+            "description": "Operações relacionadas ao Memorando"
+        }
+    ]
+}

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\Pessoa\PessoaAtualizarSenhaDTO;
+use App\Validations\Pessoa\PessoaMudarSenhaValidation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\PessoaService;
@@ -26,7 +28,7 @@ class PessoaController extends BaseController
 
         $this->pessoaService = $pessoaService;
     }
-    
+
 
     /**
      * @OA\Post(
@@ -78,18 +80,18 @@ class PessoaController extends BaseController
                 PessoaValidation::rules(),
                 PessoaValidation::messages()
             );
-        
+
             if ($validator->fails()) {
                 return $this->errorResponse(null, 422, $validator->errors());
             }
 
             $pessoa = $this->pessoaService->cadastrarPessoa($request->all());
-            
+
             return $this->sucessoResponse($pessoa);
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }
-        
+
     }
 
     /**
@@ -97,7 +99,7 @@ class PessoaController extends BaseController
      *     path="/pessoa/{id_pessoa}/imagem",
      *     summary="Cadastrar uma nova imagem para pessoa",
      *     tags={"Pessoa"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id_pessoa",
      *         in="path",
@@ -136,12 +138,12 @@ class PessoaController extends BaseController
             );
 
             $pessoa = $this->pessoaService->cadastrarOuAtualizarImagem($request->only(['imagem']), $id_pessoa);
-            
+
             return $this->sucessoResponse($pessoa);
         } catch (\Exception $e) {
             return $this->errorResponse(null,500,$e->getMessage());
         }
-        
+
     }
 
     /**
@@ -167,12 +169,12 @@ class PessoaController extends BaseController
         try {
 
             $pessoa = $this->pessoaService->buscarPessoaPorCpf($cpf);
-            
+
             return $this->sucessoResponse($pessoa->toArray());
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }
-        
+
     }
 
 
@@ -181,7 +183,7 @@ class PessoaController extends BaseController
      *     path="/pessoa/{id_pessoa}",
      *     summary="Atualizar uma pessoa",
      *     tags={"Pessoa"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id_pessoa",
      *         in="path",
@@ -230,8 +232,48 @@ class PessoaController extends BaseController
             );
 
             $pessoa = $this->pessoaService->atualizarPessoa($request->all(), $id_pessoa);
-            
+
             return $this->sucessoResponse($pessoa);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/pessoa/senha",
+     *     summary="Atualiza a propria senha",
+     *     tags={"Pessoa"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *              @OA\Schema(ref="#/components/schemas/PessoaMudarSenhaValidation")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Pessoa atualizada com sucesso",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erro de validação",
+     *         @OA\JsonContent()
+     *     )
+     * )
+     */
+    public function mudarPropriaSenha(PessoaMudarSenhaValidation $request) : JsonResponse
+    {
+        try {
+            $validated = $request->validated();
+            $id = $request->user()->id_pessoa;
+
+            $dto = PessoaAtualizarSenhaDTO::fromArray([
+                "senha" => $validated['senha'],
+                "id_pessoa" => $id
+            ]);
+
+            $pessoa = $this->pessoaService->mudarSenha($dto);
+
+            return $this->sucessoResponse(true, 204);
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }
@@ -242,6 +284,13 @@ class PessoaController extends BaseController
      *     path="/pessoa/logada",
      *     summary="Retorna a pessoa autenticado",
      *     tags={"Pessoa"},
+     *     @OA\Parameter(
+     *         name="with",
+     *         in="query",
+     *         description="Separados por virgula",
+     *         required=false,
+     *         @OA\Schema(type="string", default="")
+     *     ),
      *     security={{"bearerAuth": {}}},
      *     @OA\Response(
      *         response=200,
@@ -304,8 +353,11 @@ class PessoaController extends BaseController
      */
     public function retornarPessoaLogada(Request $request) : JsonResponse
     {
-        try {            
-            return $this->sucessoResponse($request->user());
+        try {
+            $with   = isset($request->with) ? explode(',', $request->with) : [];
+            $pessoa = $request->user()->load($with);
+
+            return $this->sucessoResponse($pessoa);
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }

@@ -27,6 +27,12 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class FuncionarioRepository
 {
 
+    public function buscarTodos(String $permissao)
+    {
+        return Funcionario::whereHas('perfil.permissoes', function ($query) use ($permissao){
+            $query->where('nome', $permissao);
+        })->with(['pessoa', 'perfil.permissoes'])->get();
+    }
     public function pegarFuncionarios(array $parametros = []) : LengthAwarePaginator
     {
         $situacao       = $parametros['id_situacao'] ?? null;
@@ -84,7 +90,7 @@ class FuncionarioRepository
     {
         return FuncionarioDocs::create($dados->toArray());
     }
-    
+
     public function pegarDocumentos(array $parametros = [], $id_funcionario = null) : LengthAwarePaginator
     {
         $buscar         = !empty($parametros['buscar']) ? $parametros['buscar'] : null;
@@ -95,7 +101,7 @@ class FuncionarioRepository
 
         return FuncionarioDocs::with(['funcionarioDocFuncional'])
             ->when(!is_null($id_funcionario), function ($q) use ($id_funcionario) {
-                
+
                 return $q->where('id_funcionario', $id_funcionario);
 
             })
@@ -162,9 +168,9 @@ class FuncionarioRepository
 
                 if($ordenacao == 'descricao') {
                     return $q->join(
-                        'funcionario_listainfo', 
-                        'funcionario_outrasinfo.funcionario_listainfo_idfuncionario_listainfo', 
-                        '=', 
+                        'funcionario_listainfo',
+                        'funcionario_outrasinfo.funcionario_listainfo_idfuncionario_listainfo',
+                        '=',
                         'funcionario_listainfo.idfuncionario_listainfo'
                     )
                         ->orderBy("funcionario_listainfo.{$ordenacao}", $tipoOrdenacao);
@@ -232,9 +238,9 @@ class FuncionarioRepository
             ->when(!is_null($ordenacao), function ($q) use ($ordenacao, $tipoOrdenacao) {
                 if ($ordenacao == 'descricao') {
                     return $q->join(
-                        'funcionario_remuneracao_tipo', 
-                        'funcionario_remuneracao.funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo', 
-                        '=', 
+                        'funcionario_remuneracao_tipo',
+                        'funcionario_remuneracao.funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo',
+                        '=',
                         'funcionario_remuneracao_tipo.idfuncionario_remuneracao_tipo'
                     )
                     ->orderBy("funcionario_remuneracao_tipo.{$ordenacao}", $tipoOrdenacao);
@@ -256,7 +262,7 @@ class FuncionarioRepository
         return FuncionarioRemuneracao::findOrFail($id_remuneracao)->delete();
     }
 
-    public function buscarRemuneracaoTotalPorFuncionario(int $id_funcionario) 
+    public function buscarRemuneracaoTotalPorFuncionario(int $id_funcionario)
     {
         return FuncionarioRemuneracao::where('funcionario_id_funcionario', $id_funcionario)
             ->sum('valor');
@@ -300,7 +306,7 @@ class FuncionarioRepository
             ->when(!is_null($buscar), function ($q) use ($buscar, $id_funcionario) {
                 return $q->where(function ($query) use ($buscar, $id_funcionario) {
 
-                    $query->where('id_funcionario', $id_funcionario) 
+                    $query->where('id_funcionario', $id_funcionario)
                         ->where(function ($subQuery) use ($buscar) {
                             $subQuery->whereHas('pessoa', function ($q2) use ($buscar) {
                                 $q2->where('nome', 'like', "%{$buscar}%")
@@ -310,7 +316,7 @@ class FuncionarioRepository
                                 $q3->where('descricao', 'like', "%{$buscar}%");
                             });
                         });
-                        
+
                 });
             })
             ->when(!is_null($ordenacao), function ($q) use ($ordenacao, $tipoOrdenacao) {
@@ -330,12 +336,12 @@ class FuncionarioRepository
     {
         return FuncionarioDependente::create($dados->toArray());
     }
-    
+
     public function excluirDependente(int $id_dependente) : bool
     {
         return FuncionarioDependente::findOrFail($id_dependente)->delete();
     }
-    
+
     public function buscarDependenteParentesco() : Collection
     {
         return FuncionarioDependenteParentesco::get();

@@ -2,8 +2,11 @@
 
 namespace App\Repositories;
 
+use App\DTOs\Pessoa\CadastrarPessoaDependenteDTO;
 use App\DTOs\Pessoa\PessoaAtualizarDTO;
+use App\DTOs\Pessoa\PessoaAtualizarSenhaDTO;
 use App\Models\Pessoa;
+use App\Models\Pessoa\PessoaDependente;
 
 class PessoaRepository
 {
@@ -12,14 +15,14 @@ class PessoaRepository
     {
         return Pessoa::create($pessoa);
     }
-    
+
     public function cadastrarOuAtualizarPessoa(array $dados): Pessoa
     {
         return Pessoa::updateOrCreate(
             ['cpf' => $dados['cpf']],
             $dados
         );
-    
+
     }
 
     public function buscarPessoaPorCpf(string $cpf) : Pessoa
@@ -36,6 +39,13 @@ class PessoaRepository
         return $pessoaEncontrada;
     }
 
+    public function mudarSenha(PessoaAtualizarSenhaDTO $dto)
+    {
+        $pessoa = $this->buscarPessoaPorId($dto->id_pessoa);
+
+        return $pessoa->update(["senha" => $dto->senha] );
+    }
+
     public function buscarPessoaPorId(int $id): Pessoa
     {
         return Pessoa::findOrFail($id);
@@ -50,6 +60,45 @@ class PessoaRepository
         ]);
 
         return $pessoaEncontrada;
+    }
+
+    public function buscarDependentesPorIdPessoa(int $id_pessoa, array $parametros)
+    {
+        $buscar         = $parametros['buscar'] ?? null;
+        $ordenacao      = $parametros['ordenacao'] ?? null;
+        $tipoOrdenacao  = $parametros['tipoOrdenacao'] ?? 'ASC';
+        $itensPorPagina = $parametros['itensPorPagina'] ?? 10;
+        $pagina         = $parametros['pagina'] ?? 1;
+        $with           = isset($parametros['with']) ? explode(',', $parametros['with']) : [];
+
+        return PessoaDependente::with($with)
+            ->where('pessoa_dependente.id_pessoa', $id_pessoa)
+            ->when(!is_null($buscar), function ($q) use ($buscar) {
+                return $q->whereHas('dependente', function ($q2) use ($buscar) {
+                    $q2->where('nome', 'like', "%{$buscar}%");
+                })->orWhere('parentesco', 'like', "%{$buscar}%");
+            })
+            ->when(!is_null($ordenacao), function ($q) use ($ordenacao, $tipoOrdenacao) {
+
+                if($ordenacao == 'nome') {
+                    return $q->join('pessoa', 'pessoa_dependente.id_dependente_pessoa', '=', 'pessoa.id_pessoa')
+                        ->orderBy("pessoa.{$ordenacao}", $tipoOrdenacao);
+                }
+
+                return $q->orderBy("pessoa_dependente.{$ordenacao}", $tipoOrdenacao);
+            })
+            ->paginate($itensPorPagina, ['*'], 'page', $pagina);
+    }
+
+
+    public function criarParentesco(CadastrarPessoaDependenteDTO $dependente) : PessoaDependente
+    {
+        return PessoaDependente::create($dependente->toArray());
+    }
+
+    public function deletarDependente(int $id_dependente) : bool
+    {
+        return PessoaDependente::destroy($id_dependente);
     }
 
 }

@@ -6,6 +6,7 @@ use App\Models\BaseModel\BaseModel;
 use App\Models\Cargo;
 use App\Models\Pessoa;
 use App\Models\Situacao;
+use App\Models\Funcionario\Perfil\FuncionarioPerfil;
 
 class Funcionario extends BaseModel
 {
@@ -21,6 +22,7 @@ class Funcionario extends BaseModel
         'id_pessoa',
         'id_cargo',
         'id_situacao',
+        'id_perfil',
         'data_admissao',
         'pis',
         'ctps',
@@ -30,11 +32,11 @@ class Funcionario extends BaseModel
         'secao',
         'certificado_reservista_numero',
         'certificado_reservista_serie',
-    ]; 
+    ];
 
     protected $hidden = [
         'senha',
-    ];   
+    ];
 
     public function pessoa()
     {
@@ -51,4 +53,8 @@ class Funcionario extends BaseModel
         return $this->belongsTo(Situacao::class, 'id_situacao');
     }
 
+    public function perfil()
+    {
+        return $this->belongsTo(FuncionarioPerfil::class, 'id_perfil', 'id_perfil');
+    }
 }

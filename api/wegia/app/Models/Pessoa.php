@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Funcionario\Funcionario;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
@@ -42,11 +44,11 @@ class Pessoa extends Authenticatable
         'tipo_sanguineo',
         'nivel_acesso',
         'adm_configurado',
-    ];    
+    ];
 
     protected $hidden = [
         'senha',
-    ];   
+    ];
 
     protected $casts = [
         'data_nascimento' => 'date',
@@ -65,7 +67,12 @@ class Pessoa extends Authenticatable
 
     public function funcionario()
     {
-        return $this->hasMany(Funcionario::class, 'id_pessoa');
+        return $this->hasOne(Funcionario::class, 'id_pessoa');
+    }
+
+    public function avisos() : HasMany
+    {
+        return $this->hasMany(Aviso::class, 'id_pessoa', 'id_pessoa')->where('ativo', true);
     }
 
 }
