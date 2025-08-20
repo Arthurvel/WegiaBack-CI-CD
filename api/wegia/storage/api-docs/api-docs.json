@@ -4161,7 +4161,16 @@
                 ],
                 "summary": "Atualiza a propria senha",
                 "operationId": "1769f547c4996f9c0895656c7a5148dc",
-                "requestBody": {},
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PessoaMudarSenhaValidation"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "204": {
                         "description": "Pessoa atualizada com sucesso",

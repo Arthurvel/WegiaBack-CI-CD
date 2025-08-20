@@ -48,5 +48,28 @@ return [
                 ],
             ],
         ],
+
+        'material' => [
+            'api' => [
+                'title' => 'API Material',
+            ],
+            'routes' => [
+                'api' => 'api/material/documentation',
+                'docs' => 'api/material/docs'
+            ],
+            'paths' => [
+                'docs' => storage_path('material-api-docs'),
+
+                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
+
+                'docs_json' => 'material-api-docs.json',
+                'docs_yaml' => 'material-api-docs.yaml',
+                'format_to_use_for_docs' => env('L5_FORMAT_TO_USE_FOR_DOCS', 'json'),
+
+                'annotations' => [
+                    base_path('Modules/Material'),
+                ],
+            ],
+        ],
     ],
 ];
