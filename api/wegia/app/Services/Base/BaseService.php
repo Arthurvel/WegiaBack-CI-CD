@@ -39,9 +39,9 @@ abstract class BaseService
         return $this->repository->buscarTodos();
     }
 
-    public function buscarPorId(int $id)
+    public function buscarPorId(int $id, Array $with = [])
     {
-        return $this->repository->buscarPorId($id);
+        return $this->repository->buscarPorId($id, $with);
     }
 
     public function deletar(int $id)

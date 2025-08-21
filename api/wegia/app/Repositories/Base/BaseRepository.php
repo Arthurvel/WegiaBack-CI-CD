@@ -43,9 +43,11 @@ abstract class BaseRepository
      * @param int $id
      * @return TModel
      */
-    public function buscarPorId(int $id)
+    public function buscarPorId(int $id, Array $with = [])
     {
-        return $this->model->findOrFail($id);
+        return $this->model
+            ->with($with)
+            ->findOrFail($id);
     }
 
     /**

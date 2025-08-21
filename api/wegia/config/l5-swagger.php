@@ -71,5 +71,28 @@ return [
                 ],
             ],
         ],
+
+        'pet' => [
+            'api' => [
+                'title' => 'API Pet',
+            ],
+            'routes' => [
+                'api' => 'api/pet/documentation',
+                'docs' => 'api/pet/docs'
+            ],
+            'paths' => [
+                'docs' => storage_path('pet-api-docs'),
+
+                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
+
+                'docs_json' => 'pet-api-docs.json',
+                'docs_yaml' => 'pet-api-docs.yaml',
+                'format_to_use_for_docs' => env('L5_FORMAT_TO_USE_FOR_DOCS', 'json'),
+
+                'annotations' => [
+                    base_path('Modules/Pet'),
+                ],
+            ],
+        ],
     ],
 ];

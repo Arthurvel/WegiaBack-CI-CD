@@ -1,0 +1,671 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Pet",
+        "description": "Documentação da API Wegia",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "Servidor Local"
+        }
+    ],
+    "paths": {
+        "/especie": {
+            "get": {
+                "tags": [
+                    "Especie"
+                ],
+                "summary": "Buscar os todas as Especies",
+                "operationId": "1934ff11963943ef880c6b0833939fa4",
+                "responses": {
+                    "200": {
+                        "description": "OpeRacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Especie"
+                ],
+                "summary": "Cadastrar a Especie",
+                "operationId": "5594fdbee722ce44174ca9f187ec99a3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EspecieCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OpeRacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar todos os pets",
+                "operationId": "184b90e982466d313875eb7ab2522bd3",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação (nome, cor, sexo, data_nascimento, data_acolhimento)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "nome",
+                                "cor",
+                                "sexo",
+                                "data_nascimento",
+                                "data_acolhimento"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastra um pet",
+                "operationId": "9710b4aa396469bfd6ec6b77f62c7444",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PetCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pet cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/{id}": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar um pet pelo id",
+                "operationId": "fce0667100ccb7b75ddbe3f4e730bcea",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Pet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "true",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Editar um pet",
+                "operationId": "be7be0e088deee028cd6544c37944908",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Pet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PetAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "true",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Exclui um pet",
+                "operationId": "37f2822af52a014d3b7e90010b14d2e1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Pet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "true",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/raca": {
+            "get": {
+                "tags": [
+                    "Raca"
+                ],
+                "summary": "Buscar os todas as Racas",
+                "operationId": "00d1edf93fd280f48be2a9dcf06d4b56",
+                "responses": {
+                    "200": {
+                        "description": "OpeRacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Raca"
+                ],
+                "summary": "Cadastrar as racas",
+                "operationId": "3238565cecfccf14d935e60cba00e5da",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RacaCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OpeRacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "EspecieCadastrarValidation": {
+                "required": [
+                    "descricao"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "Campo descrição",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PetAtualizarValidation": {
+                "required": [],
+                "properties": {
+                    "nome": {
+                        "description": "Nome do pet",
+                        "type": "string"
+                    },
+                    "data_nascimento": {
+                        "description": "Data de nascimento do pet (YYYY-MM-DD)",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "data_acolhimento": {
+                        "description": "Data de acolhimento do pet (YYYY-MM-DD)",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "sexo": {
+                        "description": "Sexo do pet (M ou F)",
+                        "type": "string",
+                        "enum": [
+                            "M",
+                            "F"
+                        ]
+                    },
+                    "caracteristicas_especificas": {
+                        "description": "Características específicas do pet",
+                        "type": "string"
+                    },
+                    "foto": {
+                        "description": "Arquivo da foto do pet (jpeg, jpg, png, máx. 5MB)",
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "id_pet_especie": {
+                        "description": "ID da espécie do pet",
+                        "type": "integer"
+                    },
+                    "id_pet_raca": {
+                        "description": "ID da raça do pet",
+                        "type": "integer"
+                    },
+                    "cor": {
+                        "description": "Cor do pet",
+                        "type": "string",
+                        "enum": [
+                            "Preto",
+                            "Branco",
+                            "Cinza",
+                            "Marrom",
+                            "Caramelo",
+                            "Amarelo",
+                            "Bege",
+                            "Dourado",
+                            "Ruivo",
+                            "Creme",
+                            "Azul",
+                            "Chocolate",
+                            "Bicolor",
+                            "Tricolor"
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "PetCadastrarValidation": {
+                "required": [
+                    "nome",
+                    "data_nascimento",
+                    "data_acolhimento",
+                    "sexo",
+                    "id_pet_especie",
+                    "id_pet_raca",
+                    "cor"
+                ],
+                "properties": {
+                    "nome": {
+                        "description": "Nome do pet",
+                        "type": "string"
+                    },
+                    "data_nascimento": {
+                        "description": "Data de nascimento do pet (YYYY-MM-DD)",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "data_acolhimento": {
+                        "description": "Data de acolhimento do pet (YYYY-MM-DD)",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "sexo": {
+                        "description": "Sexo do pet (M ou F)",
+                        "type": "string",
+                        "enum": [
+                            "M",
+                            "F"
+                        ]
+                    },
+                    "caracteristicas_especificas": {
+                        "description": "Características específicas do pet",
+                        "type": "string"
+                    },
+                    "foto": {
+                        "description": "Arquivo da foto do pet (jpeg, jpg, png, máx. 5MB)",
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "id_pet_especie": {
+                        "description": "ID da espécie do pet",
+                        "type": "integer"
+                    },
+                    "id_pet_raca": {
+                        "description": "ID da raça do pet",
+                        "type": "integer"
+                    },
+                    "cor": {
+                        "description": "Cor do pet",
+                        "type": "string",
+                        "enum": [
+                            "Preto",
+                            "Branco",
+                            "Cinza",
+                            "Marrom",
+                            "Caramelo",
+                            "Amarelo",
+                            "Bege",
+                            "Dourado",
+                            "Ruivo",
+                            "Creme",
+                            "Azul",
+                            "Chocolate",
+                            "Bicolor",
+                            "Tricolor"
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "RacaCadastrarValidation": {
+                "required": [
+                    "descricao"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "Campo descrição",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Especie",
+            "description": "Operações relacionadas ao Modulo de Pet"
+        },
+        {
+            "name": "Pet",
+            "description": "Operações relacionadas ao Modulo de Pet"
+        },
+        {
+            "name": "Raca",
+            "description": "Operações relacionadas ao Modulo de Pet"
+        }
+    ]
+}

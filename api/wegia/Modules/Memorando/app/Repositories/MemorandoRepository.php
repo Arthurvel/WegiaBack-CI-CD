@@ -77,12 +77,4 @@ class MemorandoRepository extends BaseRepository
             })
             ->paginate($itensPorPagina, ['*'], 'page', $pagina);
     }
-
-    public function buscarPorId(int $id)
-    {
-        return $this->model
-            ->with(['despachos.anexos', 'despachos.remetente', 'despachos.destinatario'])
-            ->where('id_memorando', $id)
-            ->firstOrFail();
-    }
 }
