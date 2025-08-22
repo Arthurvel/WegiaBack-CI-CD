@@ -45,4 +45,8 @@ class Pet extends BaseModel
         return $this->hasOne(FichaMedica::class, 'id_pet');
     }
 
+    public function adocao() : HasOne
+    {
+        return $this->hasOne(Adocao::class, 'id_pet');
+    }
 }

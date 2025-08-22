@@ -1797,7 +1797,7 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pet_atendimento`(
     `id_pet_atendimento` INT NOT NULL AUTO_INCREMENT,
     `id_ficha_medica` INT NOT NULL,
     `data_atendimento` DATE NOT NULL,
-    `descricao` BLOB NOT NULL,
+    `descricao` TEXT NOT NULL,
     PRIMARY KEY (`id_pet_atendimento`),
     CONSTRAINT `fk_ficha_pet_medica`
      FOREIGN KEY (`id_ficha_medica`)

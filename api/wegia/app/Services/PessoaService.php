@@ -44,6 +44,12 @@ class PessoaService
         return $this->pessoaRepository->buscarPessoaPorCpf($cpf);
     }
 
+    public function buscarPessoaParaFiltros()
+    {
+        return $this->pessoaRepository->buscarPessoaParaFiltros();
+    }
+
+
     public function atualizarPessoa(array $pessoa, int $id): array
     {
         $pessoaAtualizaDTO = PessoaAtualizarDTO::fromArray($pessoa);

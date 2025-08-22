@@ -45,6 +45,7 @@ Route::group([ 'prefix' => 'aviso' ], function () {
 
 Route::group([ 'prefix' => 'pessoa' ], function () {
     Route::get('/logada', [PessoaController::class, 'retornarPessoaLogada']);
+    Route::get('/filtro', [PessoaController::class, 'buscarPessoaParaFiltros']);
     Route::get('/{id_pessoa}/dependente', [PessoaDependenteController::class, 'buscarDependentesPorIdPessoa']);
     Route::get('/{cpf}', [PessoaController::class, 'buscarPessoaPorCpf']);
 
@@ -173,17 +174,4 @@ Route::group(['prefix' => 'pet'], function ( ){
     Route::post('/{id_pet}/ficha-medica', [FichaMedicaController::class, 'create']);
     Route::get('/{id_pet}/ficha-medica', [FichaMedicaController::class, 'index']);
 
-    Route::group(['prefix' => 'ficha-medica'], function ( ){
-        Route::put('/{id_ficha_medica}', [FichaMedicaController::class, 'update']);
-        Route::post('/{id_ficha_medica}/atendimento', [AtendimentoController::class, 'create']);
-        Route::delete('/atendimento/{id_atendimento}', [AtendimentoController::class, 'delete']);
-        Route::put('/atendimento/{id_atendimento}', [AtendimentoController::class, 'update']);
-        Route::get('/{id_ficha_medica}/atendimento', [AtendimentoController::class, 'index']);
-        Route::post('/atendimento/{id_pet_atendimento}/medicacao', [MedicacaoController::class, 'create']);
-        Route::delete('/atendimento/medicacao/{id_medicacao}', [MedicacaoController::class, 'delete']);
-        Route::get('/atendimento/{id_pet_atendimento}/medicacao', [MedicacaoController::class, 'index']);
-        Route::post('/atendimento/medicacao/medicamento', [MedicamentoController::class, 'create']);
-        Route::delete('/atendimento/medicacao/medicamento/{id_medicamento}', [MedicamentoController::class, 'delete']);
-        Route::get('/atendimento/medicacao/medicamento', [MedicamentoController::class, 'index']);
-    });
 });

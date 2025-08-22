@@ -30,6 +30,13 @@ class PessoaRepository
         return Pessoa::where('cpf', $cpf)->firstOrFail();
     }
 
+    public function buscarPessoaParaFiltros()
+    {
+        return Pessoa::select(['id_pessoa', 'nome'])
+            ->get();
+    }
+
+
     public function atualizarPessoa(PessoaAtualizarDTO $pessoa, int $id) : Pessoa
     {
         $pessoaEncontrada = $this->buscarPessoaPorId($id);

@@ -23,7 +23,8 @@ class PetResource extends JsonResource
             'especie'                    => $this->relationLoaded('especie') ? new EspecieResource($this->especie) : null,
             'raca'                       => $this->relationLoaded('raca') ? new RacaResource($this->raca) : null,
             'foto'                       => $this->relationLoaded('foto') ? new FotoResource($this->foto) : null,
-            'ficha_medica'               => $this->relationLoaded('fichaMedica') ? new FichaMedicaResource($this->fichaMedica) : null
+            'ficha_medica'               => $this->relationLoaded('fichaMedica') ? new FichaMedicaResource($this->fichaMedica) : null,
+            'adocao'                     => $this->relationLoaded('adocao') ? new AdocaoResource($this->adocao) : null
         ];
     }
 

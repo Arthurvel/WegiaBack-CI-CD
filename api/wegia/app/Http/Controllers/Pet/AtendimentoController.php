@@ -26,32 +26,7 @@ class AtendimentoController extends BaseController
         $this->petService = $petService;
     }
 
-    /**
-     * @OA\Post(
-     *     path="/pet/ficha-medica/{id_ficha_medica}/atendimento",
-     *     summary="Cadastrar o Atendimento",
-     *     tags={"Pet"},
-     *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(
-     *         name="id_ficha_medica",
-     *         in="path",
-     *         description="ID da Ficha Medica",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *  @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"data_atendimento", "descricao"},
-     *             @OA\Property(property="data_atendimento", type="string", format="date", description="Data do Atendimento"),
-     *             @OA\Property(property="descricao", type="string", description="Descricao")
-     *         )
-     *     ),
-     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
-     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
-     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
-     * )
-    */
+
     public function create(int $id_ficha_medica, Request $request):JsonResponse
     {
         try{
