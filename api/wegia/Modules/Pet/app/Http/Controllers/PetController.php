@@ -30,8 +30,9 @@ class PetController extends BaseController
     )
     {
         $this->middleware(['auth:sanctum', 'ability:criar-pet'])->only(['cadastrar']);
-        $this->middleware(['auth:sanctum', 'ability:visualizar-pet'])->only(['index']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-pet'])->only(['index', 'buscarPorId']);
         $this->middleware(['auth:sanctum', 'ability:deletar-pet'])->only(['excluir']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-pet'])->only(['atualizar']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->petService = $petService;
@@ -123,7 +124,7 @@ class PetController extends BaseController
     public function buscarPorId(int $id) : JsonResponse
     {
         try {
-            $with = ['especie', 'raca', 'foto'];
+            $with = ['especie', 'raca', 'foto', 'fichaMedica'];
             $pet = $this->petService->buscarPorId($id, $with);
 
             return $this->sucessoResponse(new PetResource($pet));

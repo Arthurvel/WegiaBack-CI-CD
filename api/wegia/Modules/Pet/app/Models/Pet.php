@@ -4,6 +4,7 @@ namespace Modules\Pet\app\Models;
 
 use App\Models\BaseModel\BaseModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Pet extends BaseModel
 {
@@ -37,6 +38,11 @@ class Pet extends BaseModel
     public function foto() : BelongsTo
     {
         return $this->BelongsTo(PetFoto::class, 'id_pet_foto');
+    }
+
+    public function fichaMedica() : HasOne
+    {
+        return $this->hasOne(FichaMedica::class, 'id_pet');
     }
 
 }

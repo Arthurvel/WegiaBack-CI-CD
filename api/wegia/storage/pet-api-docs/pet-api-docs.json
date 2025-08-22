@@ -100,6 +100,365 @@
                 ]
             }
         },
+        "/pet/{id}/ficha-medica": {
+            "put": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Atualizar a ficha medica do pet",
+                "operationId": "b525c71cdb4bcec7754b7e1bd7376957",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Pet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FichaMedicaAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Ficha medica atualizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastra uma ficha medica no pet",
+                "operationId": "a3c2c9db24c12c08281f516701c5b058",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Pet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FichaMedicaCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Ficha medica cadastrada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/medicamento": {
+            "get": {
+                "tags": [
+                    "Medicamento"
+                ],
+                "summary": "Busca todos os medicamentos paginado",
+                "operationId": "68ba321bc8c564e19c2725403855ece0",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação (nome_medicamento)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "nome_medicamento"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Medicamento cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Medicamento"
+                ],
+                "summary": "Cadastra um medicamento",
+                "operationId": "ed34d0d5570299f7bc6e2c7a8e51fe10",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MedicamentoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Medicamento cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/medicamento/{id}": {
+            "get": {
+                "tags": [
+                    "Medicamento"
+                ],
+                "summary": "Buscar por um medicamento",
+                "operationId": "45485b04a04bc13c917f452fa216bfa5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do medicamento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Medicamento"
+                ],
+                "summary": "Atualizar um medicamento",
+                "operationId": "05a9e789be6f96986679382c6bf4d7d3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do medicamento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MedicamentoAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Medicamento atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/medicamento/filtro": {
+            "get": {
+                "tags": [
+                    "Medicamento"
+                ],
+                "summary": "Busca todos os medicamentos para usar em filtros",
+                "operationId": "389aa72671f97ec48cbbb2eb2113793a",
+                "responses": {
+                    "200": {
+                        "description": "Medicamento cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/pet": {
             "get": {
                 "tags": [
@@ -495,6 +854,82 @@
                 },
                 "type": "object"
             },
+            "FichaMedicaAtualizarValidation": {
+                "properties": {
+                    "castrado": {
+                        "description": "castrado",
+                        "type": "string",
+                        "enum": [
+                            "s",
+                            "n"
+                        ]
+                    },
+                    "necessidades_especiais": {
+                        "description": "Necessidades especiais",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "FichaMedicaCadastrarValidation": {
+                "required": [
+                    "castrado"
+                ],
+                "properties": {
+                    "castrado": {
+                        "description": "castrado",
+                        "type": "string",
+                        "enum": [
+                            "s",
+                            "n"
+                        ]
+                    },
+                    "necessidades_especiais": {
+                        "description": "Necessidades especiais",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "MedicamentoAtualizarValidation": {
+                "properties": {
+                    "nome_medicamento": {
+                        "description": "Nome do medicamento",
+                        "type": "string"
+                    },
+                    "descricao_medicamento": {
+                        "description": "Descricao do medicamento",
+                        "type": "string"
+                    },
+                    "aplicacao": {
+                        "description": "Como funciona a aplicacao",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "MedicamentoCadastrarValidation": {
+                "required": [
+                    "nome_medicamento",
+                    "descricao_medicamento",
+                    "aplicacao"
+                ],
+                "properties": {
+                    "nome_medicamento": {
+                        "description": "Nome do medicamento",
+                        "type": "string"
+                    },
+                    "descricao_medicamento": {
+                        "description": "Descricao do medicamento",
+                        "type": "string"
+                    },
+                    "aplicacao": {
+                        "description": "Como funciona a aplicacao",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "PetAtualizarValidation": {
                 "required": [],
                 "properties": {
@@ -657,6 +1092,10 @@
     "tags": [
         {
             "name": "Especie",
+            "description": "Operações relacionadas ao Modulo de Pet"
+        },
+        {
+            "name": "Medicamento",
             "description": "Operações relacionadas ao Modulo de Pet"
         },
         {

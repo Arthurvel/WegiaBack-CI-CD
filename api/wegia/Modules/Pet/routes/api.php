@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Modules\Pet\app\Http\Controllers\PetController;
 use Modules\Pet\app\Http\Controllers\RacaController;
 use Modules\Pet\app\Http\Controllers\EspecieController;
+use Modules\Pet\app\Http\Controllers\FichaMedicaController;
+use Modules\Pet\app\Http\Controllers\MedicamentoController;
 
 Route::prefix('pet')->group(function () {
 
@@ -13,8 +15,22 @@ Route::prefix('pet')->group(function () {
     Route::post('/{id}', [PetController::class, 'atualizar']);
     Route::delete('/{id}', [PetController::class, 'excluir']);
 
+    Route::prefix('{id}/ficha-medica')->group(function () {
+        Route::post('/', [FichaMedicaController::class, 'cadastrar']);
+        Route::put('/', [FichaMedicaController::class, 'atualizar']);
+    });
+
 });
 
+Route::prefix('medicamento')->group(function () {
+
+    Route::get('/', [MedicamentoController::class, 'index']);
+    Route::get('/{id}', [MedicamentoController::class, 'buscarPorId']);
+    Route::get('/filtro', [MedicamentoController::class, 'buscarTodosParaFiltro']);
+    Route::post('/', [MedicamentoController::class, 'cadastrar']);
+    Route::Put('/{id}', [MedicamentoController::class, 'atualizar']);
+
+});
 
 Route::prefix('raca')->group(function () {
 
