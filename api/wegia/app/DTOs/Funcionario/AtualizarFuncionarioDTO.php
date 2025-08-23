@@ -4,7 +4,7 @@ namespace App\DTOs\Funcionario;
 
 class AtualizarFuncionarioDTO
 {
-    public ?int $id_cargo;
+    public ?int $id_perfil;
     public ?int $id_situacao;
     public ?string $data_admissao;
     public ?string $pis;
@@ -18,7 +18,7 @@ class AtualizarFuncionarioDTO
 
 
     public function __construct(
-        ?int $id_cargo = null,
+        ?int $id_perfil = null,
         ?int $id_situacao = null,
         ?string $data_admissao = null,
         ?string $ctps = null,
@@ -30,7 +30,7 @@ class AtualizarFuncionarioDTO
         ?string $certificado_reservista_numero = null,
         ?string $certificado_reservista_serie = null
     ) {
-        $this->id_cargo                      = $id_cargo;
+        $this->id_perfil                      = $id_perfil;
         $this->id_situacao                   = $id_situacao;
         $this->data_admissao                 = $data_admissao;
         $this->ctps                          = $ctps;
@@ -45,8 +45,8 @@ class AtualizarFuncionarioDTO
 
     public static function fromArray(array $dados): self
     {
-        return new self( 
-            $dados['id_cargo'] ?? null,
+        return new self(
+            $dados['id_perfil'] ?? null,
             $dados['id_situacao'] ?? null,
             $dados['data_admissao'] ?? null,
             $dados['ctps'] ?? null,
@@ -63,7 +63,7 @@ class AtualizarFuncionarioDTO
     public function toArray(): array
     {
         return array_filter([
-            'id_cargo'                      => $this->id_cargo,
+            'id_perfil'                      => $this->id_perfil,
             'id_situacao'                   => $this->id_situacao,
             'data_admissao'                 => $this->data_admissao,
             'ctps'                          => $this->ctps,

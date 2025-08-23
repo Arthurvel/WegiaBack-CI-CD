@@ -5,7 +5,7 @@ namespace App\DTOs\Funcionario;
 class CadastrarFuncionarioDTO
 {
     public int $id_pessoa;
-    public int $id_cargo;
+    public int $id_perfil;
     public int $id_situacao;
     public string $data_admissao;
     public ?string $pis;
@@ -19,7 +19,7 @@ class CadastrarFuncionarioDTO
 
     public function __construct(
         int $id_pessoa,
-        int $id_cargo,
+        int $id_perfil,
         int $id_situacao,
         string $data_admissao,
         string $ctps,
@@ -32,7 +32,7 @@ class CadastrarFuncionarioDTO
         ?string $certificado_reservista_serie = null
     ) {
         $this->id_pessoa                     = $id_pessoa;
-        $this->id_cargo                      = $id_cargo;
+        $this->id_perfil                      = $id_perfil;
         $this->id_situacao                   = $id_situacao;
         $this->data_admissao                 = $data_admissao;
         $this->ctps                          = $ctps;
@@ -47,9 +47,9 @@ class CadastrarFuncionarioDTO
 
     public static function fromArray(array $dados): self
     {
-        return new self( 
+        return new self(
             $dados['id_pessoa'],
-            $dados['id_cargo'],
+            $dados['id_perfil'],
             $dados['id_situacao'],
             $dados['data_admissao'],
             $dados['ctps'] ?? '',
@@ -67,7 +67,7 @@ class CadastrarFuncionarioDTO
     {
         return [
             'id_pessoa'                     => $this->id_pessoa,
-            'id_cargo'                      => $this->id_cargo,
+            'id_perfil'                      => $this->id_perfil,
             'id_situacao'                   => $this->id_situacao,
             'data_admissao'                 => $this->data_admissao,
             'pis'                           => $this->pis,

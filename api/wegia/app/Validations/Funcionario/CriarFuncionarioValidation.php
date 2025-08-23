@@ -22,7 +22,7 @@ class CriarFuncionarioValidation
 
             'data_admissao' => 'required|date',
             'id_situacao' => 'required|integer|max:11|exists:situacao,id_situacao',
-            'id_cargo' => 'required|integer|max:11|exists:cargo,id_cargo',
+            'id_perfil' => 'required|integer|max:11|exists:perfil,id_perfil',
             'id_escala' => 'required|integer|max:11|exists:escala_quadro_horario,id_escala',
             'id_tipo' => 'required|integer|max:11|exists:tipo_quadro_horario,id_tipo',
             'certificado_reservista_numero' => 'nullable|string|max:100',
