@@ -1305,8 +1305,8 @@
                                         "type": "integer",
                                         "example": 0
                                     },
-                                    "id_cargo": {
-                                        "description": "ID do cargo",
+                                    "id_perfil": {
+                                        "description": "ID do perfil",
                                         "type": "integer",
                                         "example": 0
                                     },
@@ -1444,8 +1444,8 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "id_cargo": {
-                                        "description": "ID do cargo",
+                                    "id_perfil": {
+                                        "description": "ID do perfil",
                                         "type": "integer"
                                     },
                                     "id_situacao": {
@@ -4186,6 +4186,48 @@
                 ],
                 "summary": "Atualiza a propria senha",
                 "operationId": "1769f547c4996f9c0895656c7a5148dc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PessoaMudarSenhaValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Pessoa atualizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pessoa/{id}/senha": {
+            "put": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Atualiza a senha de outras pessoas",
+                "operationId": "81fb8de3f8ac82526b7566f36e6b5fb4",
                 "requestBody": {
                     "required": true,
                     "content": {

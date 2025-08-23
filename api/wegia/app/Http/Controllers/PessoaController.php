@@ -25,6 +25,7 @@ class PessoaController extends BaseController
     public function __construct(PessoaService $pessoaService)
     {
         $this->middleware('auth:sanctum')->except(['create']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-senha-de-outras-pessoas'])->only(['mudarSenhaDeFuncionarios']);
 
         $this->pessoaService = $pessoaService;
     }
@@ -290,6 +291,46 @@ class PessoaController extends BaseController
         try {
             $validated = $request->validated();
             $id = $request->user()->id_pessoa;
+
+            $dto = PessoaAtualizarSenhaDTO::fromArray([
+                "senha" => $validated['senha'],
+                "id_pessoa" => $id
+            ]);
+
+            $pessoa = $this->pessoaService->mudarSenha($dto);
+
+            return $this->sucessoResponse(true, 204);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/pessoa/{id}/senha",
+     *     summary="Atualiza a senha de outras pessoas",
+     *     tags={"Pessoa"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/PessoaMudarSenhaValidation")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Pessoa atualizada com sucesso",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erro de validação",
+     *         @OA\JsonContent()
+     *     )
+     * )
+     */
+    public function mudarSenhaDeFuncionarios(int $id, PessoaMudarSenhaValidation $request) : JsonResponse
+    {
+        try {
+            $validated = $request->validated();
 
             $dto = PessoaAtualizarSenhaDTO::fromArray([
                 "senha" => $validated['senha'],

@@ -42,7 +42,7 @@ class FuncionarioRepository
         $itensPorPagina = $parametros['itensPorPagina'] ?? 10;
         $pagina         = $parametros['pagina'] ?? 1;
 
-        return Funcionario::with(['pessoa', 'cargo', 'situacao'])
+        return Funcionario::with(['pessoa', 'perfil', 'situacao'])
             ->when(!is_null($situacao), function ($q) use ($situacao){
                 return $q->where('id_situacao', $situacao);
             })
@@ -57,9 +57,9 @@ class FuncionarioRepository
                 if($ordenacao == 'nome' || $ordenacao == 'cpf') {
                     return $q->join('pessoa', 'funcionario.id_pessoa', '=', 'pessoa.id_pessoa')
                         ->orderBy("pessoa.{$ordenacao}", $tipoOrdenacao);
-                } else if($ordenacao == 'cargo') {
-                    return $q->join('cargo', 'funcionario.id_cargo', '=', 'cargo.id_cargo')
-                    ->orderBy("cargo.cargo", $tipoOrdenacao);
+                } else if($ordenacao == 'perfil') {
+                    return $q->join('perfil', 'funcionario.id_perfil', '=', 'perfil.id_perfil')
+                    ->orderBy("perfil.cargo", $tipoOrdenacao);
                 }
             })
             ->paginate($itensPorPagina, ['*'], 'page', $pagina);

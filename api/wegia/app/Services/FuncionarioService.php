@@ -64,7 +64,7 @@ class FuncionarioService
         $funcionarios = $this->funcionarioRepository->pegarFuncionarios($parametros);
 
         $itens = collect($funcionarios->items())->map(function ($funcionario) {
-            return FuncionarioDTO::fromArray($funcionario->toArray());
+            return $funcionario;
         })->toArray();
 
         return new PaginacaoDTO(
@@ -76,11 +76,11 @@ class FuncionarioService
         );
     }
 
-    public function pegarFuncionarioPorId(int $id) : FuncionarioDTO
+    public function pegarFuncionarioPorId(int $id)
     {
         $funcionario = $this->funcionarioRepository->pegarFuncionarioPorId($id, ['pessoa']);
 
-        return FuncionarioDTO::fromArray($funcionario->toArray());
+        return $funcionario;
     }
 
     public function cadastrarFuncionario(array $dados) : Funcionario

@@ -155,7 +155,7 @@ class FuncionarioController extends BaseController
 
             $funcionario = $this->funcionarioService->pegarFuncionarioPorId($id_funcionario);
 
-            return $this->sucessoResponse($funcionario->toArray());
+            return $this->sucessoResponse($funcionario);
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
@@ -183,7 +183,7 @@ class FuncionarioController extends BaseController
      *             @OA\Property(property="imagem", type="string", nullable=true, description="URL da imagem", example=""),
      *             @OA\Property(property="data_admissao", type="string", format="date", description="Data de admissão", example=""),
      *             @OA\Property(property="id_situacao", type="integer", description="ID da situação", example=0),
-     *             @OA\Property(property="id_cargo", type="integer", description="ID do cargo", example=0),
+     *             @OA\Property(property="id_perfil", type="integer", description="ID do perfil", example=0),
      *             @OA\Property(property="id_escala", type="integer", description="ID da escala", example=0),
      *             @OA\Property(property="id_tipo", type="integer", description="ID do tipo", example=0),
      *             @OA\Property(property="certificado_reservista_numero", type="string", maxLength=100, description="Número do certificado de reservista", example=""),
@@ -229,7 +229,7 @@ class FuncionarioController extends BaseController
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="id_cargo", type="integer", description="ID do cargo"),
+     *             @OA\Property(property="id_perfil", type="integer", description="ID do perfil"),
      *             @OA\Property(property="id_situacao", type="integer", description="ID da situação"),
      *             @OA\Property(property="data_admissao", type="string", format="date", description="Data de admissão"),
      *             @OA\Property(property="ctps", type="string", maxLength=150, description="Carteira de Trabalho"),
