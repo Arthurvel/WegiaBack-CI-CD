@@ -228,7 +228,8 @@ class MemorandoController extends BaseController
     public function buscarPorId(int $id) : JsonResponse
     {
         try {
-            $memorando = $this->memorandoService->buscarPorId($id);
+            $with = ['despachos.anexos', 'despachos.remetente', 'despachos.destinatario'];
+            $memorando = $this->memorandoService->buscarPorId($id, $with);
 
             return $this->sucessoResponse( new MemorandoResource($memorando) );
         } catch (\Exception $e) {

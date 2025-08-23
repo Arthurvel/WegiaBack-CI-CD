@@ -1,0 +1,1416 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Pet",
+        "description": "Documentação da API Wegia",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "Servidor Local"
+        }
+    ],
+    "paths": {
+        "/pet/{id_pet}/adocao": {
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastra um adotante para o pet",
+                "operationId": "100564c0945dac00c8396f8306782dcf",
+                "parameters": [
+                    {
+                        "name": "id_pet",
+                        "in": "path",
+                        "description": "ID do pet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdocaoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Adocao cadastrada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/adocao/{id}": {
+            "put": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Atualziar uma adocao de pet",
+                "operationId": "7ef941a8fb4d23d51bd5b4a31c67373b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da adocao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdocaoAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Adocao atualizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/ficha-medica/{id}/atendimento": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar todos os atendimentos de uma ficha medica",
+                "operationId": "cbf722f638b8099e97cd6a82897e94f7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da Ficha Medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação (data_atendimento)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "data_atendimento"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastra um atendimento na ficha medica do pet",
+                "operationId": "9e55f94986d22dc632e9a0c94100a569",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da Ficha Medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AtendimentoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Atendimento cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/especie": {
+            "get": {
+                "tags": [
+                    "Especie"
+                ],
+                "summary": "Buscar os todas as Especies",
+                "operationId": "1934ff11963943ef880c6b0833939fa4",
+                "responses": {
+                    "200": {
+                        "description": "OpeRacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Especie"
+                ],
+                "summary": "Cadastrar a Especie",
+                "operationId": "5594fdbee722ce44174ca9f187ec99a3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EspecieCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OpeRacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/{id}/ficha-medica": {
+            "put": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Atualizar a ficha medica do pet",
+                "operationId": "b525c71cdb4bcec7754b7e1bd7376957",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Pet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FichaMedicaAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Ficha medica atualizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastra uma ficha medica no pet",
+                "operationId": "a3c2c9db24c12c08281f516701c5b058",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Pet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FichaMedicaCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Ficha medica cadastrada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/medicamento": {
+            "get": {
+                "tags": [
+                    "Medicamento"
+                ],
+                "summary": "Busca todos os medicamentos paginado",
+                "operationId": "68ba321bc8c564e19c2725403855ece0",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação (nome_medicamento)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "nome_medicamento"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Medicamento cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Medicamento"
+                ],
+                "summary": "Cadastra um medicamento",
+                "operationId": "ed34d0d5570299f7bc6e2c7a8e51fe10",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MedicamentoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Medicamento cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/medicamento/{id}": {
+            "get": {
+                "tags": [
+                    "Medicamento"
+                ],
+                "summary": "Buscar por um medicamento",
+                "operationId": "45485b04a04bc13c917f452fa216bfa5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do medicamento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Medicamento"
+                ],
+                "summary": "Atualizar um medicamento",
+                "operationId": "05a9e789be6f96986679382c6bf4d7d3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do medicamento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MedicamentoAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Medicamento atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/medicamento/filtro": {
+            "get": {
+                "tags": [
+                    "Medicamento"
+                ],
+                "summary": "Busca todos os medicamentos para usar em filtros",
+                "operationId": "389aa72671f97ec48cbbb2eb2113793a",
+                "responses": {
+                    "200": {
+                        "description": "Medicamento cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar todos os pets",
+                "operationId": "184b90e982466d313875eb7ab2522bd3",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação (nome, cor, sexo, data_nascimento, data_acolhimento)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "nome",
+                                "cor",
+                                "sexo",
+                                "data_nascimento",
+                                "data_acolhimento"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Cadastra um pet",
+                "operationId": "9710b4aa396469bfd6ec6b77f62c7444",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PetCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pet cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pet/{id}": {
+            "get": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Buscar um pet pelo id",
+                "operationId": "fce0667100ccb7b75ddbe3f4e730bcea",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Pet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "true",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Editar um pet",
+                "operationId": "be7be0e088deee028cd6544c37944908",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Pet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PetAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "true",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Exclui um pet",
+                "operationId": "37f2822af52a014d3b7e90010b14d2e1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Pet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "true",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/raca": {
+            "get": {
+                "tags": [
+                    "Raca"
+                ],
+                "summary": "Buscar os todas as Racas",
+                "operationId": "00d1edf93fd280f48be2a9dcf06d4b56",
+                "responses": {
+                    "200": {
+                        "description": "OpeRacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Raca"
+                ],
+                "summary": "Cadastrar as racas",
+                "operationId": "3238565cecfccf14d935e60cba00e5da",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RacaCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OpeRacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AdocaoAtualizarValidation": {
+                "properties": {
+                    "data_adocao": {
+                        "description": "Data da adoção",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "id_pessoa": {
+                        "description": "id da pessoa",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "AdocaoCadastrarValidation": {
+                "required": [
+                    "data_adocao",
+                    "id_pessoa"
+                ],
+                "properties": {
+                    "data_adocao": {
+                        "description": "Data da adoção",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "id_pessoa": {
+                        "description": "id da pessoa",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "AtendimentoCadastrarValidation": {
+                "required": [
+                    "data_atendimento",
+                    "descricao",
+                    "medicamentos"
+                ],
+                "properties": {
+                    "data_atendimento": {
+                        "description": "Data do atendimento (formato Y-m-d)",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "descricao": {
+                        "description": "Descricao do atendimento",
+                        "type": "string"
+                    },
+                    "medicamentos": {
+                        "description": "Array de IDs de medicamentos",
+                        "type": "array",
+                        "items": {
+                            "description": "ID do medicamento",
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "EspecieCadastrarValidation": {
+                "required": [
+                    "descricao"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "Campo descrição",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "FichaMedicaAtualizarValidation": {
+                "properties": {
+                    "castrado": {
+                        "description": "castrado",
+                        "type": "string",
+                        "enum": [
+                            "s",
+                            "n"
+                        ]
+                    },
+                    "necessidades_especiais": {
+                        "description": "Necessidades especiais",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "FichaMedicaCadastrarValidation": {
+                "required": [
+                    "castrado"
+                ],
+                "properties": {
+                    "castrado": {
+                        "description": "castrado",
+                        "type": "string",
+                        "enum": [
+                            "s",
+                            "n"
+                        ]
+                    },
+                    "necessidades_especiais": {
+                        "description": "Necessidades especiais",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "MedicamentoAtualizarValidation": {
+                "properties": {
+                    "nome_medicamento": {
+                        "description": "Nome do medicamento",
+                        "type": "string"
+                    },
+                    "descricao_medicamento": {
+                        "description": "Descricao do medicamento",
+                        "type": "string"
+                    },
+                    "aplicacao": {
+                        "description": "Como funciona a aplicacao",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "MedicamentoCadastrarValidation": {
+                "required": [
+                    "nome_medicamento",
+                    "descricao_medicamento",
+                    "aplicacao"
+                ],
+                "properties": {
+                    "nome_medicamento": {
+                        "description": "Nome do medicamento",
+                        "type": "string"
+                    },
+                    "descricao_medicamento": {
+                        "description": "Descricao do medicamento",
+                        "type": "string"
+                    },
+                    "aplicacao": {
+                        "description": "Como funciona a aplicacao",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PetAtualizarValidation": {
+                "required": [],
+                "properties": {
+                    "nome": {
+                        "description": "Nome do pet",
+                        "type": "string"
+                    },
+                    "data_nascimento": {
+                        "description": "Data de nascimento do pet (YYYY-MM-DD)",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "data_acolhimento": {
+                        "description": "Data de acolhimento do pet (YYYY-MM-DD)",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "sexo": {
+                        "description": "Sexo do pet (M ou F)",
+                        "type": "string",
+                        "enum": [
+                            "M",
+                            "F"
+                        ]
+                    },
+                    "caracteristicas_especificas": {
+                        "description": "Características específicas do pet",
+                        "type": "string"
+                    },
+                    "foto": {
+                        "description": "Arquivo da foto do pet (jpeg, jpg, png, máx. 5MB)",
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "id_pet_especie": {
+                        "description": "ID da espécie do pet",
+                        "type": "integer"
+                    },
+                    "id_pet_raca": {
+                        "description": "ID da raça do pet",
+                        "type": "integer"
+                    },
+                    "cor": {
+                        "description": "Cor do pet",
+                        "type": "string",
+                        "enum": [
+                            "Preto",
+                            "Branco",
+                            "Cinza",
+                            "Marrom",
+                            "Caramelo",
+                            "Amarelo",
+                            "Bege",
+                            "Dourado",
+                            "Ruivo",
+                            "Creme",
+                            "Azul",
+                            "Chocolate",
+                            "Bicolor",
+                            "Tricolor"
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "PetCadastrarValidation": {
+                "required": [
+                    "nome",
+                    "data_nascimento",
+                    "data_acolhimento",
+                    "sexo",
+                    "id_pet_especie",
+                    "id_pet_raca",
+                    "cor"
+                ],
+                "properties": {
+                    "nome": {
+                        "description": "Nome do pet",
+                        "type": "string"
+                    },
+                    "data_nascimento": {
+                        "description": "Data de nascimento do pet (YYYY-MM-DD)",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "data_acolhimento": {
+                        "description": "Data de acolhimento do pet (YYYY-MM-DD)",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "sexo": {
+                        "description": "Sexo do pet (M ou F)",
+                        "type": "string",
+                        "enum": [
+                            "M",
+                            "F"
+                        ]
+                    },
+                    "caracteristicas_especificas": {
+                        "description": "Características específicas do pet",
+                        "type": "string"
+                    },
+                    "foto": {
+                        "description": "Arquivo da foto do pet (jpeg, jpg, png, máx. 5MB)",
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "id_pet_especie": {
+                        "description": "ID da espécie do pet",
+                        "type": "integer"
+                    },
+                    "id_pet_raca": {
+                        "description": "ID da raça do pet",
+                        "type": "integer"
+                    },
+                    "cor": {
+                        "description": "Cor do pet",
+                        "type": "string",
+                        "enum": [
+                            "Preto",
+                            "Branco",
+                            "Cinza",
+                            "Marrom",
+                            "Caramelo",
+                            "Amarelo",
+                            "Bege",
+                            "Dourado",
+                            "Ruivo",
+                            "Creme",
+                            "Azul",
+                            "Chocolate",
+                            "Bicolor",
+                            "Tricolor"
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "RacaCadastrarValidation": {
+                "required": [
+                    "descricao"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "Campo descrição",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Especie",
+            "description": "Operações relacionadas ao Modulo de Pet"
+        },
+        {
+            "name": "Medicamento",
+            "description": "Operações relacionadas ao Modulo de Pet"
+        },
+        {
+            "name": "Pet",
+            "description": "Operações relacionadas ao Modulo de Pet"
+        },
+        {
+            "name": "Raca",
+            "description": "Operações relacionadas ao Modulo de Pet"
+        }
+    ]
+}

@@ -177,6 +177,30 @@ class PessoaController extends BaseController
 
     }
 
+    /**
+     * @OA\Get(
+     *     path="/pessoa/filtro",
+     *     summary="Buscar pessoa para filtro",
+     *     tags={"Pessoa"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(response="200", description="Operação realizado com sucesso"),
+     *     @OA\Response(response="422", description="Erro de validação"),
+     *     @OA\Response(response="500", description="Erro interno")
+     * )
+     */
+    public function buscarPessoaParaFiltros() : JsonResponse
+    {
+        try {
+
+            $pessoas = $this->pessoaService->buscarPessoaParaFiltros();
+
+            return $this->sucessoResponse($pessoas);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
+
+    }
+
 
     /**
      * @OA\Put(

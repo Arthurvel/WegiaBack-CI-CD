@@ -32,6 +32,21 @@ abstract class BaseRepository
     }
 
     /**
+     * @param array<int, TCriar|array> $dados
+     * @return bool
+     */
+    public function criarEmMassa(array $dados): bool
+    {
+        $dadosFormatados = array_map(function ($item) {
+            return is_object($item) && method_exists($item, 'toArray')
+                ? $item->toArray()
+                : (array) $item;
+        }, $dados);
+
+        return $this->model->insert($dadosFormatados);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Collection<int, TModel>
      */
     public function buscarTodos()
@@ -43,9 +58,11 @@ abstract class BaseRepository
      * @param int $id
      * @return TModel
      */
-    public function buscarPorId(int $id)
+    public function buscarPorId(int $id, Array $with = [])
     {
-        return $this->model->findOrFail($id);
+        return $this->model
+            ->with($with)
+            ->findOrFail($id);
     }
 
     /**

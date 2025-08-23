@@ -5,6 +5,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 trait Response
 {
@@ -38,7 +39,7 @@ trait Response
     protected function errorResponse(\Exception $exception = null, int $statusCode = 400, string $messageError = 'Ocorreu um erro na operação!'): JsonResponse
     {
         $status = $statusCode;
-        $message = $messageError;
+        $message = $exception->getMessage();
 
         if ($exception instanceof ModelNotFoundException) {
             $message = 'Não encontrado';

@@ -1587,7 +1587,7 @@ ENGINE = InnoDB;
 -- -------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`pet_foto` (
     `id_pet_foto` INT NOT NULL AUTO_INCREMENT,
-    `arquivo_foto_pet` LONGBLOB NOT NULL,
+    `arquivo_foto_pet` VARCHAR(255) NOT NULL,
     `arquivo_foto_pet_nome` varchar(200) NOT NULL,
     `arquivo_foto_pet_extensao` varchar(50) NOT NULL,
     PRIMARY KEY (`id_pet_foto`)
@@ -1611,16 +1611,6 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pet_raca` (
     PRIMARY KEY (`id_pet_raca`))
 ENGINE = InnoDB;
 
--- ---------------------------------------------------------
--- Table `wegia`.`pet_cor`
--- ---------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`pet_cor` (
-    `id_pet_cor` INT NOT NULL AUTO_INCREMENT,
-    `descricao` VARCHAR(50) NOT NULL,
-    PRIMARY KEY (`id_pet_cor`))
-ENGINE = InnoDB;
-
-
 -- -----------------------------------------------------
 -- Table `wegia`.`pet`
 -- -----------------------------------------------------
@@ -1634,22 +1624,34 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pet` (
     `id_pet_foto` INT NULL,
     `id_pet_especie` INT NOT NULL,
     `id_pet_raca` INT NOT NULL,
-    `id_pet_cor` INT NOT NULL,
+    `cor` ENUM(
+        'Preto',
+        'Branco',
+        'Cinza',
+        'Marrom',
+        'Caramelo',
+        'Amarelo',
+        'Bege',
+        'Dourado',
+        'Ruivo',
+        'Creme',
+        'Azul',
+        'Chocolate',
+        'Bicolor',
+        'Tricolor'
+    )  NOT NULL,
     PRIMARY KEY (`id_pet`),
     CONSTRAINT `fk_pet_especie`
-     FOREIGN KEY (`id_pet_especie`)
-     REFERENCES `wegia`.`pet_especie` (`id_pet_especie`),
+    FOREIGN KEY (`id_pet_especie`)
+    REFERENCES `wegia`.`pet_especie` (`id_pet_especie`),
     CONSTRAINT `fk_pet_raca`
-     FOREIGN KEY (`id_pet_raca`)
-     REFERENCES `wegia`.`pet_raca` (`id_pet_raca`),
-    CONSTRAINT `fk_pet_cor`
-     FOREIGN KEY (`id_pet_cor`)
-     REFERENCES `wegia`.`pet_cor` (`id_pet_cor`),
+    FOREIGN KEY (`id_pet_raca`)
+    REFERENCES `wegia`.`pet_raca` (`id_pet_raca`),
     CONSTRAINT `fk_pet_foto`
-     FOREIGN KEY (`id_pet_foto`)
-     REFERENCES `wegia`.`pet_foto`(`id_pet_foto`)
-)
-ENGINE = InnoDB;
+    FOREIGN KEY (`id_pet_foto`)
+    REFERENCES `wegia`.`pet_foto`(`id_pet_foto`)
+    )
+    ENGINE = InnoDB;
 
 -- ----------------------------------------------------------
 -- Table `wegia`.`pet_adocao`
@@ -1795,7 +1797,7 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pet_atendimento`(
     `id_pet_atendimento` INT NOT NULL AUTO_INCREMENT,
     `id_ficha_medica` INT NOT NULL,
     `data_atendimento` DATE NOT NULL,
-    `descricao` BLOB NOT NULL,
+    `descricao` TEXT NOT NULL,
     PRIMARY KEY (`id_pet_atendimento`),
     CONSTRAINT `fk_ficha_pet_medica`
      FOREIGN KEY (`id_ficha_medica`)
