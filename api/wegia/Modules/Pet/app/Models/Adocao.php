@@ -3,7 +3,7 @@
 namespace Modules\Pet\app\Models;
 
 use App\Models\BaseModel\BaseModel;
-use App\Models\Pessoa;
+use app\Models\Pessoa\Pessoa;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Adocao extends BaseModel

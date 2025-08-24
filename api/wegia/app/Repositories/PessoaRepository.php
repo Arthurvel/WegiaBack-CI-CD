@@ -5,15 +5,18 @@ namespace App\Repositories;
 use App\DTOs\Pessoa\CadastrarPessoaDependenteDTO;
 use App\DTOs\Pessoa\PessoaAtualizarDTO;
 use App\DTOs\Pessoa\PessoaAtualizarSenhaDTO;
-use App\Models\Pessoa;
+use App\Models\Pessoa\Pessoa;
 use App\Models\Pessoa\PessoaDependente;
+use App\Repositories\Base\BaseRepository;
 
-class PessoaRepository
+class PessoaRepository extends BaseRepository
 {
 
-    public function cadastrarPessoa(array $pessoa) : Pessoa
+    public function __construct(
+        Pessoa $model
+    )
     {
-        return Pessoa::create($pessoa);
+        parent::__construct($model);
     }
 
     public function cadastrarOuAtualizarPessoa(array $dados): Pessoa
@@ -27,7 +30,7 @@ class PessoaRepository
 
     public function buscarPessoaPorCpf(string $cpf) : Pessoa
     {
-        return Pessoa::where('cpf', $cpf)->firstOrFail();
+        return $this->model->where('cpf', $cpf)->firstOrFail();
     }
 
     public function buscarPessoaParaFiltros()
@@ -56,17 +59,6 @@ class PessoaRepository
     public function buscarPessoaPorId(int $id): Pessoa
     {
         return Pessoa::findOrFail($id);
-    }
-
-    public function cadastrarOuAtualizarImagem(string $arquivo, int $id_pessoa) : Pessoa
-    {
-        $pessoaEncontrada = $this->buscarPessoaPorId($id_pessoa);
-
-        $pessoaEncontrada->update([
-            "imagem" => $arquivo
-        ]);
-
-        return $pessoaEncontrada;
     }
 
     public function buscarDependentesPorIdPessoa(int $id_pessoa, array $parametros)

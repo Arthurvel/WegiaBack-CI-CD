@@ -3450,6 +3450,345 @@
                 ]
             }
         },
+        "/pessoa": {
+            "post": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Cadastrar uma nova pessoa",
+                "operationId": "e429bb04caf25dbb505866fcd2123d9f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PessoaCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cadastro realizado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pessoa/{id_pessoa}/imagem": {
+            "post": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Cadastrar uma nova imagem para pessoa",
+                "operationId": "07f057ff174fc06891fedce3de3bc3c7",
+                "parameters": [
+                    {
+                        "name": "id_pessoa",
+                        "in": "path",
+                        "description": "ID da pessoa que deseja atualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PessoaImagemAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cadastro realizado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pessoa/{cpf}": {
+            "get": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Buscar pessoa por cpf",
+                "operationId": "10a32fff612a1948d5cbefe349a36b69",
+                "parameters": [
+                    {
+                        "name": "cpf",
+                        "in": "path",
+                        "description": "cpf da pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pessoa/filtro": {
+            "get": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Buscar pessoa para filtro",
+                "operationId": "4e4d18f5ee470b933c9e7fe515190951",
+                "responses": {
+                    "200": {
+                        "description": "Operação realizado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pessoa/{id_pessoa}": {
+            "put": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Atualizar uma pessoa",
+                "operationId": "d25b40ed3bb1b8423c342eb8ab725546",
+                "parameters": [
+                    {
+                        "name": "id_pessoa",
+                        "in": "path",
+                        "description": "ID da pessoa que deseja atualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PessoaAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pessoa/senha": {
+            "put": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Atualiza a propria senha",
+                "operationId": "584e2b5324fca343197a87a102d8b797",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PessoaMudarSenhaValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Pessoa atualizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pessoa/{id}/senha": {
+            "put": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Atualiza a senha de outras pessoas",
+                "operationId": "aa988d8d9e43de22d9cc5d53365dbf0c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PessoaMudarSenhaValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Pessoa atualizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pessoa/logada": {
+            "get": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Retorna a pessoa autenticado",
+                "operationId": "60b28bfb306c51a68ecfd9e1b9e171e3",
+                "parameters": [
+                    {
+                        "name": "with",
+                        "in": "query",
+                        "description": "Separados por virgula",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/pessoa/{id_pessoa}/dependente": {
             "get": {
                 "tags": [
@@ -3696,775 +4035,6 @@
                 ]
             }
         },
-        "/pessoa": {
-            "post": {
-                "tags": [
-                    "Pessoa"
-                ],
-                "summary": "Cadastrar uma nova pessoa",
-                "operationId": "1a317c3ef9034524989ba311b0066196",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "cpf"
-                                ],
-                                "properties": {
-                                    "cpf": {
-                                        "description": "CPF único",
-                                        "type": "string",
-                                        "maxLength": 11
-                                    },
-                                    "senha": {
-                                        "description": "Senha do usuário",
-                                        "type": "string",
-                                        "maxLength": 70,
-                                        "nullable": true
-                                    },
-                                    "nome": {
-                                        "description": "Nome do usuário",
-                                        "type": "string",
-                                        "maxLength": 100,
-                                        "nullable": true
-                                    },
-                                    "sobrenome": {
-                                        "description": "Sobrenome do usuário",
-                                        "type": "string",
-                                        "maxLength": 100,
-                                        "nullable": true
-                                    },
-                                    "sexo": {
-                                        "description": "Sexo do usuário",
-                                        "type": "string",
-                                        "maxLength": 1,
-                                        "nullable": true
-                                    },
-                                    "telefone": {
-                                        "description": "Telefone de contato",
-                                        "type": "string",
-                                        "maxLength": 25,
-                                        "nullable": true
-                                    },
-                                    "data_nascimento": {
-                                        "description": "Data de nascimento",
-                                        "type": "string",
-                                        "format": "date",
-                                        "nullable": true
-                                    },
-                                    "imagem": {
-                                        "description": "URL da imagem",
-                                        "type": "string",
-                                        "nullable": true
-                                    },
-                                    "cep": {
-                                        "description": "CEP",
-                                        "type": "string",
-                                        "maxLength": 10,
-                                        "nullable": true
-                                    },
-                                    "estado": {
-                                        "description": "Estado",
-                                        "type": "string",
-                                        "maxLength": 5,
-                                        "nullable": true
-                                    },
-                                    "cidade": {
-                                        "description": "Cidade",
-                                        "type": "string",
-                                        "maxLength": 40,
-                                        "nullable": true
-                                    },
-                                    "bairro": {
-                                        "description": "Bairro",
-                                        "type": "string",
-                                        "maxLength": 40,
-                                        "nullable": true
-                                    },
-                                    "logradouro": {
-                                        "description": "Logradouro",
-                                        "type": "string",
-                                        "maxLength": 100,
-                                        "nullable": true
-                                    },
-                                    "numero_endereco": {
-                                        "description": "Número do endereço",
-                                        "type": "string",
-                                        "maxLength": 80,
-                                        "nullable": true
-                                    },
-                                    "complemento": {
-                                        "description": "Complemento",
-                                        "type": "string",
-                                        "maxLength": 50,
-                                        "nullable": true
-                                    },
-                                    "ibge": {
-                                        "description": "Código IBGE",
-                                        "type": "string",
-                                        "maxLength": 20,
-                                        "nullable": true
-                                    },
-                                    "registro_geral": {
-                                        "description": "Registro Geral (RG)",
-                                        "type": "string",
-                                        "maxLength": 120,
-                                        "nullable": true
-                                    },
-                                    "orgao_emissor": {
-                                        "description": "Órgão emissor do RG",
-                                        "type": "string",
-                                        "maxLength": 120,
-                                        "nullable": true
-                                    },
-                                    "data_expedicao": {
-                                        "description": "Data de expedição do RG",
-                                        "type": "string",
-                                        "format": "date",
-                                        "nullable": true
-                                    },
-                                    "nome_mae": {
-                                        "description": "Nome da mãe",
-                                        "type": "string",
-                                        "maxLength": 100,
-                                        "nullable": true
-                                    },
-                                    "nome_pai": {
-                                        "description": "Nome do pai",
-                                        "type": "string",
-                                        "maxLength": 100,
-                                        "nullable": true
-                                    },
-                                    "tipo_sanguineo": {
-                                        "description": "Tipo sanguíneo",
-                                        "type": "string",
-                                        "maxLength": 5,
-                                        "nullable": true
-                                    },
-                                    "nivel_acesso": {
-                                        "description": "Nível de acesso do usuário",
-                                        "type": "integer",
-                                        "nullable": true
-                                    },
-                                    "adm_configurado": {
-                                        "description": "Indica se o administrador está configurado",
-                                        "type": "integer",
-                                        "nullable": true
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Cadastro realizado com sucesso"
-                    },
-                    "422": {
-                        "description": "Erro de validação"
-                    },
-                    "500": {
-                        "description": "Erro interno"
-                    }
-                }
-            }
-        },
-        "/pessoa/{id_pessoa}/imagem": {
-            "post": {
-                "tags": [
-                    "Pessoa"
-                ],
-                "summary": "Cadastrar uma nova imagem para pessoa",
-                "operationId": "355be652fca4fac34692b59fbfa69a86",
-                "parameters": [
-                    {
-                        "name": "id_pessoa",
-                        "in": "path",
-                        "description": "ID da pessoa que deseja atualizar",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "imagem"
-                                ],
-                                "properties": {
-                                    "imagem": {
-                                        "description": "Imagem da pessoa para upload",
-                                        "type": "string",
-                                        "format": "binary"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Cadastro realizado com sucesso"
-                    },
-                    "422": {
-                        "description": "Erro de validação"
-                    },
-                    "500": {
-                        "description": "Erro interno"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/pessoa/{cpf}": {
-            "get": {
-                "tags": [
-                    "Pessoa"
-                ],
-                "summary": "Buscar pessoa por cpf",
-                "operationId": "90bd58268422d571591f60bbf631eb3c",
-                "parameters": [
-                    {
-                        "name": "cpf",
-                        "in": "path",
-                        "description": "cpf da pessoa",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Operação realizado com sucesso"
-                    },
-                    "422": {
-                        "description": "Erro de validação"
-                    },
-                    "500": {
-                        "description": "Erro interno"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/pessoa/filtro": {
-            "get": {
-                "tags": [
-                    "Pessoa"
-                ],
-                "summary": "Buscar pessoa para filtro",
-                "operationId": "60d7103992ece8b6e3a1e4b16ea051d6",
-                "responses": {
-                    "200": {
-                        "description": "Operação realizado com sucesso"
-                    },
-                    "422": {
-                        "description": "Erro de validação"
-                    },
-                    "500": {
-                        "description": "Erro interno"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/pessoa/{id_pessoa}": {
-            "put": {
-                "tags": [
-                    "Pessoa"
-                ],
-                "summary": "Atualizar uma pessoa",
-                "operationId": "8514b99daaafb86c37872ddad3544afd",
-                "parameters": [
-                    {
-                        "name": "id_pessoa",
-                        "in": "path",
-                        "description": "ID da pessoa que deseja atualizar",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "nome": {
-                                        "description": "Nome do usuário",
-                                        "type": "string",
-                                        "maxLength": 100,
-                                        "nullable": true
-                                    },
-                                    "sobrenome": {
-                                        "description": "Sobrenome do usuário",
-                                        "type": "string",
-                                        "maxLength": 100,
-                                        "nullable": true
-                                    },
-                                    "sexo": {
-                                        "description": "Sexo do usuário",
-                                        "type": "string",
-                                        "maxLength": 1,
-                                        "nullable": true
-                                    },
-                                    "telefone": {
-                                        "description": "Telefone de contato",
-                                        "type": "string",
-                                        "maxLength": 25,
-                                        "nullable": true
-                                    },
-                                    "data_nascimento": {
-                                        "description": "Data de nascimento",
-                                        "type": "string",
-                                        "format": "date",
-                                        "nullable": true
-                                    },
-                                    "imagem": {
-                                        "description": "URL da imagem",
-                                        "type": "string",
-                                        "nullable": true
-                                    },
-                                    "cep": {
-                                        "description": "CEP",
-                                        "type": "string",
-                                        "maxLength": 10,
-                                        "nullable": true
-                                    },
-                                    "estado": {
-                                        "description": "Estado",
-                                        "type": "string",
-                                        "maxLength": 5,
-                                        "nullable": true
-                                    },
-                                    "cidade": {
-                                        "description": "Cidade",
-                                        "type": "string",
-                                        "maxLength": 40,
-                                        "nullable": true
-                                    },
-                                    "bairro": {
-                                        "description": "Bairro",
-                                        "type": "string",
-                                        "maxLength": 40,
-                                        "nullable": true
-                                    },
-                                    "logradouro": {
-                                        "description": "Logradouro",
-                                        "type": "string",
-                                        "maxLength": 100,
-                                        "nullable": true
-                                    },
-                                    "numero_endereco": {
-                                        "description": "Número do endereço",
-                                        "type": "string",
-                                        "maxLength": 80,
-                                        "nullable": true
-                                    },
-                                    "complemento": {
-                                        "description": "Complemento",
-                                        "type": "string",
-                                        "maxLength": 50,
-                                        "nullable": true
-                                    },
-                                    "ibge": {
-                                        "description": "Código IBGE",
-                                        "type": "string",
-                                        "maxLength": 20,
-                                        "nullable": true
-                                    },
-                                    "registro_geral": {
-                                        "description": "Registro Geral (RG)",
-                                        "type": "string",
-                                        "maxLength": 120,
-                                        "nullable": true
-                                    },
-                                    "orgao_emissor": {
-                                        "description": "Órgão emissor do RG",
-                                        "type": "string",
-                                        "maxLength": 120,
-                                        "nullable": true
-                                    },
-                                    "data_expedicao": {
-                                        "description": "Data de expedição do RG",
-                                        "type": "string",
-                                        "format": "date",
-                                        "nullable": true
-                                    },
-                                    "nome_mae": {
-                                        "description": "Nome da mãe",
-                                        "type": "string",
-                                        "maxLength": 100,
-                                        "nullable": true
-                                    },
-                                    "nome_pai": {
-                                        "description": "Nome do pai",
-                                        "type": "string",
-                                        "maxLength": 100,
-                                        "nullable": true
-                                    },
-                                    "tipo_sanguineo": {
-                                        "description": "Tipo sanguíneo",
-                                        "type": "string",
-                                        "maxLength": 5,
-                                        "nullable": true
-                                    },
-                                    "nivel_acesso": {
-                                        "description": "Nível de acesso do usuário",
-                                        "type": "integer",
-                                        "nullable": true
-                                    },
-                                    "adm_configurado": {
-                                        "description": "Indica se o administrador está configurado",
-                                        "type": "integer",
-                                        "nullable": true
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Operacao realizada com sucesso!",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Erro de validação",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Erro interno",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/pessoa/senha": {
-            "put": {
-                "tags": [
-                    "Pessoa"
-                ],
-                "summary": "Atualiza a propria senha",
-                "operationId": "1769f547c4996f9c0895656c7a5148dc",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/PessoaMudarSenhaValidation"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "204": {
-                        "description": "Pessoa atualizada com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Erro de validação",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/pessoa/{id}/senha": {
-            "put": {
-                "tags": [
-                    "Pessoa"
-                ],
-                "summary": "Atualiza a senha de outras pessoas",
-                "operationId": "81fb8de3f8ac82526b7566f36e6b5fb4",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/PessoaMudarSenhaValidation"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "204": {
-                        "description": "Pessoa atualizada com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Erro de validação",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/pessoa/logada": {
-            "get": {
-                "tags": [
-                    "Pessoa"
-                ],
-                "summary": "Retorna a pessoa autenticado",
-                "operationId": "98a035012ccaa2b2292da2dcc34a52d7",
-                "parameters": [
-                    {
-                        "name": "with",
-                        "in": "query",
-                        "description": "Separados por virgula",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "default": ""
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Usuário retornado com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Operação realizada com sucesso!"
-                                        },
-                                        "data": {
-                                            "properties": {
-                                                "id_pessoa": {
-                                                    "type": "integer",
-                                                    "example": ""
-                                                },
-                                                "cpf": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "nome": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "sobrenome": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "sexo": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "telefone": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "data_nascimento": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": ""
-                                                },
-                                                "imagem": {
-                                                    "type": "string",
-                                                    "example": null,
-                                                    "nullable": true
-                                                },
-                                                "cep": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "estado": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "cidade": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "bairro": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "logradouro": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "numero_endereco": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "complemento": {
-                                                    "type": "string",
-                                                    "example": null,
-                                                    "nullable": true
-                                                },
-                                                "ibge": {
-                                                    "type": "string",
-                                                    "example": null,
-                                                    "nullable": true
-                                                },
-                                                "registro_geral": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "orgao_emissor": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "data_expedicao": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": ""
-                                                },
-                                                "nome_mae": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "nome_pai": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "tipo_sanguineo": {
-                                                    "type": "string",
-                                                    "example": ""
-                                                },
-                                                "nivel_acesso": {
-                                                    "type": "integer",
-                                                    "example": ""
-                                                },
-                                                "adm_configurado": {
-                                                    "type": "integer",
-                                                    "example": ""
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Usuário não autenticado",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "message",
-                                            "example": "Mensagem de erro"
-                                        },
-                                        "data": {
-                                            "type": "data",
-                                            "example": null
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Erro no servidor",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "message",
-                                            "example": "Mensagem de erro"
-                                        },
-                                        "data": {
-                                            "type": "data",
-                                            "example": null
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/situacao": {
             "get": {
                 "tags": [
@@ -4664,6 +4234,290 @@
                             2,
                             3
                         ]
+                    }
+                },
+                "type": "object"
+            },
+            "PessoaAtualizarValidation": {
+                "properties": {
+                    "nome": {
+                        "description": "Nome do usuário",
+                        "type": "string",
+                        "maxLength": 100,
+                        "nullable": true
+                    },
+                    "sobrenome": {
+                        "description": "Sobrenome do usuário",
+                        "type": "string",
+                        "maxLength": 100,
+                        "nullable": true
+                    },
+                    "sexo": {
+                        "description": "Sexo do usuário",
+                        "type": "string",
+                        "maxLength": 1,
+                        "nullable": true
+                    },
+                    "telefone": {
+                        "description": "Telefone de contato",
+                        "type": "string",
+                        "maxLength": 25,
+                        "nullable": true
+                    },
+                    "data_nascimento": {
+                        "description": "Data de nascimento",
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    },
+                    "cep": {
+                        "description": "CEP",
+                        "type": "string",
+                        "maxLength": 10,
+                        "nullable": true
+                    },
+                    "estado": {
+                        "description": "Estado",
+                        "type": "string",
+                        "maxLength": 5,
+                        "nullable": true
+                    },
+                    "cidade": {
+                        "description": "Cidade",
+                        "type": "string",
+                        "maxLength": 40,
+                        "nullable": true
+                    },
+                    "bairro": {
+                        "description": "Bairro",
+                        "type": "string",
+                        "maxLength": 40,
+                        "nullable": true
+                    },
+                    "logradouro": {
+                        "description": "Logradouro",
+                        "type": "string",
+                        "maxLength": 100,
+                        "nullable": true
+                    },
+                    "numero_endereco": {
+                        "description": "Número do endereço",
+                        "type": "string",
+                        "maxLength": 80,
+                        "nullable": true
+                    },
+                    "complemento": {
+                        "description": "Complemento",
+                        "type": "string",
+                        "maxLength": 50,
+                        "nullable": true
+                    },
+                    "ibge": {
+                        "description": "Código IBGE",
+                        "type": "string",
+                        "maxLength": 20,
+                        "nullable": true
+                    },
+                    "registro_geral": {
+                        "description": "Registro Geral (RG)",
+                        "type": "string",
+                        "maxLength": 120,
+                        "nullable": true
+                    },
+                    "orgao_emissor": {
+                        "description": "Órgão emissor do RG",
+                        "type": "string",
+                        "maxLength": 120,
+                        "nullable": true
+                    },
+                    "data_expedicao": {
+                        "description": "Data de expedição do RG",
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    },
+                    "nome_mae": {
+                        "description": "Nome da mãe",
+                        "type": "string",
+                        "maxLength": 100,
+                        "nullable": true
+                    },
+                    "nome_pai": {
+                        "description": "Nome do pai",
+                        "type": "string",
+                        "maxLength": 100,
+                        "nullable": true
+                    },
+                    "tipo_sanguineo": {
+                        "description": "Tipo sanguíneo",
+                        "type": "string",
+                        "maxLength": 5,
+                        "nullable": true
+                    },
+                    "nivel_acesso": {
+                        "description": "Nível de acesso do usuário",
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "adm_configurado": {
+                        "description": "Indica se o administrador está configurado",
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PessoaCadastrarValidation": {
+                "required": [
+                    "cpf"
+                ],
+                "properties": {
+                    "cpf": {
+                        "description": "CPF único",
+                        "type": "string",
+                        "maxLength": 11
+                    },
+                    "nome": {
+                        "description": "Nome do usuário",
+                        "type": "string",
+                        "maxLength": 100,
+                        "nullable": true
+                    },
+                    "sobrenome": {
+                        "description": "Sobrenome do usuário",
+                        "type": "string",
+                        "maxLength": 100,
+                        "nullable": true
+                    },
+                    "sexo": {
+                        "description": "Sexo do usuário",
+                        "type": "string",
+                        "maxLength": 1,
+                        "nullable": true
+                    },
+                    "telefone": {
+                        "description": "Telefone de contato",
+                        "type": "string",
+                        "maxLength": 25,
+                        "nullable": true
+                    },
+                    "data_nascimento": {
+                        "description": "Data de nascimento",
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    },
+                    "imagem": {
+                        "description": "URL da imagem",
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "cep": {
+                        "description": "CEP",
+                        "type": "string",
+                        "maxLength": 10,
+                        "nullable": true
+                    },
+                    "estado": {
+                        "description": "Estado",
+                        "type": "string",
+                        "maxLength": 5,
+                        "nullable": true
+                    },
+                    "cidade": {
+                        "description": "Cidade",
+                        "type": "string",
+                        "maxLength": 40,
+                        "nullable": true
+                    },
+                    "bairro": {
+                        "description": "Bairro",
+                        "type": "string",
+                        "maxLength": 40,
+                        "nullable": true
+                    },
+                    "logradouro": {
+                        "description": "Logradouro",
+                        "type": "string",
+                        "maxLength": 100,
+                        "nullable": true
+                    },
+                    "numero_endereco": {
+                        "description": "Número do endereço",
+                        "type": "string",
+                        "maxLength": 80,
+                        "nullable": true
+                    },
+                    "complemento": {
+                        "description": "Complemento",
+                        "type": "string",
+                        "maxLength": 50,
+                        "nullable": true
+                    },
+                    "ibge": {
+                        "description": "Código IBGE",
+                        "type": "string",
+                        "maxLength": 20,
+                        "nullable": true
+                    },
+                    "registro_geral": {
+                        "description": "Registro Geral (RG)",
+                        "type": "string",
+                        "maxLength": 120,
+                        "nullable": true
+                    },
+                    "orgao_emissor": {
+                        "description": "Órgão emissor do RG",
+                        "type": "string",
+                        "maxLength": 120,
+                        "nullable": true
+                    },
+                    "data_expedicao": {
+                        "description": "Data de expedição do RG",
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    },
+                    "nome_mae": {
+                        "description": "Nome da mãe",
+                        "type": "string",
+                        "maxLength": 100,
+                        "nullable": true
+                    },
+                    "nome_pai": {
+                        "description": "Nome do pai",
+                        "type": "string",
+                        "maxLength": 100,
+                        "nullable": true
+                    },
+                    "tipo_sanguineo": {
+                        "description": "Tipo sanguíneo",
+                        "type": "string",
+                        "maxLength": 5,
+                        "nullable": true
+                    },
+                    "nivel_acesso": {
+                        "description": "Nível de acesso do usuário",
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "adm_configurado": {
+                        "description": "Indica se o administrador está configurado",
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PessoaImagemAtualizarValidation": {
+                "required": [
+                    "imagem"
+                ],
+                "properties": {
+                    "imagem": {
+                        "description": "Arquivo da foto da pessoa (jpeg, jpg, png, máx. 5MB)",
+                        "type": "string",
+                        "format": "binary"
                     }
                 },
                 "type": "object"

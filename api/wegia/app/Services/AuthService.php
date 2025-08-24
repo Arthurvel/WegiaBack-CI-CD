@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Pessoa;
+use app\Models\Pessoa\Pessoa;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 

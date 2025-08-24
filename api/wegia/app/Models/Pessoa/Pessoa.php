@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Pessoa;
 
+use App\Models\Aviso;
 use App\Models\Funcionario\Funcionario;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;

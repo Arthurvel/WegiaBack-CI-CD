@@ -2,7 +2,9 @@
 
 namespace App\DTOs\Pessoa;
 
-class PessoaCadastrarDTO
+use App\DTOs\BaseDTO;
+
+class PessoaCadastrarDTO extends BaseDTO
 {
     public ?string $nome;
     public ?string $sobrenome;
@@ -28,113 +30,4 @@ class PessoaCadastrarDTO
     public ?int $nivel_acesso;
     public ?int $adm_configurado;
 
-    public function __construct(
-        ?string $nome = null,
-        ?string $sobrenome = null,
-        string  $cpf,
-        ?string $sexo = null,
-        ?string $telefone = null,
-        ?string $data_nascimento = null,
-        ?string $imagem = null,
-        ?string $cep = null,
-        ?string $estado = null,
-        ?string $cidade = null,
-        ?string $bairro = null,
-        ?string $logradouro = null,
-        ?string $numero_endereco = null,
-        ?string $complemento = null,
-        ?string $ibge = null,
-        ?string $registro_geral = null,
-        ?string $orgao_emissor = null,
-        ?string $data_expedicao = null,
-        ?string $nome_mae = null,
-        ?string $nome_pai = null,
-        ?string $tipo_sanguineo = null,
-        ?int $nivel_acesso = null,
-        ?int $adm_configurado = null
-    ) {
-        $this->nome            = $nome;
-        $this->sobrenome       = $sobrenome;
-        $this->cpf             = $cpf;
-        $this->sexo            = $sexo;
-        $this->telefone        = $telefone;
-        $this->data_nascimento = $data_nascimento;
-        $this->imagem          = $imagem;
-        $this->cep             = $cep;
-        $this->estado          = $estado;
-        $this->cidade          = $cidade;
-        $this->bairro          = $bairro;
-        $this->logradouro      = $logradouro;
-        $this->numero_endereco = $numero_endereco;
-        $this->complemento     = $complemento;
-        $this->ibge            = $ibge;
-        $this->registro_geral  = $registro_geral;
-        $this->orgao_emissor   = $orgao_emissor;
-        $this->data_expedicao  = $data_expedicao;
-        $this->nome_mae        = $nome_mae;
-        $this->nome_pai        = $nome_pai;
-        $this->tipo_sanguineo  = $tipo_sanguineo;
-        $this->nivel_acesso    = $nivel_acesso;
-        $this->adm_configurado = $adm_configurado;
-    }
-
-    public static function fromArray(array $dados): self
-    {
-        return new self(
-            $dados['nome'] ?? null,
-            $dados['sobrenome'] ?? null,
-            $dados['cpf'],
-            $dados['sexo'] ?? null,
-            $dados['telefone'] ?? null,
-            $dados['data_nascimento'] ?? null,
-            $dados['imagem'] ?? null,
-            $dados['cep'] ?? null,
-            $dados['estado'] ?? null,
-            $dados['cidade'] ?? null,
-            $dados['bairro'] ?? null,
-            $dados['logradouro'] ?? null,
-            $dados['numero_endereco'] ?? null,
-            $dados['complemento'] ?? null,
-            $dados['ibge'] ?? null,
-            $dados['registro_geral'] ?? null,
-            $dados['orgao_emissor'] ?? null,
-            $dados['data_expedicao'] ?? null,
-            $dados['nome_mae'] ?? null,
-            $dados['nome_pai'] ?? null,
-            $dados['tipo_sanguineo'] ?? null,
-            $dados['nivel_acesso'] ?? null,
-            $dados['adm_configurado'] ?? null
-        );
-    }
-
-    public function toArray(): array
-    {
-        return array_filter([
-            'nome'            => $this->nome,
-            'sobrenome'       => $this->sobrenome,
-            'cpf'             => $this->cpf,
-            'sexo'            => $this->sexo,
-            'telefone'        => $this->telefone,
-            'data_nascimento' => $this->data_nascimento,
-            'imagem'          => $this->imagem,
-            'cep'             => $this->cep,
-            'estado'          => $this->estado,
-            'cidade'          => $this->cidade,
-            'bairro'          => $this->bairro,
-            'logradouro'      => $this->logradouro,
-            'numero_endereco' => $this->numero_endereco,
-            'complemento'     => $this->complemento,
-            'ibge'            => $this->ibge,
-            'registro_geral'  => $this->registro_geral,
-            'orgao_emissor'   => $this->orgao_emissor,
-            'data_expedicao'  => $this->data_expedicao,
-            'nome_mae'        => $this->nome_mae,
-            'nome_pai'        => $this->nome_pai,
-            'tipo_sanguineo'  => $this->tipo_sanguineo,
-            'nivel_acesso'    => $this->nivel_acesso,
-            'adm_configurado' => $this->adm_configurado,
-        ], function ($valor) {
-            return !is_null($valor);
-        });
-    }
 }

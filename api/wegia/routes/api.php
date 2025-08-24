@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Atendido\AtendidoController;
 use App\Http\Controllers\Atendido\AtendidoOcorrenciaController;
 use App\Http\Controllers\Atendido\AtendidoStatusController;
-use App\Http\Controllers\PessoaController;
+use App\Http\Controllers\Atendido\AtendidoTipoController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AvisoController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\Funcionario\FuncionarioController;
 use App\Http\Controllers\Funcionario\FuncionarioDependenteController;
@@ -15,11 +15,11 @@ use App\Http\Controllers\Funcionario\FuncionarioQuadroHorarioController;
 use App\Http\Controllers\Funcionario\FuncionarioRemuneracaoController;
 use App\Http\Controllers\Funcionario\Perfil\FuncionarioPerfilController;
 use App\Http\Controllers\Funcionario\Perfil\FuncionarioPermissaoController;
+use app\Http\Controllers\Pessoa\PessoaController;
+use App\Http\Controllers\Pessoa\PessoaDependenteController;
 use App\Http\Controllers\SituacaoController;
 use App\Http\Controllers\UploadController;
-use App\Http\Controllers\Atendido\AtendidoTipoController;
-use App\Http\Controllers\Pessoa\PessoaDependenteController;
-use App\Http\Controllers\AvisoController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/upload/{path}', [UploadController::class, 'retornarImagem'])
     ->where('path', '.*')

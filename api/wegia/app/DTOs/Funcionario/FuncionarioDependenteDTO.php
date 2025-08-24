@@ -3,7 +3,6 @@
 namespace App\DTOs\Funcionario;
 
 use App\DTOs\Pessoa\PessoaDTO;
-use App\Models\Pessoa;
 
 class FuncionarioDependenteDTO
 {
@@ -35,7 +34,7 @@ class FuncionarioDependenteDTO
 
     public static function fromArray(array $dados): self
     {
-        return new self( 
+        return new self(
             $dados['id_dependente'],
             $dados['id_funcionario'],
             $dados['id_parentesco'],

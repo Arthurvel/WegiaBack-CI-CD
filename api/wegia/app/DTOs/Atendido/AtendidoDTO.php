@@ -3,9 +3,6 @@
 namespace App\DTOs\Atendido;
 
 use App\DTOs\Pessoa\PessoaDTO;
-use App\Models\Atendido\AtendidoStatus;
-use App\Models\Atendido\AtendidoTipo;
-use App\Models\Pessoa;
 
 class AtendidoDTO
 {

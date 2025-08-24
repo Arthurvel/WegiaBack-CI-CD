@@ -6,76 +6,68 @@ use App\DTOs\PaginacaoDTO;
 use App\DTOs\Pessoa\CadastrarPessoaDependenteDTO;
 use App\DTOs\Pessoa\PessoaAtualizarDTO;
 use App\DTOs\Pessoa\PessoaAtualizarSenhaDTO;
+use App\DTOs\Pessoa\PessoaCadastrarDTO;
 use App\DTOs\Pessoa\PessoaDependenteDTO;
-use App\DTOs\Pessoa\PessoaDTO;
 use App\Helpers\UploadSeguroHelper;
-use App\Repositories\PessoaRepository;
-use App\Models\Pessoa;
+use App\Models\Pessoa\Pessoa;
 use App\Models\Pessoa\PessoaDependente;
+use App\Repositories\PessoaRepository;
+use App\Services\Base\BaseService;
 
-class PessoaService
+class PessoaService extends BaseService
 {
-    private PessoaRepository $pessoaRepository;
-
-    public function __construct(PessoaRepository $pessoaRepository)
+    public function __construct
+    (
+        PessoaRepository $repository,
+    )
     {
-        $this->pessoaRepository = $pessoaRepository;
+        parent::__construct($repository);
     }
 
-    public function cadastrarPessoa(array $pessoa): Pessoa
+    public function cadastrarPessoaComFoto(PessoaCadastrarDTO $pessoa): Pessoa
     {
-        if (!empty($pessoa['imagem'])) {
-            $url = UploadSeguroHelper::salvarImagem($pessoa['imagem'], 'pessoa');
-            $pessoa['imagem'] = $url;
+        if (!empty($pessoa->imagem)) {
+            $url = UploadSeguroHelper::salvarImagem($pessoa->imagem, 'pessoa');
+            $pessoa->imagem = $url;
         }
 
-        return $this->pessoaRepository->cadastrarPessoa($pessoa);
+        return $this->repository->criar($pessoa);
     }
 
-    public function buscarPessoaPorCpf(string $cpf): PessoaDTO
+    public function buscarPessoaPorCpf(string $cpf): Pessoa
     {
-        $pessoa = $this->pessoaRepository->buscarPessoaPorCpf($cpf);
-
-        return PessoaDTO::fromArray($pessoa->toArray());
+        return $this->repository->buscarPessoaPorCpf($cpf);
     }
 
     public function buscarPessoaPorCpfSemFormatacao(string $cpf): Pessoa
     {
-        return $this->pessoaRepository->buscarPessoaPorCpf($cpf);
+        return $this->repository->buscarPessoaPorCpf($cpf);
     }
 
     public function buscarPessoaParaFiltros()
     {
-        return $this->pessoaRepository->buscarPessoaParaFiltros();
-    }
-
-
-    public function atualizarPessoa(array $pessoa, int $id): array
-    {
-        $pessoaAtualizaDTO = PessoaAtualizarDTO::fromArray($pessoa);
-
-        $pessoaAtualizada = $this->pessoaRepository->atualizarPessoa($pessoaAtualizaDTO, $id);
-
-        return PessoaDTO::fromArray($pessoaAtualizada->toArray())->toArray();
+        return $this->repository->buscarPessoaParaFiltros();
     }
 
     public function mudarSenha(PessoaAtualizarSenhaDTO $dto)
     {
-        return $this->pessoaRepository->mudarSenha($dto);
+        return $this->repository->mudarSenha($dto);
     }
 
-    public function cadastrarOuAtualizarImagem(array $dados, String $id_pessoa)
+    public function atualizarImagem(array $dados, String $id_pessoa)
     {
         $url = UploadSeguroHelper::salvarImagem($dados['imagem'], 'pessoa');
 
-        $pessoaAtualizada = $this->pessoaRepository->cadastrarOuAtualizarImagem($url, $id_pessoa);
+        $dto = PessoaAtualizarDTO::fromArray([
+            'imagem' => $url
+        ]);
 
-        return $pessoaAtualizada;
+        return $this->repository->atualizar($id_pessoa, $dto);
     }
 
     public function buscarDependentesPorIdPessoa(int $id_pessoa, array $filtros = []) : PaginacaoDTO
     {
-        $dependentes = $this->pessoaRepository->buscarDependentesPorIdPessoa($id_pessoa, $filtros);
+        $dependentes = $this->repository->buscarDependentesPorIdPessoa($id_pessoa, $filtros);
 
         $itens = collect($dependentes->items())->map(function ($dependente) {
             return PessoaDependenteDTO::fromArray($dependente->toArray());
@@ -99,11 +91,11 @@ class PessoaService
         ];
         $dependenteDTO = CadastrarPessoaDependenteDTO::fromArray($array);
 
-        return $this->pessoaRepository->criarParentesco($dependenteDTO);
+        return $this->repository->criarParentesco($dependenteDTO);
     }
 
     public function deletarDependente(int $id_dependente) : bool
     {
-        return $this->pessoaRepository->deletarDependente($id_dependente);
+        return $this->repository->deletarDependente($id_dependente);
     }
 }
