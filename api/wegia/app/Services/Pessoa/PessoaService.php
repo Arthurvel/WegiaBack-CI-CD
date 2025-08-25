@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace app\Services\Pessoa;
 
 use App\DTOs\PaginacaoDTO;
 use App\DTOs\Pessoa\CadastrarPessoaDependenteDTO;
@@ -11,7 +11,7 @@ use App\DTOs\Pessoa\PessoaDependenteDTO;
 use App\Helpers\UploadSeguroHelper;
 use App\Models\Pessoa\Pessoa;
 use App\Models\Pessoa\PessoaDependente;
-use App\Repositories\PessoaRepository;
+use app\Repositories\Pessoa\PessoaRepository;
 use App\Services\Base\BaseService;
 
 class PessoaService extends BaseService

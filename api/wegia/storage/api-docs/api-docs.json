@@ -3927,27 +3927,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "parentesco"
-                                ],
-                                "properties": {
-                                    "parentesco": {
-                                        "description": "Tipo de parentesco",
-                                        "type": "string",
-                                        "enum": [
-                                            "Companheiro(a)",
-                                            "Cônjuge",
-                                            "Enteado(a)",
-                                            "Ex-cônjuge",
-                                            "Filho(a)",
-                                            "Irmão(ã)",
-                                            "Neto(a)",
-                                            "Pais",
-                                            "Outra relação de dependência"
-                                        ]
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/PessoaDependenteCadastrarValidation"
                             }
                         }
                     }
@@ -4233,6 +4213,29 @@
                             1,
                             2,
                             3
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "PessoaDependenteCadastrarValidation": {
+                "required": [
+                    "parentesco"
+                ],
+                "properties": {
+                    "parentesco": {
+                        "description": "Tipo de parentesco",
+                        "type": "string",
+                        "enum": [
+                            "Companheiro(a)",
+                            "Cônjuge",
+                            "Enteado(a)",
+                            "Ex-cônjuge",
+                            "Filho(a)",
+                            "Irmão(ã)",
+                            "Neto(a)",
+                            "Pais",
+                            "Outra relação de dependência"
                         ]
                     }
                 },

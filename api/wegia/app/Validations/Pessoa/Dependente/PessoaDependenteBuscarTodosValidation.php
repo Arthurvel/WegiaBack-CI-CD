@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Validations\Pessoa\Dependente;
+namespace app\Validations\Pessoa\Dependente;
 
-use App\Models\Pessoa\PessoaParentescoEnum;
-use App\Rules\ValidarPessoaDependente;
-use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
-class BuscarPessoaDependenteValidation
+class PessoaDependenteBuscarTodosValidation extends FormRequest
 {
-    public static function rules($pessoaId = null)
+
+    public function rules() : array
     {
         return [
-            'id_pessoa' => 'required|integer|exists:pessoa,id_pessoa',
-            'buscar' => 'nullable|string',
+            'with'           => 'nullable|string',
+            'buscar'         => 'nullable|string',
             'ordenacao'      => 'nullable|string|in:nome,parentesco',
             'tipoOrdenacao'  => 'nullable|string|in:asc,desc,ASC,DESC',
             'itensPorPagina' => 'nullable|integer',
@@ -20,7 +19,7 @@ class BuscarPessoaDependenteValidation
         ];
     }
 
-    public static function messages()
+    public function messages() : array
     {
         return [
             'required' => 'O campo é obrigatório.',
@@ -29,4 +28,5 @@ class BuscarPessoaDependenteValidation
             'in' => 'O campo deve ser um dos seguintes valores: :values.',
         ];
     }
+
 }

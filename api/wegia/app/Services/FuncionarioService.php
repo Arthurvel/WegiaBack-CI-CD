@@ -16,9 +16,8 @@ use App\DTOs\Funcionario\FuncionarioOutrasInfoDTO;
 use App\DTOs\Funcionario\FuncionarioQuadroHorarioDTO;
 use App\DTOs\Funcionario\FuncionarioRemuneracaoDTO;
 use App\DTOs\PaginacaoDTO;
-use App\Helpers\UploadSeguroHelper;
 use App\DTOs\Pessoa\PessoaCadastrarDTO;
-use App\Helpers\ArquivoHelper;
+use App\Helpers\UploadSeguroHelper;
 use App\Models\Funcionario\Funcionario;
 use App\Models\Funcionario\FuncionarioDependente;
 use App\Models\Funcionario\FuncionarioDependenteParentesco;
@@ -28,12 +27,12 @@ use App\Models\Funcionario\FuncionarioOutrasInfo;
 use App\Models\Funcionario\FuncionarioQuadroHorario;
 use App\Models\Funcionario\FuncionarioRemuneracao;
 use App\Models\Funcionario\FuncionarioRemuneracaoTipo;
-use App\Repositories\PessoaRepository;
 use App\Repositories\FuncionarioRepository;
-use Illuminate\Support\Facades\DB;
+use app\Repositories\Pessoa\PessoaRepository;
 use Exception;
-use Illuminate\Support\Collection;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class FuncionarioService
 {

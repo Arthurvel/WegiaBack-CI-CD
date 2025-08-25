@@ -19,7 +19,7 @@ class PessoaResource extends JsonResource
             'sexo'            => $this->sexo,
             'telefone'        => $this->telefone,
             'data_nascimento' => $this->data_nascimento ? Carbon::parse($this->data_nascimento)->format('d/m/Y') : null,
-            'imagem'          => UploadSeguroHelper::urlTemporaria($this->imagem),
+            'imagem'          => $this->imagem ? UploadSeguroHelper::urlTemporaria($this->imagem)  : null,
             'cep'             => $this->cep,
             'estado'          => $this->estado,
             'cidade'          => $this->cidade,

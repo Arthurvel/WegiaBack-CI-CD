@@ -7,7 +7,7 @@ use App\DTOs\Pessoa\PessoaAtualizarSenhaDTO;
 use App\DTOs\Pessoa\PessoaCadastrarDTO;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Pessoa\PessoaResource;
-use App\Services\PessoaService;
+use app\Services\Pessoa\PessoaService;
 use app\Validations\Pessoa\PessoaAtualizarValidation;
 use App\Validations\Pessoa\PessoaCadastrarValidation;
 use app\Validations\Pessoa\PessoaImagemAtualizarValidation;
@@ -23,11 +23,11 @@ use Illuminate\Http\JsonResponse;
  */
 class PessoaController extends BaseController
 {
-    private $pessoaService;
+    private PessoaService $pessoaService;
 
     public function __construct(PessoaService $pessoaService)
-    {
-        $this->middleware(['auth:sanctum', 'ability:criar-pessoa'])->only(['create']);
+        {
+            $this->middleware(['auth:sanctum', 'ability:criar-pessoa'])->only(['create']);
         $this->middleware(['auth:sanctum', 'ability:visualizar-pessoa'])->only(['buscarPessoaPorCpf']);
         $this->middleware(['auth:sanctum', 'ability:atualizar-senha-de-outras-pessoas'])->only(['mudarSenhaDeFuncionarios']);
         $this->middleware(['auth:sanctum', 'ability:atualizar-pessoa'])->only(['cadastrarOuAtualizarImagem', 'update']);

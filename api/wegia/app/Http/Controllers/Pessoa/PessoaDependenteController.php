@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Pessoa;
 
+use app\DTOs\Pessoa\Dependente\PessoaDependenteBuscarTodosPorIdDTO;
+use app\DTOs\Pessoa\Dependente\PessoaDependenteCadastrarDTO;
 use App\Http\Controllers\BaseController;
-use App\Services\PessoaService;
-use App\Validations\Pessoa\Dependente\CriarPessoaDependenteValidation;
-use App\Validations\Pessoa\Dependente\DependenteExisteValidation;
+use App\Http\Resources\Paginacao\PaginacaoResource;
+use App\Http\Resources\Pessoa\PessoaDependenteResource;
+use app\Services\Pessoa\PessoaDependenteService;
+use app\Validations\Pessoa\Dependente\PessoaDependenteBuscarTodosValidation;
+use App\Validations\Pessoa\Dependente\PessoaDependenteCadastrarValidation;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 /**
  * @OA\Tag(
@@ -17,13 +20,18 @@ use Illuminate\Http\Request;
  */
 class PessoaDependenteController extends BaseController
 {
-    private $pessoaService;
+    private PessoaDependenteService $service;
 
-    public function __construct(PessoaService $pessoaService)
+    public function __construct(
+        PessoaDependenteService $service
+    )
     {
+        $this->middleware(['auth:sanctum', 'ability:criar-dependente'])->only(['create']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-dependente'])->only(['buscarDependentesPorIdPessoa']);
+        $this->middleware(['auth:sanctum', 'ability:deletar-dependente'])->only(['destroy']);
         $this->middleware('auth:sanctum')->except([]);
 
-        $this->pessoaService = $pessoaService;
+        $this->service = $service;
     }
 
     /**
@@ -86,26 +94,24 @@ class PessoaDependenteController extends BaseController
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
     */
-    public function buscarDependentesPorIdPessoa(int $id_pessoa, Request $request) : JsonResponse
+    public function buscarDependentesPorIdPessoa(int $id_pessoa, PessoaDependenteBuscarTodosValidation $request) : JsonResponse
     {
         try {
-            $this->validarRequest(
-                [ 
-                    "id_pessoa" => $id_pessoa,
-                    ...$request->all()
-                ],
-                CriarPessoaDependenteValidation::rules($id_pessoa),
-                CriarPessoaDependenteValidation::messages()
-            );
+            $validated = $request->validated();
 
-            $pessoa = $this->pessoaService->buscarDependentesPorIdPessoa($id_pessoa, $request->all());
-            
-            return $this->sucessoResponse($pessoa);
+            $dto = PessoaDependenteBuscarTodosPorIdDTO::fromArray([
+                $id_pessoa => $id_pessoa,
+                ...$validated
+            ]);
+
+            $pessoa = $this->service->buscarDependentesPorIdPessoa($id_pessoa, $dto);
+
+            return $this->sucessoResponse(new PaginacaoResource($pessoa, PessoaDependenteResource::class));
         } catch (\Exception $e) {
             return $this->errorResponse(null,500,$e->getMessage());
         }
     }
-    
+
     /**
      * @OA\Post(
      *     path="/pessoa/{id_pessoa}/dependente/{id_dependente}",
@@ -125,54 +131,34 @@ class PessoaDependenteController extends BaseController
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"parentesco"},
-     *             @OA\Property(
-     *                 property="parentesco",
-     *                 type="string",
-     *                 description="Tipo de parentesco",
-     *                 enum={
-     *                     "Companheiro(a)",
-     *                     "Cônjuge",
-     *                     "Enteado(a)",
-     *                     "Ex-cônjuge",
-     *                     "Filho(a)",
-     *                     "Irmão(ã)",
-     *                     "Neto(a)",
-     *                     "Pais",
-     *                     "Outra relação de dependência"
-     *                 }
-     *             )
-     *         )
+     *           required=true,
+     *           @OA\JsonContent(ref="#/components/schemas/PessoaDependenteCadastrarValidation")
      *     ),
      *     @OA\Response(response="201", description="Cadastro realizado com sucesso!", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
      */
-    public function create(int $id_pessoa, int $id_dependente, Request $request) : JsonResponse
+    public function create(int $id_pessoa, int $id_dependente, PessoaDependenteCadastrarValidation $request) : JsonResponse
     {
 
         try {
-            $this->validarRequest(
-                [ 
-                    "id_pessoa" => $id_pessoa,
-                    "id_dependente_pessoa" => $id_dependente,
-                    ...$request->all()
-                ],
-                CriarPessoaDependenteValidation::rules($id_pessoa),
-                CriarPessoaDependenteValidation::messages()
-            );
+            $validated = $request->validated();
 
-            $pessoa = $this->pessoaService->criarParentesco($request->all(), $id_pessoa, $id_dependente);
-            
+            $dto = PessoaDependenteCadastrarDTO::fromArray([
+               'id_pessoa' => $id_pessoa,
+               'id_dependente_pessoa' => $id_dependente,
+               'parentesco' => $validated["parentesco"]
+            ]);
+
+            $pessoa = $this->service->criarDependente($dto);
+
             return $this->sucessoResponse($pessoa, 201, 'Cadastro realizado com sucesso');
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }
-        
-    }   
+
+    }
 
     /**
      * @OA\Delete(
@@ -194,17 +180,9 @@ class PessoaDependenteController extends BaseController
     public function destroy(int $id_dependente) : JsonResponse
     {
         try {
-            $this->validarRequest(
-                [ 
-                    "id_dependente" => $id_dependente,
-                ],
-                DependenteExisteValidation::rules(),
-                DependenteExisteValidation::messages()
-            );
-            
-            $pessoa = $this->pessoaService->deletarDependente($id_dependente);
-            
-            return $this->sucessoResponse($pessoa, 200, 'Deletado com sucesso');
+            $pessoa = $this->service->deletar($id_dependente);
+
+            return $this->sucessoResponse(true, 204, 'Deletado com sucesso');
         } catch (\Exception $e) {
             return $this->errorResponse(null,500,$e->getMessage());
         }
