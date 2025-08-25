@@ -263,29 +263,6 @@ class FuncionarioService extends BaseService
         return $this->repository->buscarDependentesPorFuncionario($dados, $id_funcionario, ['pessoa', 'funcionario', 'parentesco']);
     }
 
-    public function cadastrarDependente(array $dados) : FuncionarioDependente
-    {
-        try {
-            $depentendeCadastrarDTO = CadastrarDependenteFuncionarioDTO::fromArray($dados);
-
-            $depentende = $this->repository->cadastrarDependente($depentendeCadastrarDTO);
-
-            return $depentende;
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
-
-    public function excluirDependente(int $id_dependente) : bool
-    {
-        return $this->repository->excluirDependente($id_dependente);
-    }
-
-    public function buscarDependenteParentesco() : Collection
-    {
-        return $this->repository->buscarDependenteParentesco();
-    }
-
     public function cadastrarDependenteParentesco(array $dados) : FuncionarioDependenteParentesco
     {
         return $this->repository->cadastrarDependenteParentesco($dados);

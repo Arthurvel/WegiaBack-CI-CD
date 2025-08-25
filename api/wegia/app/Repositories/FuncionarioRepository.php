@@ -330,23 +330,5 @@ class FuncionarioRepository extends BaseRepository
             ->paginate($itensPorPagina, ['*'], 'page', $pagina);
     }
 
-    public function cadastrarDependente(CadastrarDependenteFuncionarioDTO $dados) :FuncionarioDependente
-    {
-        return FuncionarioDependente::create($dados->toArray());
-    }
 
-    public function excluirDependente(int $id_dependente) : bool
-    {
-        return FuncionarioDependente::findOrFail($id_dependente)->delete();
-    }
-
-    public function buscarDependenteParentesco() : Collection
-    {
-        return FuncionarioDependenteParentesco::get();
-    }
-
-    public function cadastrarDependenteParentesco(array $dados) : FuncionarioDependenteParentesco
-    {
-        return FuncionarioDependenteParentesco::create($dados);
-    }
 }

@@ -1474,31 +1474,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "id_funcionario",
-                                    "cpf",
-                                    "nome",
-                                    "sobrenome",
-                                    "sexo",
-                                    "telefone",
-                                    "data_nascimento",
-                                    "id_parentesco"
-                                ],
-                                "properties": {
-                                    "id_funcionario": {
-                                        "description": "ID do funcionário",
-                                        "type": "integer"
-                                    },
-                                    "id_pessoa": {
-                                        "description": "id da pessoa que é dependente",
-                                        "type": "integer"
-                                    },
-                                    "id_parentesco": {
-                                        "description": "ID do parentesco do dependente",
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/FuncionarioDependenteCadastrarValidation"
                             }
                         }
                     }
@@ -1637,16 +1613,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "descricao"
-                                ],
-                                "properties": {
-                                    "descricao": {
-                                        "description": "Tipo de parentesco",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/FuncionarioDependenteParentescoCadastrarValidation"
                             }
                         }
                     }
@@ -3995,6 +3962,40 @@
     },
     "components": {
         "schemas": {
+            "FuncionarioDependenteCadastrarValidation": {
+                "required": [
+                    "id_funcionario",
+                    "id_pessoa",
+                    "id_parentesco"
+                ],
+                "properties": {
+                    "id_funcionario": {
+                        "description": "ID do funcionário",
+                        "type": "integer"
+                    },
+                    "id_pessoa": {
+                        "description": "id da pessoa que é dependente",
+                        "type": "integer"
+                    },
+                    "id_parentesco": {
+                        "description": "ID do parentesco do dependente",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "FuncionarioDependenteParentescoCadastrarValidation": {
+                "required": [
+                    "descricao"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "Tipo de parentesco",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "FuncionarioAtualizarValidation": {
                 "properties": {
                     "id_perfil": {
