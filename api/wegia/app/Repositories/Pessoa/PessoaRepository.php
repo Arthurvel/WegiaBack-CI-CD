@@ -5,6 +5,7 @@ namespace app\Repositories\Pessoa;
 use App\DTOs\Pessoa\CadastrarPessoaDependenteDTO;
 use App\DTOs\Pessoa\PessoaAtualizarDTO;
 use App\DTOs\Pessoa\PessoaAtualizarSenhaDTO;
+use App\DTOs\Pessoa\PessoaCadastrarDTO;
 use App\Models\Pessoa\Pessoa;
 use App\Models\Pessoa\PessoaDependente;
 use App\Repositories\Base\BaseRepository;
@@ -19,11 +20,11 @@ class PessoaRepository extends BaseRepository
         parent::__construct($model);
     }
 
-    public function cadastrarOuAtualizarPessoa(array $dados): Pessoa
+    public function cadastrarOuAtualizarPessoa(PessoaCadastrarDTO $pessoaDTO): Pessoa
     {
         return Pessoa::updateOrCreate(
-            ['cpf' => $dados['cpf']],
-            $dados
+            ['cpf' => $pessoaDTO->cpf],
+            $pessoaDTO->toArrayUpdate()
         );
 
     }

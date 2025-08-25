@@ -9,6 +9,8 @@ use App\DTOs\Funcionario\CadastrarDocumentoTipoDTO;
 use App\DTOs\Funcionario\CadastrarFuncionarioDTO;
 use App\DTOs\Funcionario\CadastrarQuadroHorarioDTO;
 use App\DTOs\Funcionario\CadastrarRemuneracaoDTO;
+use app\DTOs\Funcionario\FuncionarioBuscarDTO;
+use app\DTOs\Funcionario\FuncionarioBuscarTodosDTO;
 use App\Models\Funcionario\Funcionario;
 use App\Models\Funcionario\FuncionarioDependente;
 use App\Models\Funcionario\FuncionarioDependenteParentesco;
@@ -21,26 +23,38 @@ use App\Models\Funcionario\FuncionarioQuadroHorarioEscala;
 use App\Models\Funcionario\FuncionarioQuadroHorarioTipo;
 use App\Models\Funcionario\FuncionarioRemuneracao;
 use App\Models\Funcionario\FuncionarioRemuneracaoTipo;
+use App\Repositories\Base\BaseRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class FuncionarioRepository
+class FuncionarioRepository extends BaseRepository
 {
 
-    public function buscarTodos(String $permissao)
+    public function __construct(
+        Funcionario $model
+    )
     {
-        return Funcionario::whereHas('perfil.permissoes', function ($query) use ($permissao){
-            $query->where('nome', $permissao);
-        })->with(['pessoa', 'perfil.permissoes'])->get();
+        parent::__construct($model);
     }
-    public function pegarFuncionarios(array $parametros = []) : LengthAwarePaginator
+
+    public function buscarTodosFiltrados(FuncionarioBuscarTodosDTO $dto)
     {
-        $situacao       = $parametros['id_situacao'] ?? null;
-        $buscar         = $parametros['buscar'] ?? null;
-        $ordenacao      = $parametros['ordenacao'] ?? null;
-        $tipoOrdenacao  = $parametros['tipoOrdenacao'] ?? 'ASC';
-        $itensPorPagina = $parametros['itensPorPagina'] ?? 10;
-        $pagina         = $parametros['pagina'] ?? 1;
+        $permissao = $dto->permissao ?? null;
+
+        return $this->model
+            ->whereHas('perfil.permissoes', function ($query) use ($permissao){
+                $query->where('nome', $permissao);
+            })
+            ->with(['pessoa', 'perfil.permissoes'])->get();
+    }
+    public function pegarFuncionarios(FuncionarioBuscarDTO $dto) : LengthAwarePaginator
+    {
+        $situacao       = $dto->id_situacao ?? null;
+        $buscar         = $dto->buscar ?? null;
+        $ordenacao      = $dto->ordenacao ?? null;
+        $tipoOrdenacao  = $dto->tipoOrdenacao ?? 'ASC';
+        $itensPorPagina = $dto->itensPorPagina ?? 10;
+        $pagina         = $dto->pagina ?? 1;
 
         return Funcionario::with(['pessoa', 'perfil', 'situacao'])
             ->when(!is_null($situacao), function ($q) use ($situacao){
@@ -65,25 +79,9 @@ class FuncionarioRepository
             ->paginate($itensPorPagina, ['*'], 'page', $pagina);
     }
 
-    public function pegarFuncionarioPorId(int $id, $with = []) : Funcionario
-    {
-        return Funcionario::with($with)
-            ->findOrFail($id);
-    }
-
     public function cadastrarFuncionario(CadastrarFuncionarioDTO $dados) : Funcionario
     {
         return Funcionario::create($dados->toArray());
-    }
-
-    public function atualizarFuncionario(AtualizarFuncionarioDTO $dados, int $id_funcionario) : Funcionario
-    {
-        $funcionario = $this->pegarFuncionarioPorId($id_funcionario);
-
-        $funcionario->update($dados->toArray());
-        $funcionario->save();
-
-        return $funcionario;
     }
 
     public function cadastrarDocumento(CadastrarDocumentoDTO $dados) : FuncionarioDocs

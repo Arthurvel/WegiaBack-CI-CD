@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Funcionario;
 
+use App\Http\Resources\Pessoa\PessoaResource;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -27,7 +28,9 @@ class FuncionarioResource extends JsonResource
             'certificado_reservista_numero' => $this->certificado_reservista_numero,
             'certificado_reservista_serie'  => $this->certificado_reservista_serie,
             'perfil'                        => $this->relationLoaded('perfil') ?
-                new PerfilResource($this->perfil) : null
+                new PerfilResource($this->perfil) : null,
+            'pessoa'                        => $this->relationLoaded('pessoa') ?
+                new PessoaResource($this->pessoa) : null
         ];
     }
 

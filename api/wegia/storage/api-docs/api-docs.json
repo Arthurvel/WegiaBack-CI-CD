@@ -1215,125 +1215,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "cpf",
-                                    "nome",
-                                    "sobrenome",
-                                    "sexo",
-                                    "telefone",
-                                    "data_nascimento",
-                                    "registro_geral",
-                                    "orgao_emissor",
-                                    "data_expedicao",
-                                    "data_admissao",
-                                    "id_situacao",
-                                    "id_cargo",
-                                    "id_escala",
-                                    "id_tipo",
-                                    "certificado_reservista_numero",
-                                    "certificado_reservista_serie"
-                                ],
-                                "properties": {
-                                    "cpf": {
-                                        "description": "CPF único",
-                                        "type": "string",
-                                        "maxLength": 11,
-                                        "example": ""
-                                    },
-                                    "nome": {
-                                        "description": "Nome do usuário",
-                                        "type": "string",
-                                        "maxLength": 100,
-                                        "example": ""
-                                    },
-                                    "sobrenome": {
-                                        "description": "Sobrenome do usuário",
-                                        "type": "string",
-                                        "maxLength": 100,
-                                        "example": ""
-                                    },
-                                    "sexo": {
-                                        "description": "Sexo do usuário",
-                                        "type": "string",
-                                        "maxLength": 1,
-                                        "example": ""
-                                    },
-                                    "telefone": {
-                                        "description": "Telefone de contato",
-                                        "type": "string",
-                                        "maxLength": 25,
-                                        "example": ""
-                                    },
-                                    "data_nascimento": {
-                                        "description": "Data de nascimento",
-                                        "type": "string",
-                                        "format": "date",
-                                        "example": ""
-                                    },
-                                    "registro_geral": {
-                                        "description": "Registro Geral (RG)",
-                                        "type": "string",
-                                        "maxLength": 120,
-                                        "example": ""
-                                    },
-                                    "orgao_emissor": {
-                                        "description": "Órgão emissor do RG",
-                                        "type": "string",
-                                        "maxLength": 120,
-                                        "example": ""
-                                    },
-                                    "data_expedicao": {
-                                        "description": "Data de expedição do RG",
-                                        "type": "string",
-                                        "format": "date",
-                                        "example": ""
-                                    },
-                                    "imagem": {
-                                        "description": "URL da imagem",
-                                        "type": "string",
-                                        "example": "",
-                                        "nullable": true
-                                    },
-                                    "data_admissao": {
-                                        "description": "Data de admissão",
-                                        "type": "string",
-                                        "format": "date",
-                                        "example": ""
-                                    },
-                                    "id_situacao": {
-                                        "description": "ID da situação",
-                                        "type": "integer",
-                                        "example": 0
-                                    },
-                                    "id_perfil": {
-                                        "description": "ID do perfil",
-                                        "type": "integer",
-                                        "example": 0
-                                    },
-                                    "id_escala": {
-                                        "description": "ID da escala",
-                                        "type": "integer",
-                                        "example": 0
-                                    },
-                                    "id_tipo": {
-                                        "description": "ID do tipo",
-                                        "type": "integer",
-                                        "example": 0
-                                    },
-                                    "certificado_reservista_numero": {
-                                        "description": "Número do certificado de reservista",
-                                        "type": "string",
-                                        "maxLength": 100,
-                                        "example": ""
-                                    },
-                                    "certificado_reservista_serie": {
-                                        "description": "Série do certificado de reservista",
-                                        "type": "string",
-                                        "maxLength": 100,
-                                        "example": ""
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/FuncionarioCadastrarValidation"
                             }
                         }
                     }
@@ -1381,7 +1263,7 @@
                 "parameters": [
                     {
                         "name": "id_funcionario",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do funcionario",
                         "required": false,
                         "schema": {
@@ -1443,62 +1325,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "id_perfil": {
-                                        "description": "ID do perfil",
-                                        "type": "integer"
-                                    },
-                                    "id_situacao": {
-                                        "description": "ID da situação",
-                                        "type": "integer"
-                                    },
-                                    "data_admissao": {
-                                        "description": "Data de admissão",
-                                        "type": "string",
-                                        "format": "date"
-                                    },
-                                    "ctps": {
-                                        "description": "Carteira de Trabalho",
-                                        "type": "string",
-                                        "maxLength": 150
-                                    },
-                                    "pis": {
-                                        "description": "Número do PIS",
-                                        "type": "string",
-                                        "maxLength": 140
-                                    },
-                                    "uf_ctps": {
-                                        "description": "UF da CTPS",
-                                        "type": "string",
-                                        "maxLength": 20
-                                    },
-                                    "numero_titulo": {
-                                        "description": "Número do título de eleitor",
-                                        "type": "string",
-                                        "maxLength": 150
-                                    },
-                                    "zona": {
-                                        "description": "Zona eleitoral",
-                                        "type": "string",
-                                        "maxLength": 30
-                                    },
-                                    "secao": {
-                                        "description": "Seção eleitoral",
-                                        "type": "string",
-                                        "maxLength": 40
-                                    },
-                                    "certificado_reservista_numero": {
-                                        "description": "Número do certificado de reservista",
-                                        "type": "string",
-                                        "maxLength": 100
-                                    },
-                                    "certificado_reservista_serie": {
-                                        "description": "Série do certificado de reservista",
-                                        "type": "string",
-                                        "maxLength": 100
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/FuncionarioAtualizarValidation"
                             }
                         }
                     }
@@ -4168,6 +3995,169 @@
     },
     "components": {
         "schemas": {
+            "FuncionarioAtualizarValidation": {
+                "properties": {
+                    "id_perfil": {
+                        "description": "ID do perfil",
+                        "type": "integer"
+                    },
+                    "id_situacao": {
+                        "description": "ID da situação",
+                        "type": "integer"
+                    },
+                    "data_admissao": {
+                        "description": "Data de admissão",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "ctps": {
+                        "description": "Carteira de Trabalho",
+                        "type": "string",
+                        "maxLength": 150
+                    },
+                    "pis": {
+                        "description": "Número do PIS",
+                        "type": "string",
+                        "maxLength": 140
+                    },
+                    "uf_ctps": {
+                        "description": "UF da CTPS",
+                        "type": "string",
+                        "maxLength": 20
+                    },
+                    "numero_titulo": {
+                        "description": "Número do título de eleitor",
+                        "type": "string",
+                        "maxLength": 150
+                    },
+                    "zona": {
+                        "description": "Zona eleitoral",
+                        "type": "string",
+                        "maxLength": 30
+                    },
+                    "secao": {
+                        "description": "Seção eleitoral",
+                        "type": "string",
+                        "maxLength": 40
+                    },
+                    "certificado_reservista_numero": {
+                        "description": "Número do certificado de reservista",
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "certificado_reservista_serie": {
+                        "description": "Série do certificado de reservista",
+                        "type": "string",
+                        "maxLength": 100
+                    }
+                },
+                "type": "object"
+            },
+            "FuncionarioCadastrarValidation": {
+                "required": [
+                    "cpf",
+                    "nome",
+                    "sobrenome",
+                    "sexo",
+                    "telefone",
+                    "data_nascimento",
+                    "registro_geral",
+                    "orgao_emissor",
+                    "data_expedicao",
+                    "data_admissao",
+                    "id_situacao",
+                    "id_perfil",
+                    "id_escala",
+                    "id_tipo"
+                ],
+                "properties": {
+                    "cpf": {
+                        "description": "CPF do funcionário (somente números)",
+                        "type": "string",
+                        "maxLength": 11
+                    },
+                    "nome": {
+                        "description": "Nome do funcionário",
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "sobrenome": {
+                        "description": "Sobrenome do funcionário",
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "sexo": {
+                        "description": "Sexo do funcionário (M ou F)",
+                        "type": "string",
+                        "enum": [
+                            "M",
+                            "F"
+                        ]
+                    },
+                    "telefone": {
+                        "description": "Telefone do funcionário",
+                        "type": "string",
+                        "maxLength": 25
+                    },
+                    "data_nascimento": {
+                        "description": "Data de nascimento do funcionário (YYYY-MM-DD)",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "imagem": {
+                        "description": "Foto do funcionário (jpg, jpeg, png, máx. 5MB)",
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "registro_geral": {
+                        "description": "Número do RG do funcionário",
+                        "type": "string",
+                        "maxLength": 120
+                    },
+                    "orgao_emissor": {
+                        "description": "Órgão emissor do RG",
+                        "type": "string",
+                        "maxLength": 120
+                    },
+                    "data_expedicao": {
+                        "description": "Data de expedição do RG (YYYY-MM-DD)",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "data_admissao": {
+                        "description": "Data de admissão do funcionário (YYYY-MM-DD)",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "id_situacao": {
+                        "description": "ID da situação do funcionário",
+                        "type": "integer"
+                    },
+                    "id_perfil": {
+                        "description": "ID do perfil do funcionário",
+                        "type": "integer"
+                    },
+                    "id_escala": {
+                        "description": "ID da escala do funcionário",
+                        "type": "integer"
+                    },
+                    "id_tipo": {
+                        "description": "ID do tipo de quadro horário do funcionário",
+                        "type": "integer"
+                    },
+                    "certificado_reservista_numero": {
+                        "description": "Número do certificado de reservista (se aplicável)",
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "certificado_reservista_serie": {
+                        "description": "Série do certificado de reservista (se aplicável)",
+                        "type": "string",
+                        "maxLength": 100
+                    }
+                },
+                "type": "object"
+            },
             "AtualizarFuncionarioPerfilValidation": {
                 "properties": {
                     "cargo": {
