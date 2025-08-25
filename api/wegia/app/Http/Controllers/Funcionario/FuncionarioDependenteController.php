@@ -38,6 +38,9 @@ class FuncionarioDependenteController extends BaseController
         FuncionarioDependenteService $service
     )
     {
+        $this->middleware(['auth:sanctum', 'ability:visualizar-dependente'])->only(['index', 'buscarDependenteParentesco']);
+        $this->middleware(['auth:sanctum', 'ability:criar-dependente'])->only(['create', 'cadastrarDependenteParentesco']);
+        $this->middleware(['auth:sanctum', 'ability:deletar-dependente'])->only(['destroy']);
         $this->middleware('auth:sanctum')->except([]);
 
         $this->service = $service;
