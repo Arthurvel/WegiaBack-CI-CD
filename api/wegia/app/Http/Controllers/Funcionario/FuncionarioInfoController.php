@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Funcionario;
 
+use app\DTOs\Funcionario\Infos\FuncionarioInfosBuscarDTO;
+use app\DTOs\Funcionario\Infos\FuncionarioInfosCadastrarDTO;
+use app\DTOs\Funcionario\Infos\FuncionarioListaInfoDTO;
 use App\Http\Controllers\BaseController;
-use App\Services\FuncionarioService;
-use App\Validations\Funcionario\BuscarFuncionarioInfoValidation;
-use App\Validations\Funcionario\CriarListaInfoFuncionarioValidation;
-use App\Validations\Funcionario\CriarOutraInfoFuncionarioValidation;
+use app\Http\Resources\Funcionario\FuncionarioInfoResource;
+use app\Http\Resources\Funcionario\FuncionarioListaInfoResource;
+use app\Services\Funcionario\FuncionarioInfoService;
+use app\Validations\Funcionario\infos\FuncionarioInfosCadastrarValidation;
+use app\Validations\Funcionario\infos\FuncionarioListaInfoCadastrarValidation;
+use App\Validations\PaginacaoValidation;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Exception;
 
 /**
@@ -20,15 +24,18 @@ use Exception;
 class FuncionarioInfoController extends BaseController
 {
 
-    protected $funcionarioService;
+    protected FuncionarioInfoService $service;
 
     public function __construct(
-        FuncionarioService $funcionarioService
+        FuncionarioInfoService $service,
     )
     {
+        $this->middleware(['auth:sanctum', 'ability:visualizar-outras-informacoes-do-funcionario'])->only(['buscarInfosPorIdFuncionario', 'pegarListaInfo']);
+        $this->middleware(['auth:sanctum', 'ability:criar-outras-informacoes-do-funcionario'])->only(['create', 'cadastrarListaInfo']);
+        $this->middleware(['auth:sanctum', 'ability:deletar-outras-informacoes-do-funcionario'])->only(['destroy']);
         $this->middleware('auth:sanctum')->except([]);
 
-        $this->funcionarioService = $funcionarioService;
+        $this->service = $service;
     }
 
     /**
@@ -36,7 +43,7 @@ class FuncionarioInfoController extends BaseController
      *     path="/funcionario/{id_funcionario}/outra-info",
      *     summary="Busca todas as informações de um funcionario",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *      @OA\Parameter(
      *         name="id_funcionario",
      *         in="path",
@@ -84,21 +91,18 @@ class FuncionarioInfoController extends BaseController
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
      */
-    public function buscarInfosPorIdFuncionario(Request $request, int $id_funcionario) : JsonResponse
+    public function buscarInfosPorIdFuncionario(PaginacaoValidation $request, int $id_funcionario) : JsonResponse
     {
         try {
-            $this->validarRequest(
-                [
-                    ...$request->query(),
-                    "id_funcionario" => $id_funcionario
-                ],
-                BuscarFuncionarioInfoValidation::rules(),
-                BuscarFuncionarioInfoValidation::messages()
-            );
 
-            $info = $this->funcionarioService->buscarInfosPorIdFuncionario($id_funcionario, $request->query());
+            $validated = $request->validated();
 
-            return $this->sucessoResponse($info);
+            $dto = FuncionarioInfosBuscarDTO::fromArray($validated);
+            $dto->id_funcionario = $id_funcionario;
+
+            $info = $this->service->buscarInfosPorIdFuncionario($dto);
+
+            return $this->sucessoResponse(FuncionarioInfoResource::collection($info));
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
@@ -109,7 +113,7 @@ class FuncionarioInfoController extends BaseController
      *     path="/funcionario/{id_funcionario}/outra-info/{id_funcionario_lista_info}",
      *     summary="Cadastra um novo item na lista de informacoes",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *      @OA\Parameter(
      *         name="id_funcionario",
      *         in="path",
@@ -126,32 +130,27 @@ class FuncionarioInfoController extends BaseController
      *     ),
      *     @OA\RequestBody(
      *       required=true,
-     *       @OA\JsonContent(
-     *          required={"dado"},
-     *          @OA\Property(property="dado", type="string", maxLength=255, description="Dados a serem cadastrados")
-     *      )
+     *       @OA\JsonContent(ref="#/components/schemas/FuncionarioInfosCadastrarValidation")
      *     ),
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
      */
-    public function create(Request $request, int $id_funcionario, int $id_funcionario_lista_info) : JsonResponse
+    public function create(FuncionarioInfosCadastrarValidation $request, int $id_funcionario, int $id_funcionario_lista_info) : JsonResponse
     {
         try {
-            $this->validarRequest(
-                [
-                    ...$request->all(),
-                    "id_funcionario" => $id_funcionario,
-                    "id_funcionario_lista_info" => $id_funcionario_lista_info
-                ],
-                CriarOutraInfoFuncionarioValidation::rules(),
-                CriarOutraInfoFuncionarioValidation::messages()
-            );
+            $validated = $request->validated();
 
-            $info = $this->funcionarioService->cadastrarInfo($request->dado, $id_funcionario, $id_funcionario_lista_info);
+            $dto = FuncionarioInfosCadastrarDTO::fromArray([
+                ...$validated,
+                'funcionario_id_funcionario' => $id_funcionario,
+                'funcionario_listainfo_idfuncionario_listainfo' => $id_funcionario_lista_info
+            ]);
 
-            return $this->sucessoResponse($info);
+            $info = $this->service->criar($dto);
+
+            return $this->sucessoResponse($info, 201);
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
@@ -162,7 +161,7 @@ class FuncionarioInfoController extends BaseController
      *     path="/funcionario/outra-info/{id_funcionario_outrasinfo}",
      *     summary="Deletar um item na lista de informacoes",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *      @OA\Parameter(
      *         name="id_funcionario_outrasinfo",
      *         in="path",
@@ -178,9 +177,9 @@ class FuncionarioInfoController extends BaseController
     public function destroy(int $id_funcionario_outrasinfo) : JsonResponse
     {
         try {
-            $info = $this->funcionarioService->deletarInfo($id_funcionario_outrasinfo);
+            $this->service->deletar($id_funcionario_outrasinfo);
 
-            return $this->sucessoResponse($info);
+            return $this->sucessoResponse(true, 204);
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
@@ -191,7 +190,7 @@ class FuncionarioInfoController extends BaseController
      *     path="/funcionario/lista-info",
      *     summary="Busca todos os itens da lista de informacoes",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
@@ -200,9 +199,9 @@ class FuncionarioInfoController extends BaseController
     public function pegarListaInfo() : JsonResponse
     {
         try {
-            $listaInfo = $this->funcionarioService->pegarListaInfo();
+            $listaInfo = $this->service->pegarListaInfo();
 
-            return $this->sucessoResponse($listaInfo);
+            return $this->sucessoResponse(FuncionarioListaInfoResource::collection($listaInfo));
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
@@ -213,34 +212,29 @@ class FuncionarioInfoController extends BaseController
      *     path="/funcionario/lista-info",
      *     summary="Cadastra um novo item na lista de informacoes",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
      *       required=true,
-     *       @OA\JsonContent(
-     *          required={"descricao"},
-     *          @OA\Property(property="descricao", type="string", maxLength=255, description="Descricao único")
-     *      )
+     *       @OA\JsonContent(ref="#/components/schemas/FuncionarioListaInfoCadastrarValidation")
      *     ),
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
      */
-    public function cadastrarListaInfo(Request $request) : JsonResponse
+    public function cadastrarListaInfo(FuncionarioListaInfoCadastrarValidation $request) : JsonResponse
     {
         try {
-            $this->validarRequest(
-                $request->all(),
-                CriarListaInfoFuncionarioValidation::rules(),
-                CriarListaInfoFuncionarioValidation::messages()
-            );
+            $validated = $request->validated();
 
-            $listaCriada = $this->funcionarioService->cadastrarListaInfo($request->descricao);
+            $dto = FuncionarioListaInfoDTO::fromArray($validated);
 
-            return $this->sucessoResponse($listaCriada);
+            $listaCriada = $this->service->cadastrarListaInfo($dto);
+
+            return $this->sucessoResponse($listaCriada, 201);
         } catch (Exception $e) {
             return $this->errorResponse($e);
-        } 
+        }
     }
 
 }

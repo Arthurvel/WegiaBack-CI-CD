@@ -2,10 +2,21 @@
 
 namespace App\Http\Controllers\Funcionario;
 
+use app\DTOs\Funcionario\Documento\FuncionarioDocumentoBuscarDTO;
+use app\DTOs\Funcionario\Documento\FuncionarioDocumentoCadastrarDTO;
+use app\DTOs\Funcionario\Documento\FuncionarioDocumentoTipoCadastrarDTO;
+use App\DTOs\Funcionario\FuncionarioDocumentoDTO;
 use App\Http\Controllers\BaseController;
+use app\Http\Resources\Funcionario\FuncionarioDocumentoResource;
+use app\Http\Resources\Funcionario\FuncionarioDocumentoTipoResource;
+use App\Http\Resources\Paginacao\PaginacaoResource;
+use app\Services\Funcionario\FuncionarioDocumentoService;
 use App\Services\FuncionarioService;
 use App\Validations\Funcionario\CriarDocumentoFuncionarioValidation;
 use App\Validations\Funcionario\CriarDocumentoTipoFuncionarioValidation;
+use app\Validations\Funcionario\Documento\FuncionarioDocumentoTipoCadastrarValidation;
+use app\Validations\Funcionario\Documento\FuncionarioDocumentoValidation;
+use App\Validations\PaginacaoValidation;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -19,15 +30,18 @@ use Illuminate\Http\JsonResponse;
 class FuncionarioDocumentoController extends BaseController
 {
 
-    protected $funcionarioService;
+    protected FuncionarioDocumentoService $service;
 
     public function __construct(
-        FuncionarioService $funcionarioService
+        FuncionarioDocumentoService $service
     )
     {
+        $this->middleware(['auth:sanctum', 'ability:cadastrar-arquivo-do-funcionario'])->only(['adicionarDocumento', 'cadastrarDocumentoTipo']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-arquivo-do-funcionario'])->only(['pegarDocumentosDeUmFuncionario', 'buscarDocumentoTipo']);
+        $this->middleware(['auth:sanctum', 'ability:deletar-arquivo-do-funcionario'])->only(['deletarDocumento', 'buscarDocumentoTipo']);
         $this->middleware('auth:sanctum')->except([]);
 
-        $this->funcionarioService = $funcionarioService;
+        $this->service = $service;
     }
 
     /**
@@ -35,7 +49,7 @@ class FuncionarioDocumentoController extends BaseController
      *     path="/funcionario/{id_funcionario}/documento",
      *     summary="Adicionar um documento para um funcionário",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id_funcionario",
      *         in="path",
@@ -47,43 +61,35 @@ class FuncionarioDocumentoController extends BaseController
      *         required=true,
      *         description="Dados do documento a ser enviado",
      *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 @OA\Property(property="arquivo", type="string", format="binary", description="Arquivo a ser enviado (PDF, JPG, PNG)"),
-     *                 @OA\Property(property="id_docfuncional", type="integer", nullable=true, description="ID do documento funcional")
-     *             )
-     *         )
+     *               mediaType="multipart/form-data",
+     *               @OA\Schema(ref="#/components/schemas/FuncionarioDocumentoValidation")
+     *           )
      *     ),
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
      */
-    public function adicionarDocumento(Request $request, int $id_funcionario) : JsonResponse
+    public function adicionarDocumento(FuncionarioDocumentoValidation $request, int $id_funcionario) : JsonResponse
     {
         try {
-            $request->merge(['id_funcionario' => $id_funcionario]);
 
-            $this->validarRequest(
-                [
-                    "arquivo" => $request->file('arquivo'),
-                    ...$request->only(['id_funcionario', 'id_docfuncional'])
-                ],
-                CriarDocumentoFuncionarioValidation::rules(),
-                CriarDocumentoFuncionarioValidation::messages()
-            );
+            $validated = $request->validated();
+            $foto = $request->file('arquivo') ?? null;
 
-            $resultado = $this->funcionarioService->cadastrarDocumento(
-                $request->file('arquivo'),
-                $id_funcionario,
-                $request->id_docfuncional
-            );
+            $dto = FuncionarioDocumentoCadastrarDTO::fromArray([
+                ...$validated,
+                'arquivo' => $foto,
+                'id_funcionario' => $id_funcionario
+            ]);
 
-            return $this->sucessoResponse($resultado);
-            
+            $resultado = $this->service->cadastrarDocumento($dto);
+
+            return $this->sucessoResponse($resultado, 201);
+
         } catch (Exception $e) {
             return $this->errorResponse($e);
-        } 
+        }
     }
 
     /**
@@ -91,7 +97,7 @@ class FuncionarioDocumentoController extends BaseController
      *     path="/funcionario/{id_funcionario}/documento",
      *     summary="Pegar os documentos do funcionário",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id_funcionario",
      *         in="path",
@@ -139,15 +145,22 @@ class FuncionarioDocumentoController extends BaseController
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
     */
-    public function pegarDocumentosDeUmFuncionario(Request $request, int $id_funcionario) : JsonResponse
+    public function pegarDocumentosDeUmFuncionario(PaginacaoValidation $request, int $id_funcionario) : JsonResponse
     {
         try {
-            $documentos = $this->funcionarioService->pegarDocumentos($request->query(), $id_funcionario);
+            $validated = $request->validated();
 
-            return  $this->sucessoResponse($documentos);
+            $dto = FuncionarioDocumentoBuscarDTO::fromArray([
+                ...$validated,
+                'id_funcionario' => $id_funcionario
+            ]);
+
+            $documentos = $this->service->pegarDocumentos($dto);
+
+            return  $this->sucessoResponse(new PaginacaoResource($documentos, FuncionarioDocumentoResource::class));
         } catch (Exception $e) {
-            return $this->errorResponse(null,500,$e->getMessage());
-        } 
+            return $this->errorResponse($e);
+        }
     }
 
     /**
@@ -155,7 +168,7 @@ class FuncionarioDocumentoController extends BaseController
      *     path="/funcionario/documento/{id_documento}",
      *     summary="Deletar o documentos do funcionário",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id_documento",
      *         in="path",
@@ -171,12 +184,12 @@ class FuncionarioDocumentoController extends BaseController
     public function deletarDocumento(int $id_documento) : JsonResponse
     {
         try {
-            $documentoDeletado = $this->funcionarioService->deletarDocumento($id_documento);
+           $this->service->deletar($id_documento);
 
-            return  $this->sucessoResponse($documentoDeletado);
+            return  $this->sucessoResponse(true, 204);
         } catch (Exception $e) {
             return $this->errorResponse($e);
-        } 
+        }
     }
 
     /**
@@ -184,7 +197,7 @@ class FuncionarioDocumentoController extends BaseController
      *     path="/funcionario/documento/tipo",
      *     summary="Pegar os tipos de documentos do funcionário",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
@@ -193,12 +206,12 @@ class FuncionarioDocumentoController extends BaseController
     public function buscarDocumentoTipo() : JsonResponse
     {
         try {
-            $tipo = $this->funcionarioService->buscarDocumentoTipo();
+            $tipo = $this->service->buscarDocumentoTipo();
 
-            return  $this->sucessoResponse($tipo);
+            return  $this->sucessoResponse(FuncionarioDocumentoTipoResource::collection($tipo));
         } catch (Exception $e) {
             return $this->errorResponse($e);
-        } 
+        }
     }
 
     /**
@@ -206,36 +219,30 @@ class FuncionarioDocumentoController extends BaseController
      *     path="/funcionario/documento/tipo",
      *     summary="Adicionar um novo tipo de documento",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
      *         required=true,
      *         description="Dados do documento a ser enviado",
-     *         @OA\JsonContent(
-     *             required={"nome_docfuncional"},
-     *             @OA\Property(property="nome_docfuncional", type="string", description="Nome do documento"),
-     *             @OA\Property(property="descricao_docfuncional", type="string", nullable=true, description="Descricao do documento")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/FuncionarioDocumentoTipoCadastrarValidation")
      *     ),
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
      */
-    public function cadastrarDocumentoTipo(Request $request) : JsonResponse
+    public function cadastrarDocumentoTipo(FuncionarioDocumentoTipoCadastrarValidation $request) : JsonResponse
     {
         try {
-            $this->validarRequest(
-                $request->all(),
-                CriarDocumentoTipoFuncionarioValidation::rules(),
-                CriarDocumentoTipoFuncionarioValidation::messages()
-            );
+            $validated = $request->validated();
 
-            $tipo = $this->funcionarioService->cadastrarDocumentoTipo($request->all());
+            $dto = FuncionarioDocumentoTipoCadastrarDTO::fromArray($validated);
 
-            return  $this->sucessoResponse($tipo);
+            $tipo = $this->service->cadastrarDocumentoTipo($dto);
+
+            return  $this->sucessoResponse($tipo, 201);
         } catch (Exception $e) {
             return $this->errorResponse($e);
-        } 
+        }
     }
 
 }

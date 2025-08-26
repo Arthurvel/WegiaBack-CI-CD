@@ -1772,19 +1772,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "properties": {
-                                    "arquivo": {
-                                        "description": "Arquivo a ser enviado (PDF, JPG, PNG)",
-                                        "type": "string",
-                                        "format": "binary"
-                                    },
-                                    "id_docfuncional": {
-                                        "description": "ID do documento funcional",
-                                        "type": "integer",
-                                        "nullable": true
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/FuncionarioDocumentoValidation"
                             }
                         }
                     }
@@ -1924,21 +1912,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "nome_docfuncional"
-                                ],
-                                "properties": {
-                                    "nome_docfuncional": {
-                                        "description": "Nome do documento",
-                                        "type": "string"
-                                    },
-                                    "descricao_docfuncional": {
-                                        "description": "Descricao do documento",
-                                        "type": "string",
-                                        "nullable": true
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/FuncionarioDocumentoTipoCadastrarValidation"
                             }
                         }
                     }
@@ -2107,17 +2081,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "dado"
-                                ],
-                                "properties": {
-                                    "dado": {
-                                        "description": "Dados a serem cadastrados",
-                                        "type": "string",
-                                        "maxLength": 255
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/FuncionarioInfosCadastrarValidation"
                             }
                         }
                     }
@@ -2256,17 +2220,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "descricao"
-                                ],
-                                "properties": {
-                                    "descricao": {
-                                        "description": "Descricao único",
-                                        "type": "string",
-                                        "maxLength": 255
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/FuncionarioListaInfoCadastrarValidation"
                             }
                         }
                     }
@@ -2376,79 +2330,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "id_escala",
-                                    "id_tipo"
-                                ],
-                                "properties": {
-                                    "id_escala": {
-                                        "description": "ID da escala",
-                                        "type": "integer",
-                                        "example": 2
-                                    },
-                                    "id_tipo": {
-                                        "description": "ID do tipo de quadro horário",
-                                        "type": "integer",
-                                        "example": 3
-                                    },
-                                    "carga_horaria": {
-                                        "description": "Carga horária do funcionário",
-                                        "type": "string",
-                                        "maxLength": 200,
-                                        "example": "08:00",
-                                        "nullable": true
-                                    },
-                                    "entrada1": {
-                                        "description": "Primeira entrada do funcionário",
-                                        "type": "string",
-                                        "maxLength": 200,
-                                        "example": "09:00",
-                                        "nullable": true
-                                    },
-                                    "saida1": {
-                                        "description": "Primeira saída do funcionário",
-                                        "type": "string",
-                                        "maxLength": 200,
-                                        "example": "12:00",
-                                        "nullable": true
-                                    },
-                                    "entrada2": {
-                                        "description": "Segunda entrada do funcionário",
-                                        "type": "string",
-                                        "maxLength": 200,
-                                        "example": "13:00",
-                                        "nullable": true
-                                    },
-                                    "saida2": {
-                                        "description": "Segunda saída do funcionário",
-                                        "type": "string",
-                                        "maxLength": 200,
-                                        "example": "17:00",
-                                        "nullable": true
-                                    },
-                                    "total": {
-                                        "description": "Total de horas trabalhadas",
-                                        "type": "string",
-                                        "maxLength": 200,
-                                        "example": "08:00",
-                                        "nullable": true
-                                    },
-                                    "dias_trabalhados": {
-                                        "description": "Dias trabalhados pelo funcionário",
-                                        "type": "string",
-                                        "maxLength": 200,
-                                        "example": "5",
-                                        "nullable": true
-                                    },
-                                    "folga": {
-                                        "description": "Dias de folga do funcionário",
-                                        "type": "string",
-                                        "maxLength": 200,
-                                        "example": "2",
-                                        "nullable": true
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/FuncionarioQuadroHorarioCadastrarValidation"
                             }
                         }
                     }
@@ -2677,37 +2559,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "funcionario_id_funcionario",
-                                    "funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo",
-                                    "valor"
-                                ],
-                                "properties": {
-                                    "funcionario_id_funcionario": {
-                                        "description": "id do funcionario",
-                                        "type": "integer"
-                                    },
-                                    "funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo": {
-                                        "description": "id do tipo de remuneracao",
-                                        "type": "integer"
-                                    },
-                                    "valor": {
-                                        "description": "valor da remuneracao",
-                                        "type": "number",
-                                        "format": "float"
-                                    },
-                                    "inicio": {
-                                        "description": "inicio da remuneracao",
-                                        "type": "string",
-                                        "format": "date"
-                                    },
-                                    "fim": {
-                                        "description": "fim da remuneracao",
-                                        "type": "string",
-                                        "format": "date"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/FuncionarioRemuneracaoCadastrarValidation"
                             }
                         }
                     }
@@ -2897,17 +2749,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "descricao"
-                                ],
-                                "properties": {
-                                    "descricao": {
-                                        "description": "Descricao do tipo",
-                                        "type": "string",
-                                        "maxLength": 255
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/FuncionarioRemuneracaoTipoCadastrarValidation"
                             }
                         }
                     }
@@ -3996,6 +3838,38 @@
                 },
                 "type": "object"
             },
+            "FuncionarioDocumentoTipoCadastrarValidation": {
+                "required": [
+                    "nome_docfuncional"
+                ],
+                "properties": {
+                    "nome_docfuncional": {
+                        "description": "Nome do documento",
+                        "type": "string"
+                    },
+                    "descricao_docfuncional": {
+                        "description": "Descricao do documento",
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "FuncionarioDocumentoValidation": {
+                "properties": {
+                    "arquivo": {
+                        "description": "Arquivo a ser enviado (PDF, JPG, PNG)",
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "id_docfuncional": {
+                        "description": "ID do documento funcional",
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
             "FuncionarioAtualizarValidation": {
                 "properties": {
                     "id_perfil": {
@@ -4205,6 +4079,150 @@
                             2,
                             3
                         ]
+                    }
+                },
+                "type": "object"
+            },
+            "FuncionarioQuadroHorarioCadastrarValidation": {
+                "required": [
+                    "id_escala",
+                    "id_tipo"
+                ],
+                "properties": {
+                    "id_escala": {
+                        "description": "ID da escala",
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "id_tipo": {
+                        "description": "ID do tipo de quadro horário",
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "carga_horaria": {
+                        "description": "Carga horária do funcionário",
+                        "type": "string",
+                        "maxLength": 200,
+                        "example": "08:00",
+                        "nullable": true
+                    },
+                    "entrada1": {
+                        "description": "Primeira entrada do funcionário",
+                        "type": "string",
+                        "maxLength": 200,
+                        "example": "09:00",
+                        "nullable": true
+                    },
+                    "saida1": {
+                        "description": "Primeira saída do funcionário",
+                        "type": "string",
+                        "maxLength": 200,
+                        "example": "12:00",
+                        "nullable": true
+                    },
+                    "entrada2": {
+                        "description": "Segunda entrada do funcionário",
+                        "type": "string",
+                        "maxLength": 200,
+                        "example": "13:00",
+                        "nullable": true
+                    },
+                    "saida2": {
+                        "description": "Segunda saída do funcionário",
+                        "type": "string",
+                        "maxLength": 200,
+                        "example": "17:00",
+                        "nullable": true
+                    },
+                    "total": {
+                        "description": "Total de horas trabalhadas",
+                        "type": "string",
+                        "maxLength": 200,
+                        "example": "08:00",
+                        "nullable": true
+                    },
+                    "dias_trabalhados": {
+                        "description": "Dias trabalhados pelo funcionário",
+                        "type": "string",
+                        "maxLength": 200,
+                        "example": "5",
+                        "nullable": true
+                    },
+                    "folga": {
+                        "description": "Dias de folga do funcionário",
+                        "type": "string",
+                        "maxLength": 200,
+                        "example": "2",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "FuncionarioRemuneracaoCadastrarValidation": {
+                "required": [
+                    "funcionario_id_funcionario",
+                    "funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo",
+                    "valor"
+                ],
+                "properties": {
+                    "funcionario_id_funcionario": {
+                        "description": "id do funcionario",
+                        "type": "integer"
+                    },
+                    "funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo": {
+                        "description": "id do tipo de remuneracao",
+                        "type": "integer"
+                    },
+                    "valor": {
+                        "description": "valor da remuneracao",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "inicio": {
+                        "description": "inicio da remuneracao",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "fim": {
+                        "description": "fim da remuneracao",
+                        "type": "string",
+                        "format": "date"
+                    }
+                },
+                "type": "object"
+            },
+            "FuncionarioRemuneracaoTipoCadastrarValidation": {
+                "required": [
+                    "descricao"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "Descricao do tipo",
+                        "type": "string",
+                        "maxLength": 255
+                    }
+                },
+                "type": "object"
+            },
+            "FuncionarioInfosCadastrarValidation": {
+                "properties": {
+                    "dado": {
+                        "description": "Dados a serem cadastrados",
+                        "type": "string",
+                        "maxLength": 255
+                    }
+                },
+                "type": "object"
+            },
+            "FuncionarioListaInfoCadastrarValidation": {
+                "required": [
+                    "descricao"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "Descricao único",
+                        "type": "string",
+                        "maxLength": 255
                     }
                 },
                 "type": "object"

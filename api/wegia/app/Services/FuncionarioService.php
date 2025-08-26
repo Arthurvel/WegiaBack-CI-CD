@@ -103,87 +103,6 @@ class FuncionarioService extends BaseService
         return $this->repository->cadastrarDocumento($FuncionarioDocumentoDTO);
     }
 
-    public function pegarDocumentos(array $parametros = [], $id_funcionario = null) : PaginacaoDTO
-    {
-        $funcionarioDocs = $this->repository->pegarDocumentos($parametros, $id_funcionario);
-
-        $itens = collect($funcionarioDocs->items())->map(function ($documento) {
-            return FuncionarioDocumentoDTO::fromArray($documento->toArray())->toArray();
-        })->toArray();
-
-        return new PaginacaoDTO(
-            $itens,
-            $funcionarioDocs->currentPage(),
-            $funcionarioDocs->lastPage(),
-            $funcionarioDocs->total(),
-            $funcionarioDocs->perPage()
-        );
-    }
-
-    public function deletarDocumento(int $id_documento) : bool
-    {
-        return $this->repository->deletarDocumento($id_documento);
-    }
-
-    public function buscarDocumentoTipo() : Collection
-    {
-        return $this->repository->buscarDocumentoTipo();
-    }
-
-    public function cadastrarDocumentoTipo($dados)
-    {
-        $dto = CadastrarDocumentoTipoDTO::fromArray($dados);
-
-        return $this->repository->cadastrarDocumentoTipo($dto);
-    }
-
-    public function buscarInfosPorIdFuncionario(int $id_funcionario, array $parametros = []) : PaginacaoDTO
-    {
-        $infos =  $this->repository->buscarInfosPorIdFuncionario($id_funcionario, $parametros);
-
-        $itens = collect($infos->items())->map(function ($info) {
-            return FuncionarioOutrasInfoDTO::fromArray($info->toArray());
-        })->toArray();
-
-        return new PaginacaoDTO(
-            $itens,
-            $infos->currentPage(),
-            $infos->lastPage(),
-            $infos->total(),
-            $infos->perPage()
-        );
-    }
-
-    public function cadastrarInfo(string $dado, int $id_funcionario, int $id_funcionario_lista_info) : FuncionarioOutrasInfo
-    {
-        return $this->repository->cadastrarInfo($dado, $id_funcionario, $id_funcionario_lista_info);
-    }
-
-    public function deletarInfo(int $id_funcionario_outrasinfo) : bool
-    {
-        return $this->repository->deletarInfo($id_funcionario_outrasinfo);
-    }
-
-    public function pegarListaInfo() : Collection
-    {
-        return $this->repository->pegarListaInfo();
-    }
-
-    public function cadastrarListaInfo(string $descricao) : FuncionarioListaInfo
-    {
-        return $this->repository->cadastrarListaInfo($descricao);
-    }
-
-    public function pegarRemuneracaoTipo() : Collection
-    {
-        return $this->repository->pegarRemuneracaoTipo();
-    }
-
-    public function cadastrarRemuneracaoTipo(string $descricao) : FuncionarioRemuneracaoTipo
-    {
-        return $this->repository->cadastrarRemuneracaoTipo($descricao);
-    }
-
     public function buscarRemuneracaoPorFuncionario(int $id_funcionario, $parametros = []) : PaginacaoDTO
     {
         $remuneracoes = $this->repository->buscarRemuneracaoPorFuncionario($id_funcionario,$parametros);
@@ -201,48 +120,6 @@ class FuncionarioService extends BaseService
         );
     }
 
-    public function cadastrarRemuneracao(array $dados) : FuncionarioRemuneracao
-    {
-        $remuneracao = CadastrarRemuneracaoDTO::fromArray($dados);
-
-        return $this->repository->cadastrarRemuneracao($remuneracao);
-    }
-
-    public function deletarRemuneracao(int $id_remuneracao) : bool
-    {
-        return $this->repository->deletarRemuneracao($id_remuneracao);
-    }
-
-    public function buscarRemuneracaoTotalPorFuncionario(int $id_funcionario)
-    {
-        return $this->repository->buscarRemuneracaoTotalPorFuncionario($id_funcionario);
-    }
-
-    public function cadastrarQuadroHorario(array $dados, int $id_funcionario) : FuncionarioQuadroHorario
-    {
-        $dados['id_funcionario'] = $id_funcionario;
-
-        $quadroHorario = CadastrarQuadroHorarioDTO::fromArray($dados);
-
-        return $this->repository->cadastrarQuadroHorario($quadroHorario);
-    }
-
-    public function buscarQuadroHorarioPorFuncionario(int $id_funcionario) : FuncionarioQuadroHorarioDTO
-    {
-        $quadroHorario = $this->repository->buscarQuadroHorarioPorFuncionario($id_funcionario);
-
-        return FuncionarioQuadroHorarioDTO::fromArray($quadroHorario->toArray());
-    }
-
-    public function buscarEscalaQuadroHorario() : Collection
-    {
-        return $this->repository->buscarEscalaQuadroHorario();
-    }
-
-    public function buscarTipoQuadroHorario() : Collection
-    {
-        return $this->repository->buscarTipoQuadroHorario();
-    }
 
     public function buscarDependentesPorFuncionario(array $dados, int $id_funcionario) : PaginacaoDTO
     {

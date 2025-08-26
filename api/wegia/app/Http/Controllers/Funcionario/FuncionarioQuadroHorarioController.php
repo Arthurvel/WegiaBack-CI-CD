@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Funcionario;
 
+use app\DTOs\Funcionario\QuadroHorario\FuncionarioQuadroHorarioCadastrarDTO;
 use App\Http\Controllers\BaseController;
+use app\Http\Resources\Funcionario\FuncionarioQuadroHorarioEscalaResource;
+use app\Http\Resources\Funcionario\FuncionarioQuadroHorarioResource;
+use app\Http\Resources\Funcionario\FuncionarioQuadroHorarioTipoResource;
+use app\Services\Funcionario\FuncionarioQuadroHorarioService;
 use App\Services\FuncionarioService;
-use App\Validations\Funcionario\CriarQuadroHorarioFuncionarioValidation;
-use App\Validations\Funcionario\IdFuncionarioValidation;
+use app\Validations\Funcionario\QuadroHorario\FuncionarioQuadroHorarioCadastrarValidation;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Exception;
+
 /**
  * @OA\Tag(
  *     name="Funcionario",
@@ -18,14 +22,19 @@ use Exception;
 class FuncionarioQuadroHorarioController extends BaseController
 {
 
-    protected $funcionarioService;
+    protected FuncionarioQuadroHorarioService $service;
+    protected FuncionarioService $funcionarioService;
 
     public function __construct(
+        FuncionarioQuadroHorarioService $service,
         FuncionarioService $funcionarioService
     )
     {
+        $this->middleware(['auth:sanctum', 'ability:visualizar-funcionario-quadro-horario'])->only(['buscarQuadroHorarioPorFuncionario']);
+        $this->middleware(['auth:sanctum', 'ability:criar-funcionario-quadro-horario'])->only(['create', 'buscarEscalaQuadroHorario', 'buscarTipoQuadroHorario']);
         $this->middleware('auth:sanctum')->except([]);
 
+        $this->service = $service;
         $this->funcionarioService = $funcionarioService;
     }
 
@@ -50,15 +59,9 @@ class FuncionarioQuadroHorarioController extends BaseController
     public function buscarQuadroHorarioPorFuncionario(int $id_funcionario) : JsonResponse
     {
         try {
-            $this->validarRequest(
-                ["id_funcionario" => $id_funcionario],
-                IdFuncionarioValidation::rules(),
-                IdFuncionarioValidation::messages()
-            );
+            $quadroHorario = $this->service->buscarQuadroHorarioPorFuncionario($id_funcionario);
 
-            $remuneracao = $this->funcionarioService->buscarQuadroHorarioPorFuncionario($id_funcionario);
-
-            return $this->sucessoResponse($remuneracao->toArray());
+            return $this->sucessoResponse(new FuncionarioQuadroHorarioResource($quadroHorario));
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
@@ -78,43 +81,29 @@ class FuncionarioQuadroHorarioController extends BaseController
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"id_escala", "id_tipo"},
-     *             @OA\Property(property="id_escala", type="integer", description="ID da escala", example=2),
-     *             @OA\Property(property="id_tipo", type="integer", description="ID do tipo de quadro horário", example=3),
-     *             @OA\Property(property="carga_horaria", type="string", maxLength=200, nullable=true, description="Carga horária do funcionário", example="08:00"),
-     *             @OA\Property(property="entrada1", type="string", maxLength=200, nullable=true, description="Primeira entrada do funcionário", example="09:00"),
-     *             @OA\Property(property="saida1", type="string", maxLength=200, nullable=true, description="Primeira saída do funcionário", example="12:00"),
-     *             @OA\Property(property="entrada2", type="string", maxLength=200, nullable=true, description="Segunda entrada do funcionário", example="13:00"),
-     *             @OA\Property(property="saida2", type="string", maxLength=200, nullable=true, description="Segunda saída do funcionário", example="17:00"),
-     *             @OA\Property(property="total", type="string", maxLength=200, nullable=true, description="Total de horas trabalhadas", example="08:00"),
-     *             @OA\Property(property="dias_trabalhados", type="string", maxLength=200, nullable=true, description="Dias trabalhados pelo funcionário", example="5"),
-     *             @OA\Property(property="folga", type="string", maxLength=200, nullable=true, description="Dias de folga do funcionário", example="2")
-     *         )
-     *     ),
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/FuncionarioQuadroHorarioCadastrarValidation")
+     *      ),
      *     @OA\Response(response="200", description="Cadastro realizado com sucesso", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
     */
-    public function create(Request $request, int $id_funcionario) : JsonResponse
+    public function create(FuncionarioQuadroHorarioCadastrarValidation $request, int $id_funcionario) : JsonResponse
     {
         try {
-            $this->validarRequest(
-                [
-                    "id_funcionario" => $id_funcionario,
-                    ...$request->all()
-                ],
-                CriarQuadroHorarioFuncionarioValidation::rules(),
-                CriarQuadroHorarioFuncionarioValidation::messages()
-            );
+            $validated = $request->validated();
 
-            $remuneracaoTipo = $this->funcionarioService->cadastrarQuadroHorario($request->all(), $id_funcionario);
+            $dto = FuncionarioQuadroHorarioCadastrarDTO::fromArray([
+                ...$validated,
+                'id_funcionario' => $id_funcionario
+            ]);
 
-            return $this->sucessoResponse($remuneracaoTipo);
+            $remuneracaoTipo = $this->service->cadastrarQuadroHorario($dto);
+
+            return $this->sucessoResponse($remuneracaoTipo, 201);
         } catch (Exception $e) {
-            return $this->errorResponse(null,500,$e->getMessage());
+            return $this->errorResponse($e);
         }
     }
 
@@ -132,15 +121,9 @@ class FuncionarioQuadroHorarioController extends BaseController
     public function buscarEscalaQuadroHorario() : JsonResponse
     {
         try {
-            // $this->validarRequest(
-            //     $request->all(),
-            //     CriarRemuneracaoTipoFuncionarioValidation::rules(),
-            //     CriarRemuneracaoTipoFuncionarioValidation::messages()
-            // );
+            $escala = $this->service->buscarEscalaQuadroHorario();
 
-            $escala = $this->funcionarioService->buscarEscalaQuadroHorario();
-
-            return $this->sucessoResponse($escala);
+            return $this->sucessoResponse(FuncionarioQuadroHorarioEscalaResource::collection($escala));
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
@@ -160,9 +143,9 @@ class FuncionarioQuadroHorarioController extends BaseController
     public function buscarTipoQuadroHorario() : JsonResponse
     {
         try {
-            $tipo = $this->funcionarioService->buscarTipoQuadroHorario();
+            $tipo = $this->service->buscarTipoQuadroHorario();
 
-            return $this->sucessoResponse($tipo);
+            return $this->sucessoResponse(FuncionarioQuadroHorarioTipoResource::collection($tipo));
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }

@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Funcionario;
 
+use app\DTOs\Funcionario\Remuneracao\FuncionarioRemuneracaoBuscarDTO;
+use app\DTOs\Funcionario\Remuneracao\FuncionarioRemuneracaoCadastrarDTO;
+use app\DTOs\Funcionario\Remuneracao\FuncionarioRemuneracaoTipoCadastrarDTO;
 use App\Http\Controllers\BaseController;
-use App\Services\FuncionarioService;
-use App\Validations\Funcionario\BuscarRemuneracaoPorFuncionarioValidation;
-use App\Validations\Funcionario\CriarRemuneracaoFuncionarioValidation;
-use App\Validations\Funcionario\CriarRemuneracaoTipoFuncionarioValidation;
+use app\Http\Resources\Funcionario\FuncionarioRemuneracaoResource;
+use app\Http\Resources\Funcionario\FuncionarioRemuneracaoTipoResource;
+use App\Http\Resources\Paginacao\PaginacaoResource;
+use app\Services\Funcionario\FuncionarioRemuneracaoService;
+use app\Validations\Funcionario\Remuneracao\FuncionarioRemuneracaoBuscarValidation;
+use app\Validations\Funcionario\Remuneracao\FuncionarioRemuneracaoCadastrarValidation;
+use app\Validations\Funcionario\Remuneracao\FuncionarioRemuneracaoTipoCadastrarValidation;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Exception;
 
 /**
@@ -20,15 +25,18 @@ use Exception;
 class FuncionarioRemuneracaoController extends BaseController
 {
 
-    protected $funcionarioService;
+    protected  FuncionarioRemuneracaoService $service;
 
     public function __construct(
-        FuncionarioService $funcionarioService
+        FuncionarioRemuneracaoService $service
     )
     {
+        $this->middleware(['auth:sanctum', 'ability:visualizar-remuneracao-do-funcionario'])->only(['buscarRemuneracaoPorFuncionario', 'buscarRemuneracaoTotalPorFuncionario', 'pegarRemuneracaoTipo']);
+        $this->middleware(['auth:sanctum', 'ability:criar-remuneracao-do-funcionario'])->only(['create', 'cadastrarRemuneracaoTipo']);
+        $this->middleware(['auth:sanctum', 'ability:deletar-remuneracao-do-funcionario'])->only(['destroy']);
         $this->middleware('auth:sanctum')->except([]);
 
-        $this->funcionarioService = $funcionarioService;
+        $this->service = $service;
     }
 
     /**
@@ -83,22 +91,20 @@ class FuncionarioRemuneracaoController extends BaseController
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
-    */    
-    public function buscarRemuneracaoPorFuncionario(Request $request, int $id_funcionario) : JsonResponse
+    */
+    public function buscarRemuneracaoPorFuncionario(FuncionarioRemuneracaoBuscarValidation $request, int $id_funcionario) : JsonResponse
     {
         try {
-            $this->validarRequest(
-                [
-                    "id_funcionario" => $id_funcionario,
-                    ...$request->query()
-                ],
-                BuscarRemuneracaoPorFuncionarioValidation::rules(),
-                BuscarRemuneracaoPorFuncionarioValidation::messages()
-            );
+            $validated = $request->validated();
 
-            $remuneracoes = $this->funcionarioService->buscarRemuneracaoPorFuncionario($id_funcionario, $request->query());
+            $dto = FuncionarioRemuneracaoBuscarDTO::fromArray([
+                ...$validated,
+                'id_funcionario' => $id_funcionario
+            ]);
 
-            return $this->sucessoResponse($remuneracoes);
+            $remuneracoes = $this->service->buscarRemuneracaoPorFuncionario($dto);
+
+            return $this->sucessoResponse( new PaginacaoResource($remuneracoes, FuncionarioRemuneracaoResource::class) );
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
@@ -109,35 +115,26 @@ class FuncionarioRemuneracaoController extends BaseController
      *     path="/funcionario/remuneracao",
      *     summary="Cadastra uma nova remuneracao",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
      *       required=true,
-     *       @OA\JsonContent(
-     *          required={"funcionario_id_funcionario", "funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo", "valor"},
-     *          @OA\Property(property="funcionario_id_funcionario", type="integer", description="id do funcionario"),
-     *          @OA\Property(property="funcionario_remuneracao_tipo_idfuncionario_remuneracao_tipo", type="integer", description="id do tipo de remuneracao"),
-     *          @OA\Property(property="valor", type="float", description="valor da remuneracao"),
-     *          @OA\Property(property="inicio", type="string", format="date", description="inicio da remuneracao"),
-     *          @OA\Property(property="fim", type="string", format="date", description="fim da remuneracao")
-     *      )
+     *       @OA\JsonContent(ref="#/components/schemas/FuncionarioRemuneracaoCadastrarValidation")
      *     ),
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
     */
-    public function create(Request $request) : JsonResponse
+    public function create(FuncionarioRemuneracaoCadastrarValidation $request) : JsonResponse
     {
         try {
-            $this->validarRequest(
-                $request->all(),
-                CriarRemuneracaoFuncionarioValidation::rules(),
-                CriarRemuneracaoFuncionarioValidation::messages()
-            );
+            $validated = $request->validated();
 
-            $remuneracao = $this->funcionarioService->cadastrarRemuneracao($request->all());
+            $dto = FuncionarioRemuneracaoCadastrarDTO::fromArray($validated);
 
-            return $this->sucessoResponse($remuneracao);
+            $remuneracao = $this->service->criar($dto);
+
+            return $this->sucessoResponse($remuneracao, 201);
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
@@ -148,7 +145,7 @@ class FuncionarioRemuneracaoController extends BaseController
      *     path="/funcionario/remuneracao/{id_remuneracao}",
      *     summary="Deletar uma remuneracao",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *      @OA\Parameter(
      *         name="id_remuneracao",
      *         in="path",
@@ -164,9 +161,9 @@ class FuncionarioRemuneracaoController extends BaseController
     public function destroy(int $id_remuneracao) : JsonResponse
     {
         try {
-            $deletado = $this->funcionarioService->deletarRemuneracao($id_remuneracao);
+            $this->service->deletar($id_remuneracao);
 
-            return $this->sucessoResponse($deletado);
+            return $this->sucessoResponse(true, 204);
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
@@ -189,11 +186,11 @@ class FuncionarioRemuneracaoController extends BaseController
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
-    */   
+    */
     public function buscarRemuneracaoTotalPorFuncionario(int $id_funcionario) : JsonResponse
     {
         try {
-            $total = $this->funcionarioService->buscarRemuneracaoTotalPorFuncionario($id_funcionario);
+            $total = $this->service->buscarRemuneracaoTotalPorFuncionario($id_funcionario);
 
             return $this->sucessoResponse($total);
         } catch (Exception $e) {
@@ -206,7 +203,7 @@ class FuncionarioRemuneracaoController extends BaseController
      *     path="/funcionario/remuneracao/tipo",
      *     summary="Busca os tipos de remuneração",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
@@ -215,12 +212,12 @@ class FuncionarioRemuneracaoController extends BaseController
     public function pegarRemuneracaoTipo() : JsonResponse
     {
         try {
-            $tipos = $this->funcionarioService->pegarRemuneracaoTipo();
+            $tipos = $this->service->pegarRemuneracaoTipo();
 
-            return $this->sucessoResponse($tipos);
+            return $this->sucessoResponse(FuncionarioRemuneracaoTipoResource::collection($tipos));
         } catch (Exception $e) {
             return $this->errorResponse($e);
-        } 
+        }
     }
 
     /**
@@ -228,29 +225,24 @@ class FuncionarioRemuneracaoController extends BaseController
      *     path="/funcionario/remuneracao/tipo",
      *     summary="Cadastra um novo tipo de remuneracao",
      *     tags={"Funcionario"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
      *       required=true,
-     *       @OA\JsonContent(
-     *          required={"descricao"},
-     *          @OA\Property(property="descricao", type="string", maxLength=255, description="Descricao do tipo")
-     *      )
+     *       @OA\JsonContent(ref="#/components/schemas/FuncionarioRemuneracaoTipoCadastrarValidation")
      *     ),
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
      */
-    public function cadastrarRemuneracaoTipo(Request $request) : JsonResponse
+    public function cadastrarRemuneracaoTipo(FuncionarioRemuneracaoTipoCadastrarValidation $request) : JsonResponse
     {
         try {
-            $this->validarRequest(
-                $request->all(),
-                CriarRemuneracaoTipoFuncionarioValidation::rules(),
-                CriarRemuneracaoTipoFuncionarioValidation::messages()
-            );
+            $validated = $request->validated();
 
-            $tipo = $this->funcionarioService->cadastrarRemuneracaoTipo($request->descricao);
+            $dto = FuncionarioRemuneracaoTipoCadastrarDTO::fromArray($validated);
+
+            $tipo = $this->service->cadastrarRemuneracaoTipo($dto);
 
             return $this->sucessoResponse($tipo);
         } catch (Exception $e) {
