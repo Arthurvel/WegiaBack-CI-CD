@@ -22,8 +22,8 @@ class DespachoController extends BaseController
         DespachoService $despachoService
     )
     {
-        $this->middleware(['auth:sanctum', 'ability:criar-memorando'])->only(['cadastrar']);
-        $this->middleware(['auth:sanctum'])->only(['index']);
+        $this->middleware(['auth:sanctum', 'ability:criar-despacho'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum'])->only([]);
 
         $this->despachoService = $despachoService;
     }
