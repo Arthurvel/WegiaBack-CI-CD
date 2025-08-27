@@ -8,6 +8,7 @@ use app\DTOs\Funcionario\Infos\FuncionarioListaInfoDTO;
 use App\Http\Controllers\BaseController;
 use app\Http\Resources\Funcionario\FuncionarioInfoResource;
 use app\Http\Resources\Funcionario\FuncionarioListaInfoResource;
+use App\Http\Resources\Paginacao\PaginacaoResource;
 use app\Services\Funcionario\FuncionarioInfoService;
 use app\Validations\Funcionario\infos\FuncionarioInfosCadastrarValidation;
 use app\Validations\Funcionario\infos\FuncionarioListaInfoCadastrarValidation;
@@ -102,7 +103,7 @@ class FuncionarioInfoController extends BaseController
 
             $info = $this->service->buscarInfosPorIdFuncionario($dto);
 
-            return $this->sucessoResponse(FuncionarioInfoResource::collection($info));
+            return $this->sucessoResponse(new PaginacaoResource($info, FuncionarioInfoResource::class));
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
