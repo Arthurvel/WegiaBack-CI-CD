@@ -131,26 +131,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "pessoa_id_pessoa",
-                                    "atendido_tipo_idatendido_tipo",
-                                    "atendido_status_idatendido_status"
-                                ],
-                                "properties": {
-                                    "pessoa_id_pessoa": {
-                                        "description": "id da pessoa",
-                                        "type": "integer"
-                                    },
-                                    "atendido_tipo_idatendido_tipo": {
-                                        "description": "id do tipo do atendido",
-                                        "type": "integer"
-                                    },
-                                    "atendido_status_idatendido_status": {
-                                        "description": "id do status do atendido",
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/AtendidoCadastrarValidation"
                             }
                         }
                     }
@@ -384,36 +365,11 @@
                     }
                 ],
                 "requestBody": {
-                    "description": "Dados do documento a ser enviado",
                     "required": true,
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "properties": {
-                                    "arquivo": {
-                                        "description": "Arquivo a ser enviado (PDF, JPG, PNG)",
-                                        "type": "string",
-                                        "format": "binary"
-                                    },
-                                    "atendido_ocorrencia_tipos_idatendido_ocorrencia_tipos": {
-                                        "description": "ID do tipo do atendido",
-                                        "type": "integer"
-                                    },
-                                    "funcionario_id_funcionario": {
-                                        "description": "ID do funcionario que esta atendendo",
-                                        "type": "integer"
-                                    },
-                                    "data": {
-                                        "description": "Data da ocorrencia",
-                                        "type": "string",
-                                        "format": "date"
-                                    },
-                                    "descricao": {
-                                        "description": "Descricao da ocorrencia",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/AtendidoOcorrenciaCadastrarValidation"
                             }
                         }
                     }
@@ -3086,6 +3042,208 @@
                 ]
             }
         },
+        "/pessoa/{id}/arquivo": {
+            "get": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Buscar arquivos de uma pessoa",
+                "operationId": "e99ded11690cf3858fcbeeacdeeeb953",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da Pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação (data, descricao)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "data",
+                                "descricao"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Cadastra um arquivo",
+                "operationId": "12c97b187ae812ac9b415b773aebd061",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da Pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PessoaArquivoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pessoa/arquivo/{id}": {
+            "delete": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Exclui um arquivo de uma pessoa",
+                "operationId": "d7ae94b26e08dd5b1d05e65032966831",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do arquivo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "true",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/pessoa": {
             "post": {
                 "tags": [
@@ -3651,6 +3809,78 @@
                 ]
             }
         },
+        "/pessoa/arquivo/tipo": {
+            "get": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Busca os tipos possiveis de arquivo",
+                "operationId": "b80d334b2d1d6db0f33f38fda47f286c",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Cadastra um Arquivo na pessoa",
+                "operationId": "fc94576f0f85912c07538633a3604491",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PessoaTipoArquivoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pet cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/situacao": {
             "get": {
                 "tags": [
@@ -3804,6 +4034,55 @@
     },
     "components": {
         "schemas": {
+            "AtendidoCadastrarValidation": {
+                "required": [
+                    "pessoa_id_pessoa",
+                    "atendido_tipo_idatendido_tipo",
+                    "atendido_status_idatendido_status"
+                ],
+                "properties": {
+                    "pessoa_id_pessoa": {
+                        "description": "id da pessoa",
+                        "type": "integer"
+                    },
+                    "atendido_tipo_idatendido_tipo": {
+                        "description": "id do tipo do atendido",
+                        "type": "integer"
+                    },
+                    "atendido_status_idatendido_status": {
+                        "description": "id do status do atendido",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "AtendidoOcorrenciaCadastrarValidation": {
+                "properties": {
+                    "arquivo": {
+                        "description": "Arquivo a ser enviado (PDF, JPG, PNG)",
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "atendido_ocorrencia_tipos_idatendido_ocorrencia_tipos": {
+                        "description": "ID do tipo do atendido",
+                        "type": "integer"
+                    },
+                    "funcionario_id_funcionario": {
+                        "description": "ID do funcionario que esta atendendo",
+                        "type": "integer"
+                    },
+                    "data": {
+                        "description": "Data da ocorrencia",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "descricao": {
+                        "description": "Descricao da ocorrencia",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "FuncionarioDependenteCadastrarValidation": {
                 "required": [
                     "id_funcionario",
@@ -4223,6 +4502,36 @@
                         "description": "Descricao único",
                         "type": "string",
                         "maxLength": 255
+                    }
+                },
+                "type": "object"
+            },
+            "PessoaArquivoCadastrarValidation": {
+                "required": [
+                    "arquivo",
+                    "id_pessoa_tipo_arquivo"
+                ],
+                "properties": {
+                    "arquivo": {
+                        "description": "Arquivo da foto do pet (jpeg, jpg, png, máx. 5MB)",
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "id_pessoa_tipo_arquivo": {
+                        "description": "Id do tipo de arquivo",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "PessoaTipoArquivoCadastrarValidation": {
+                "required": [
+                    "descricao"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "descricao do tipo de arquivo",
+                        "type": "string"
                     }
                 },
                 "type": "object"

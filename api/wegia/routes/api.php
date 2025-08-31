@@ -17,6 +17,8 @@ use App\Http\Controllers\Funcionario\Perfil\FuncionarioPerfilController;
 use App\Http\Controllers\Funcionario\Perfil\FuncionarioPermissaoController;
 use app\Http\Controllers\Pessoa\PessoaController;
 use App\Http\Controllers\Pessoa\PessoaDependenteController;
+use app\Http\Controllers\Pessoa\PessoaTipoArquivoController;
+use app\Http\Controllers\Pessoa\PessoaArquivoController;
 use App\Http\Controllers\SituacaoController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
@@ -46,11 +48,24 @@ Route::group([ 'prefix' => 'pessoa' ], function () {
     Route::post('/{id_pessoa}/imagem', [PessoaController::class, 'cadastrarOuAtualizarImagem']);
     Route::post('/{id_pessoa}/dependente/{id_dependente}', [PessoaDependenteController::class, 'create']);
 
+    Route::get('/{id}/arquivo', [PessoaArquivoController::class, 'index']);
+    Route::post('/{id}/arquivo', [PessoaArquivoController::class, 'cadastrar']);
+
+
+    Route::group([ 'prefix' => 'arquivo' ], function () {
+        Route::get('/tipo', [PessoaTipoArquivoController::class, 'index']);
+        Route::post('/tipo', [PessoaTipoArquivoController::class, 'cadastrar']);
+
+        Route::delete('/{id}', [PessoaArquivoController::class, 'deletar']);
+    });
+
     Route::put('/senha', [PessoaController::class, 'mudarPropriaSenha']);
     Route::put('{id}/senha', [PessoaController::class, 'mudarSenhaDeFuncionarios']);
     Route::put('/{id_pessoa}', [PessoaController::class, 'update']);
 
     Route::delete('/dependente/{id_dependente}', [PessoaDependenteController::class, 'destroy']);
+
+
 });
 
 Route::group([ 'prefix' => 'funcionario' ], function () {

@@ -6,7 +6,7 @@ use app\DTOs\Funcionario\FuncionarioAtualizarDTO;
 use app\DTOs\Funcionario\FuncionarioBuscarDTO;
 use app\DTOs\Funcionario\FuncionarioBuscarTodosDTO;
 use app\DTOs\Funcionario\FuncionarioCadastrarDTO;
-use App\DTOs\Pessoa\PessoaCadastrarDTO;
+use App\DTOs\Pessoa\PessoaComFotoCadastrarDTO;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Funcionario\FuncionarioResource;
 use App\Http\Resources\Paginacao\PaginacaoResource;
@@ -190,9 +190,13 @@ class FuncionarioController extends BaseController
     public function create(FuncionarioCadastrarValidation $request) : JsonResponse
     {
         try {
-           $validated = $request->validated();
+            $validated = $request->validated();
+            $imagem = $request->file('imagem') ?? null;
 
-           $pessoaDTO = PessoaCadastrarDTO::fromArray($validated);
+           $pessoaDTO = PessoaComFotoCadastrarDTO::fromArray([
+               ...$validated,
+                'imagem' => $imagem
+           ]);
            $funcionarioDTO = FuncionarioCadastrarDTO::fromArray($validated);
 
             $resultado = $this->funcionarioService->cadastrarFuncionario($funcionarioDTO, $pessoaDTO);

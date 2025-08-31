@@ -1,10 +1,11 @@
 <?php
 
-namespace app\DTOs\Pessoa;
+namespace App\DTOs\Pessoa;
 
 use App\DTOs\BaseDTO;
+use Illuminate\Http\UploadedFile;
 
-class PessoaCadastrarDTO extends BaseDTO
+class PessoaComFotoCadastrarDTO extends BaseDTO
 {
     public ?string $nome;
     public ?string $sobrenome;
@@ -12,7 +13,7 @@ class PessoaCadastrarDTO extends BaseDTO
     public ?string $sexo;
     public ?string $telefone;
     public ?string $data_nascimento;
-    public ?string $imagem;
+    public ?UploadedFile $imagem;
     public ?string $cep;
     public ?string $estado;
     public ?string $cidade;

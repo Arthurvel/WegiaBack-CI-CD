@@ -19,7 +19,8 @@ use App\DTOs\Funcionario\FuncionarioOutrasInfoDTO;
 use App\DTOs\Funcionario\FuncionarioQuadroHorarioDTO;
 use App\DTOs\Funcionario\FuncionarioRemuneracaoDTO;
 use App\DTOs\PaginacaoDTO;
-use App\DTOs\Pessoa\PessoaCadastrarDTO;
+use app\DTOs\Pessoa\PessoaCadastrarDTO;
+use App\DTOs\Pessoa\PessoaComFotoCadastrarDTO;
 use App\Helpers\UploadSeguroHelper;
 use App\Models\Funcionario\Funcionario;
 use App\Models\Funcionario\FuncionarioDependente;
@@ -60,18 +61,23 @@ class FuncionarioService extends BaseService
         return $this->repository->pegarFuncionarios($dto);
     }
 
-    public function cadastrarFuncionario(FuncionarioCadastrarDTO $funcionarioDTO, PessoaCadastrarDTO $pessoaDTO) : Funcionario
+    public function cadastrarFuncionario(FuncionarioCadastrarDTO $funcionarioDTO, PessoaComFotoCadastrarDTO $pessoaDTO) : Funcionario
     {
         DB::beginTransaction();
 
         try {
 
+            $url = '';
             if(!empty($pessoaDTO->imagem)) {
-                $url = UploadSeguroHelper::salvarImagem($dados['imagem'], 'funcionario');
-                $pessoaDTO->imagem = $url;
+                $url = UploadSeguroHelper::salvarImagem($pessoaDTO->imagem, 'funcionario');
             }
 
-            $pessoa = $this->pessoaRepository->cadastrarOuAtualizarPessoa($pessoaDTO);
+            $pessoaFotoStringDTO = PessoaCadastrarDTO::fromArray([
+                ...$pessoaDTO->toArray(),
+                'imagem' => $url,
+            ]);
+
+            $pessoa = $this->pessoaRepository->cadastrarOuAtualizarPessoa($pessoaFotoStringDTO);
 
             $funcionarioDTO->id_pessoa = $pessoa->id_pessoa;
 

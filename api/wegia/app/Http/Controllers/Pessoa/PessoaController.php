@@ -4,7 +4,7 @@ namespace app\Http\Controllers\Pessoa;
 
 use App\DTOs\Pessoa\PessoaAtualizarDTO;
 use App\DTOs\Pessoa\PessoaAtualizarSenhaDTO;
-use App\DTOs\Pessoa\PessoaCadastrarDTO;
+use App\DTOs\Pessoa\PessoaComFotoCadastrarDTO;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Pessoa\PessoaResource;
 use app\Services\Pessoa\PessoaService;
@@ -61,7 +61,7 @@ class PessoaController extends BaseController
         try {
             $validated = $request->validated();
 
-            $dto = PessoaCadastrarDTO::fromArray($validated);
+            $dto = PessoaComFotoCadastrarDTO::fromArray($validated);
 
             $pessoa = $this->pessoaService->cadastrarPessoaComFoto($dto);
 

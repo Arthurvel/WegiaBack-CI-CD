@@ -2,24 +2,30 @@
 
 namespace App\Validations\Atendido;
 
-class BuscarAtendidoIdValidation
+use Illuminate\Foundation\Http\FormRequest;
+
+class AtendidoBuscarValidation extends FormRequest
 {
-    public static function rules()
+    public function rules() : array
     {
 
         $withPermitidos =   [
             'pessoa',
-            'pessoa.funcionario',
             'atendidoTipo',
             'atendidoStatus',
         ];
 
         return [
-            'id'   => 'required|integer|exists:atendido,idatendido',
+            'id_situacao'    => 'nullable|integer',
+            'buscar'         => 'nullable|string',
+            'itensPorPagina' => 'nullable|integer',
+            'pagina'         => 'nullable|integer',
+            'ordenacao'      => 'nullable|string|in:cpf,nome',
+            'tipoOrdenacao'  => 'nullable|string|in:ASC,DESC',
             'with' => [
                 'nullable',
                 'string',
-                'regex:/^[a-zA-Z0-9_,.]+$/',
+                'regex:/^[a-zA-Z0-9_,]+$/',
                 function ($attribute, $value, $fail) use ($withPermitidos) {
                     $relacionamento = explode(',', $value);
                     $invalido = array_diff($relacionamento, $withPermitidos);
@@ -32,13 +38,12 @@ class BuscarAtendidoIdValidation
         ];
     }
 
-    public static function messages()
+    public function messages() : array
     {
         return [
-            'required'   => 'O campo :attribute é obrigatório.',
-            'exists'     => 'O campo :attribute deve existir na tabela atendido.',
-            'string'     => 'O campo :attribute deve ser uma string.',
-            'integer'    => 'O campo :attribute deve ser um número inteiro.',
+            'string' => 'O campo :attribute deve ser uma string.',
+            'integer' => 'O campo :attribute deve ser um número inteiro.',
+            'enum' => 'O campo :attribute deve ser um dos seguintes valores: :values.',
             'with.regex' => 'O campo :attribute deve conter apenas letras, números e vírgulas.',
         ];
     }

@@ -6,7 +6,7 @@ use App\DTOs\PaginacaoDTO;
 use App\DTOs\Pessoa\CadastrarPessoaDependenteDTO;
 use App\DTOs\Pessoa\PessoaAtualizarDTO;
 use App\DTOs\Pessoa\PessoaAtualizarSenhaDTO;
-use App\DTOs\Pessoa\PessoaCadastrarDTO;
+use App\DTOs\Pessoa\PessoaComFotoCadastrarDTO;
 use App\DTOs\Pessoa\PessoaDependenteDTO;
 use App\Helpers\UploadSeguroHelper;
 use App\Models\Pessoa\Pessoa;
@@ -24,7 +24,7 @@ class PessoaService extends BaseService
         parent::__construct($repository);
     }
 
-    public function cadastrarPessoaComFoto(PessoaCadastrarDTO $pessoa): Pessoa
+    public function cadastrarPessoaComFoto(PessoaComFotoCadastrarDTO $pessoa): Pessoa
     {
         if (!empty($pessoa->imagem)) {
             $url = UploadSeguroHelper::salvarImagem($pessoa->imagem, 'pessoa');

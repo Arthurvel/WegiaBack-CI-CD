@@ -76,4 +76,9 @@ class Pessoa extends Authenticatable
         return $this->hasMany(Aviso::class, 'id_pessoa', 'id_pessoa')->where('ativo', true);
     }
 
+    public function arquivos()
+    {
+        return $this->hasMany(PessoaArquivo::class, 'id_pessoa', 'id_pessoa');
+    }
+
 }

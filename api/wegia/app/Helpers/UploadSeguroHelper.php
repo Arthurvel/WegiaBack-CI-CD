@@ -12,21 +12,21 @@ class UploadSeguroHelper
 
     public static function salvarImagem(UploadedFile $arquivo, String $pasta) : String
     {
-        
+
         $nomeDoArquivo = $arquivo->getClientOriginalName();
-        
+
         $conteudoEncriptado = Crypt::encrypt(file_get_contents($arquivo->path()));
-        
+
         $ano = date('Y');
 
         $caminho = "uploads/{$ano}/{$pasta}/" . $nomeDoArquivo;
-        
+
         Storage::disk('local_secure')->put($caminho, $conteudoEncriptado);
-        
+
         return $caminho;
     }
 
-    public static function urlTemporaria(String $caminho, Int $validadeURL = 30) : String
+    public static function urlTemporaria(String $caminho, Int $validadeURL = 10) : String
     {
         if (!Storage::disk('local_secure')->exists($caminho)) {
             return '';

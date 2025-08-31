@@ -2,17 +2,22 @@
 
 namespace App\Validations\Atendido\Ocorrencia;
 
-class BuscarAtendidoOcorrenciaValidation
+use Illuminate\Foundation\Http\FormRequest;
+
+class AtendidoOcorrenciaBuscarValidation extends FormRequest
 {
-    public static function rules()
+    public function rules() : array
     {
         $withPermitidos =   [
             'tipos',
             'documento',
+            'atendido',
+            'atendido.pessoa',
+            'funcionario',
+            'funcionario.pessoa'
         ];
 
         return [
-            'id_atendido'    => 'required|int|exists:atendido,idatendido',
             'id_tipo'        => 'nullable|int|exists:atendido_ocorrencia_tipos,idatendido_ocorrencia_tipos',
             'buscar'         => 'nullable|string',
             'itensPorPagina' => 'nullable|integer',
@@ -22,7 +27,7 @@ class BuscarAtendidoOcorrenciaValidation
             'with' => [
                 'nullable',
                 'string',
-                'regex:/^[a-zA-Z0-9_,]+$/',
+                'regex:/^[a-zA-Z0-9_,.]+$/',
                 function ($attribute, $value, $fail) use ($withPermitidos) {
                     $relacionamento = explode(',', $value);
                     $invalido = array_diff($relacionamento, $withPermitidos);
@@ -35,7 +40,7 @@ class BuscarAtendidoOcorrenciaValidation
         ];
     }
 
-    public static function messages()
+    public function messages() : array
     {
         return [
             'required' => 'O campo :attribute é obrigatório.',

@@ -2,9 +2,28 @@
 
 namespace App\Validations\Atendido\Ocorrencia;
 
-class CriarAtendidoOcorrenciaValidation
+use Illuminate\Foundation\Http\FormRequest;
+
+/**
+ * @OA\Schema(
+ *     schema="AtendidoOcorrenciaCadastrarValidation",
+ *     @OA\Property(property="arquivo", type="string", format="binary", description="Arquivo a ser enviado (PDF, JPG, PNG)"),
+ *     @OA\Property(property="atendido_ocorrencia_tipos_idatendido_ocorrencia_tipos", type="integer", description="ID do tipo do atendido"),
+ *     @OA\Property(property="funcionario_id_funcionario", type="integer", description="ID do funcionario que esta atendendo"),
+ *     @OA\Property(property="data", type="string", format="date", description="Data da ocorrencia"),
+ *     @OA\Property(property="descricao", type="string", description="Descricao da ocorrencia"),
+ * )
+ */
+class AtendidoOcorrenciaCadastrarValidation extends FormRequest
 {
-    public static function rules()
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'id_atendido' => $this->route('id')
+        ]);
+    }
+
+    public function rules() : array
     {
         return [
             'id_atendido' => 'required|int|exists:atendido,idatendido',
@@ -16,7 +35,7 @@ class CriarAtendidoOcorrenciaValidation
         ];
     }
 
-    public static function messages()
+    public function messages() : array
     {
         return [
             'required' => 'O campo :attribute é obrigatório.',
