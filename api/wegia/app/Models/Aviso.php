@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel\BaseModel;
+use App\Models\Pessoa\Pessoa;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Aviso extends BaseModel

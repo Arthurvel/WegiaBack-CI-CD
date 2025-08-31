@@ -4,9 +4,9 @@ namespace App\Models\Funcionario;
 
 use App\Models\BaseModel\BaseModel;
 use App\Models\Cargo;
-use App\Models\Pessoa;
-use App\Models\Situacao;
 use App\Models\Funcionario\Perfil\FuncionarioPerfil;
+use App\Models\Pessoa\Pessoa;
+use App\Models\Situacao;
 
 class Funcionario extends BaseModel
 {

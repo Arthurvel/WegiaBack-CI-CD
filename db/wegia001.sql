@@ -87,6 +87,41 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pessoa_dependente` (
     FOREIGN KEY (id_dependente_pessoa) REFERENCES pessoa(id_pessoa)
 );
 
+-- -----------------------------------------------------
+-- Table `wegia`.`pessoa_tipo_arquivo`
+-- -----------------------------------------------------
+
+CREATE TABLE pessoa_tipo_arquivo (
+    id_pessoa_tipo_arquivo INT AUTO_INCREMENT PRIMARY KEY,
+    descricao VARCHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -----------------------------------------------------
+-- Table `wegia`.`pessoa_arquivo`
+-- -----------------------------------------------------
+
+CREATE TABLE pessoa_arquivo (
+    id_pessoa_arquivo INT AUTO_INCREMENT PRIMARY KEY,
+    id_pessoa INT NOT NULL,
+    id_pessoa_tipo_arquivo INT NOT NULL,
+    data DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    extensao_arquivo VARCHAR(10) NOT NULL,
+    nome_arquivo VARCHAR(255) NOT NULL,
+    arquivo LONGBLOB NOT NULL,
+    CONSTRAINT fk_pessoa_arquivo_pessoa FOREIGN KEY (id_pessoa)
+        REFERENCES pessoa (id_pessoa)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT fk_pessoa_arquivo_tipo FOREIGN KEY (id_pessoa_tipo_arquivo)
+        REFERENCES pessoa_tipo_arquivo (id_pessoa_tipo_arquivo)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -----------------------------------------------------
+-- Table `wegia`.`permissao`
+-- -----------------------------------------------------
+
 CREATE TABLE permissao (
     id_permissao INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,

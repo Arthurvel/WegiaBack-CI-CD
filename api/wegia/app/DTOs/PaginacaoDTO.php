@@ -2,7 +2,7 @@
 
 namespace App\DTOs;
 
-class PaginacaoDTO
+class PaginacaoDTO extends BaseDTO
 {
     public array $items;
     public int $paginaAtual;
@@ -10,29 +10,4 @@ class PaginacaoDTO
     public int $totalItens;
     public int $itensPorPagina;
 
-    public function __construct(
-        array $items, 
-        int $paginaAtual, 
-        int $totalPaginas, 
-        int $totalItens, 
-        int $itensPorPagina
-    )
-    {
-        $this->items = $items;
-        $this->paginaAtual = $paginaAtual;
-        $this->totalPaginas = $totalPaginas;
-        $this->totalItens = $totalItens;
-        $this->itensPorPagina = $itensPorPagina;
-    }
-
-    public static function fromArray($paginator): self
-    {
-        return new self(
-            $paginator->items(),
-            $paginator->currentPage(),
-            $paginator->lastPage(),
-            $paginator->total(),
-            $paginator->perPage()
-        );
-    }
 }

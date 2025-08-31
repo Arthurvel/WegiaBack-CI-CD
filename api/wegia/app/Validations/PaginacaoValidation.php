@@ -2,9 +2,11 @@
 
 namespace App\Validations;
 
-class PaginacaoValidation
+use Illuminate\Foundation\Http\FormRequest;
+
+class PaginacaoValidation extends FormRequest
 {
-    public static function rules()
+    public function rules()
     {
         return [
             'buscar'         => 'nullable|string',
@@ -15,7 +17,7 @@ class PaginacaoValidation
         ];
     }
 
-    public static function messages()
+    public function messages()
     {
         return [
             'string'   => 'O campo :attribute deve ser uma string.',

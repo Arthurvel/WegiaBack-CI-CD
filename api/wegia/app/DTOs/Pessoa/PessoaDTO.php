@@ -4,7 +4,7 @@ namespace App\DTOs\Pessoa;
 
 use App\DTOs\Funcionario\FuncionarioDTO;
 use App\Helpers\UploadSeguroHelper;
-use App\Models\Pessoa;
+use app\Models\Pessoa\Pessoa;
 use Carbon\Carbon;
 
 class PessoaDTO

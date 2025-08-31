@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers\Funcionario;
 
+use app\DTOs\Funcionario\FuncionarioAtualizarDTO;
+use app\DTOs\Funcionario\FuncionarioBuscarDTO;
+use app\DTOs\Funcionario\FuncionarioBuscarTodosDTO;
+use app\DTOs\Funcionario\FuncionarioCadastrarDTO;
+use App\DTOs\Pessoa\PessoaComFotoCadastrarDTO;
 use App\Http\Controllers\BaseController;
+use App\Http\Resources\Funcionario\FuncionarioResource;
+use App\Http\Resources\Paginacao\PaginacaoResource;
 use App\Services\FuncionarioService;
-use App\Validations\Funcionario\BuscarFuncionarioValidation;
-use App\Validations\Funcionario\CriarFuncionarioValidation;
-use App\Validations\Pessoa\AtualizarPessoaValidation;
+use app\Validations\Funcionario\FuncionarioAtualizarValidation;
+use app\Validations\Funcionario\FuncionarioBuscarValidation;
+use app\Validations\Funcionario\FuncionarioCadastrarValidation;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -20,12 +27,15 @@ use Illuminate\Http\JsonResponse;
 class FuncionarioController extends BaseController
 {
 
-    protected $funcionarioService;
+    protected FuncionarioService $funcionarioService;
 
     public function __construct(
         FuncionarioService $funcionarioService
     )
     {
+        $this->middleware(['auth:sanctum', 'ability:visualizar-funcionario'])->only(['buscarTodos', 'index', 'findById']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-funcionario'])->only(['update']);
+        $this->middleware(['auth:sanctum', 'ability:criar-funcionario'])->only(['create']);
         $this->middleware('auth:sanctum')->except([]);
 
         $this->funcionarioService = $funcionarioService;
@@ -52,9 +62,13 @@ class FuncionarioController extends BaseController
     public function buscarTodos(Request $request) : JsonResponse
     {
         try {
-            $funcionario = $this->funcionarioService->buscarTodos($request->query('permissao'));
+            $dto = FuncionarioBuscarTodosDTO::fromArray([
+                'permissao' => $request->query('permissao')
+            ]);
 
-            return $this->sucessoResponse($funcionario);
+            $funcionarios = $this->funcionarioService->buscarTodosFiltrados($dto);
+
+            return $this->sucessoResponse(FuncionarioResource::collection($funcionarios));
         } catch (Exception $e) {
             return $this->errorResponse(null,500,$e->getMessage());
         }
@@ -113,18 +127,16 @@ class FuncionarioController extends BaseController
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
     */
-    public function index(Request $request) : JsonResponse
+    public function index(FuncionarioBuscarValidation $request) : JsonResponse
     {
         try {
-            $this->validarRequest(
-                $request->query(),
-                BuscarFuncionarioValidation::rules(),
-                BuscarFuncionarioValidation::messages()
-            );
+            $validated = $request->validated();
 
-            $funcionario = $this->funcionarioService->pegarFuncionarios($request->query());
+            $dto = FuncionarioBuscarDTO::fromArray($validated);
 
-            return $this->sucessoResponse($funcionario);
+            $funcionarios = $this->funcionarioService->pegarFuncionarios($dto);
+
+            return $this->sucessoResponse(new PaginacaoResource($funcionarios, FuncionarioResource::class));
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
@@ -138,7 +150,7 @@ class FuncionarioController extends BaseController
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *          name="id_funcionario",
-     *          in="query",
+     *          in="path",
      *          description="Id do funcionario",
      *          required=false,
      *          @OA\Schema(type="integer")
@@ -151,11 +163,10 @@ class FuncionarioController extends BaseController
     public function findById(int $id_funcionario) : JsonResponse
     {
         try {
-            $id_funcionario = (int) $id_funcionario;
+            $with = ['pessoa'];
+            $funcionario = $this->funcionarioService->buscarPorId($id_funcionario, $with);
 
-            $funcionario = $this->funcionarioService->pegarFuncionarioPorId($id_funcionario);
-
-            return $this->sucessoResponse($funcionario);
+            return $this->sucessoResponse(new FuncionarioResource($funcionario));
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
@@ -169,44 +180,28 @@ class FuncionarioController extends BaseController
      *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(
-     *             required={"cpf", "nome", "sobrenome", "sexo", "telefone", "data_nascimento", "registro_geral", "orgao_emissor", "data_expedicao", "data_admissao", "id_situacao", "id_cargo", "id_escala", "id_tipo", "certificado_reservista_numero", "certificado_reservista_serie"},
-     *             @OA\Property(property="cpf", type="string", maxLength=11, description="CPF único", example=""),
-     *             @OA\Property(property="nome", type="string", maxLength=100, description="Nome do usuário", example=""),
-     *             @OA\Property(property="sobrenome", type="string", maxLength=100, description="Sobrenome do usuário", example=""),
-     *             @OA\Property(property="sexo", type="string", maxLength=1, description="Sexo do usuário", example=""),
-     *             @OA\Property(property="telefone", type="string", maxLength=25, description="Telefone de contato", example=""),
-     *             @OA\Property(property="data_nascimento", type="string", format="date", description="Data de nascimento", example=""),
-     *             @OA\Property(property="registro_geral", type="string", maxLength=120, description="Registro Geral (RG)", example=""),
-     *             @OA\Property(property="orgao_emissor", type="string", maxLength=120, description="Órgão emissor do RG", example=""),
-     *             @OA\Property(property="data_expedicao", type="string", format="date", description="Data de expedição do RG", example=""),
-     *             @OA\Property(property="imagem", type="string", nullable=true, description="URL da imagem", example=""),
-     *             @OA\Property(property="data_admissao", type="string", format="date", description="Data de admissão", example=""),
-     *             @OA\Property(property="id_situacao", type="integer", description="ID da situação", example=0),
-     *             @OA\Property(property="id_perfil", type="integer", description="ID do perfil", example=0),
-     *             @OA\Property(property="id_escala", type="integer", description="ID da escala", example=0),
-     *             @OA\Property(property="id_tipo", type="integer", description="ID do tipo", example=0),
-     *             @OA\Property(property="certificado_reservista_numero", type="string", maxLength=100, description="Número do certificado de reservista", example=""),
-     *             @OA\Property(property="certificado_reservista_serie", type="string", maxLength=100, description="Série do certificado de reservista", example="")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/FuncionarioCadastrarValidation")
      *     ),
      *     @OA\Response(response="200", description="Cadastro realizado com sucesso", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
     */
-    public function create(Request $request) : JsonResponse
+    public function create(FuncionarioCadastrarValidation $request) : JsonResponse
     {
         try {
-            $this->validarRequest(
-                $request->all(),
-                CriarFuncionarioValidation::rules(),
-                CriarFuncionarioValidation::messages()
-            );
+            $validated = $request->validated();
+            $imagem = $request->file('imagem') ?? null;
 
-            $resultado = $this->funcionarioService->cadastrarFuncionario($request->all());
+           $pessoaDTO = PessoaComFotoCadastrarDTO::fromArray([
+               ...$validated,
+                'imagem' => $imagem
+           ]);
+           $funcionarioDTO = FuncionarioCadastrarDTO::fromArray($validated);
 
-            return $this->sucessoResponse($resultado);
+            $resultado = $this->funcionarioService->cadastrarFuncionario($funcionarioDTO, $pessoaDTO);
+
+            return $this->sucessoResponse($resultado, 201);
 
         } catch (Exception $e) {
             return $this->errorResponse($e);
@@ -228,38 +223,23 @@ class FuncionarioController extends BaseController
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="id_perfil", type="integer", description="ID do perfil"),
-     *             @OA\Property(property="id_situacao", type="integer", description="ID da situação"),
-     *             @OA\Property(property="data_admissao", type="string", format="date", description="Data de admissão"),
-     *             @OA\Property(property="ctps", type="string", maxLength=150, description="Carteira de Trabalho"),
-     *             @OA\Property(property="pis", type="string", maxLength=140, description="Número do PIS"),
-     *             @OA\Property(property="uf_ctps", type="string", maxLength=20, description="UF da CTPS"),
-     *             @OA\Property(property="numero_titulo", type="string", maxLength=150, description="Número do título de eleitor"),
-     *             @OA\Property(property="zona", type="string", maxLength=30, description="Zona eleitoral"),
-     *             @OA\Property(property="secao", type="string", maxLength=40, description="Seção eleitoral"),
-     *             @OA\Property(property="certificado_reservista_numero", type="string", maxLength=100, description="Número do certificado de reservista"),
-     *             @OA\Property(property="certificado_reservista_serie", type="string", maxLength=100, description="Série do certificado de reservista")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/FuncionarioAtualizarValidation")
      *     ),
      *     @OA\Response(response="200", description="Funcionario atualizado realizado com sucesso", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
     */
-    public function update(Request $request, int $id_funcionario) : JsonResponse
+    public function update(FuncionarioAtualizarValidation $request, int $id_funcionario) : JsonResponse
     {
         try {
-            $this->validarRequest(
-                $request->all(),
-                AtualizarPessoaValidation::rules(),
-                AtualizarPessoaValidation::messages()
-            );
+            $validated = $request->validated();
 
-            $resultado = $this->funcionarioService->atualizarFuncionario($request->all(), $id_funcionario);
+            $dto = FuncionarioAtualizarDTO::fromArray($validated);
+
+            $resultado = $this->funcionarioService->atualizar($id_funcionario, $dto);
 
             return $this->sucessoResponse($resultado);
-
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
