@@ -6,14 +6,18 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 
 class UploadSeguroHelper
 {
 
     public static function salvarImagem(UploadedFile $arquivo, String $pasta) : String
     {
+        $extensao = $arquivo->getClientOriginalExtension();
 
-        $nomeDoArquivo = $arquivo->getClientOriginalName();
+        $hash = hash('sha256', $arquivo->getClientOriginalName() . Str::uuid());
+
+        $nomeDoArquivo = $hash . '.' . $extensao;
 
         $conteudoEncriptado = Crypt::encrypt(file_get_contents($arquivo->path()));
 
