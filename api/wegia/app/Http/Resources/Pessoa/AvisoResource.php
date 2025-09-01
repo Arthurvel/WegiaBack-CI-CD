@@ -18,6 +18,7 @@ class AvisoResource extends JsonResource
             'data_criacao'  => $this->data_criacao
                 ? Carbon::parse($this->data_criacao)->format('d/m/Y H:i:s')
                 : null,
+            'url'           => $this->url,
             'nivel'         => $this->nivel,
             'ativo'         => $this->ativo,
         ];

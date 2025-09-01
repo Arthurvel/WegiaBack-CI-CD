@@ -1939,6 +1939,7 @@ CREATE TABLE IF NOT EXISTS `wegia`.`aviso` (
     `descricao` TEXT NOT NULL,
     `data_criacao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `nivel` ENUM('info', 'alerta', 'erro') NOT NULL DEFAULT 'info',
+    `url` VARCHAR(100) NULL,
     `ativo` BOOLEAN NOT NULL DEFAULT TRUE,
     PRIMARY KEY (`id_aviso`),
     FOREIGN KEY (`id_pessoa`)
@@ -2432,10 +2433,11 @@ END$$
 
 DELIMITER ;
 
-CREATE TRIGGER tr_despacho_aviso
+USE `wegia`$$
+CREATE OR REPLACE TRIGGER tr_despacho_aviso
     AFTER INSERT ON despacho
     FOR EACH ROW
-BEGIN
+    BEGIN
     DECLARE memorando_titulo TEXT;
 
     SELECT titulo INTO memorando_titulo
@@ -2446,15 +2448,17 @@ BEGIN
         id_pessoa,
         titulo,
         descricao,
+        url,
         nivel,
         ativo
     ) VALUES (
-        NEW.id_destinatario,
-        memorando_titulo,
-        CONCAT('Você recebeu um novo despacho do memorando: "', memorando_titulo, '"'),
-        'info',
-        1
-    );
+                 NEW.id_destinatario,
+                 memorando_titulo,
+                 CONCAT('Você recebeu um novo despacho do memorando: "', memorando_titulo, '"'),
+                 CONCAT('/memorando/',  NEW.id_memorando),
+                 'info',
+                 1
+             );
 END;
 //
 

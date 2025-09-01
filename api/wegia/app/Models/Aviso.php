@@ -18,7 +18,8 @@ class Aviso extends BaseModel
         'titulo',
         'descricao',
         'nivel',
-        'ativo'
+        'ativo',
+        'url'
     ];
 
     public function pessoa() : BelongsTo
