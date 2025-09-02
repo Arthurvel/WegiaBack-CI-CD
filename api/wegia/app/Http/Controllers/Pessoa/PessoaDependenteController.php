@@ -8,6 +8,7 @@ use App\Http\Controllers\BaseController;
 use App\Http\Resources\Paginacao\PaginacaoResource;
 use App\Http\Resources\Pessoa\PessoaDependenteResource;
 use app\Services\Pessoa\PessoaDependenteService;
+use app\Validations\Pessoa\Dependente\PessoaDepedenteBuscarPorIdValidation;
 use app\Validations\Pessoa\Dependente\PessoaDependenteBuscarTodosValidation;
 use App\Validations\Pessoa\Dependente\PessoaDependenteCadastrarValidation;
 use Illuminate\Http\JsonResponse;
@@ -27,7 +28,7 @@ class PessoaDependenteController extends BaseController
     )
     {
         $this->middleware(['auth:sanctum', 'ability:criar-dependente'])->only(['create']);
-        $this->middleware(['auth:sanctum', 'ability:visualizar-dependente'])->only(['buscarDependentesPorIdPessoa']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-dependente'])->only(['buscarDependentesPorIdPessoa', 'buscarDependentePorId']);
         $this->middleware(['auth:sanctum', 'ability:deletar-dependente'])->only(['destroy']);
         $this->middleware('auth:sanctum')->except([]);
 
@@ -109,6 +110,45 @@ class PessoaDependenteController extends BaseController
             return $this->sucessoResponse(new PaginacaoResource($pessoa, PessoaDependenteResource::class));
         } catch (\Exception $e) {
             return $this->errorResponse(null,500,$e->getMessage());
+        }
+    }
+
+    /**
+     * @OA\get(
+     *     path="/pessoa/dependente/{id}",
+     *     summary="buscar um dependente",
+     *     tags={"Pessoa"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *          name="with",
+     *          in="query",
+     *          description="Relacionamento separado por virugla Ex. pessoa,aviso",
+     *          required=false,
+     *          @OA\Schema(type="string")
+     *      ),
+     *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
+     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
+     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
+     * )
+     */
+    public function buscarDependentePorId(int $id, PessoaDepedenteBuscarPorIdValidation $request) : JsonResponse
+    {
+        try {
+            $validated = $request->validated();
+
+            $with = !empty($validated['with']) ? [$validated['with']] : [];
+
+            $depedente = $this->service->buscarPorId($id, $with);
+
+            return $this->sucessoResponse(new PessoaDependenteResource($depedente));
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
         }
     }
 

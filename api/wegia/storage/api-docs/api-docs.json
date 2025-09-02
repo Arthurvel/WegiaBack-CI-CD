@@ -3691,6 +3691,65 @@
                 ]
             }
         },
+        "/pessoa/dependente/{id}": {
+            "get": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "buscar um dependente",
+                "operationId": "a8139931467880932c17bab0f545a4ff",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "with",
+                        "in": "query",
+                        "description": "Relacionamento separado por virugla Ex. pessoa,aviso",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/pessoa/{id_pessoa}/dependente/{id_dependente}": {
             "post": {
                 "tags": [
