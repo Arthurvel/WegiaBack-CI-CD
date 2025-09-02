@@ -48,6 +48,9 @@ Route::group([ 'prefix' => 'pessoa' ], function () {
     Route::post('/{id_pessoa}/imagem', [PessoaController::class, 'cadastrarOuAtualizarImagem']);
     Route::post('/{id_pessoa}/dependente/{id_dependente}', [PessoaDependenteController::class, 'create']);
 
+    Route::get('/dependente/{id}', [PessoaDependenteController::class, 'buscarDependentePorId']);
+    Route::delete('/dependente/{id_dependente}', [PessoaDependenteController::class, 'destroy']);
+
     Route::get('/{id}/arquivo', [PessoaArquivoController::class, 'index']);
     Route::post('/{id}/arquivo', [PessoaArquivoController::class, 'cadastrar']);
 
@@ -62,10 +65,6 @@ Route::group([ 'prefix' => 'pessoa' ], function () {
     Route::put('/senha', [PessoaController::class, 'mudarPropriaSenha']);
     Route::put('{id}/senha', [PessoaController::class, 'mudarSenhaDeFuncionarios']);
     Route::put('/{id_pessoa}', [PessoaController::class, 'update']);
-
-    Route::delete('/dependente/{id_dependente}', [PessoaDependenteController::class, 'destroy']);
-
-
 });
 
 Route::group([ 'prefix' => 'funcionario' ], function () {
