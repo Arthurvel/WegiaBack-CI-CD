@@ -20,10 +20,9 @@ use Illuminate\Routing\Controller;
  *     securityScheme="bearerAuth",
  *     bearerFormat="JWT",
  * )
- *
  * @OA\Server(
- *     url="http://localhost:8000/api",
- *     description="Servidor Local"
+ *     url=L5_SWAGGER_CONST_HOST,
+ *     description="Servidor"
  * )
  */
 

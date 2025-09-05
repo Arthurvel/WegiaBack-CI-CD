@@ -3,7 +3,6 @@
 namespace Modules\Material\app\Http\Controllers;
 
 /**
-/**
  * @OA\Info(
  *     title="API Material",
  *     version="1.0.0",
@@ -16,10 +15,9 @@ namespace Modules\Material\app\Http\Controllers;
  *     securityScheme="bearerAuth",
  *     bearerFormat="JWT",
  * )
- *
  * @OA\Server(
- *     url="http://localhost:8000/api",
- *     description="Servidor Local"
+ * url=L5_SWAGGER_CONST_HOST,
+ * description="Servidor"
  * )
  */
 class SwaggerController
