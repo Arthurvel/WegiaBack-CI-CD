@@ -1,5 +1,9 @@
 #!/bin/sh
 
+set -e
+
+export $(grep -v '^#' /var/www/html/.env | xargs)
+
 php artisan l5-swagger:generate --all
 
 php artisan migrate --force
@@ -13,4 +17,5 @@ chown -R www-data:www-data /var/www/html/storage/app/private
 mkdir -p /var/www/html/storage/app/backups && \
 chown -R www-data:www-data /var/www/html/storage/app/backups
 
-exec php-fpm
+php-fpm &
+nginx -g 'daemon off;'

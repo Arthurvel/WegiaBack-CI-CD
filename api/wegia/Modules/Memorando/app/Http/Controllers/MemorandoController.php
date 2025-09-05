@@ -31,6 +31,9 @@ class MemorandoController extends BaseController
         MemorandoService $memorandoService
     )
     {
+        $this->middleware(['auth:sanctum', 'ability:criar-memorando'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-memorando'])->only(['index', 'memorandosParticipados', 'buscarProId']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-memorando'])->only(['atualizar']);
         $this->middleware('auth:sanctum')->except([]);
 
         $this->memorandoService = $memorandoService;
@@ -228,7 +231,8 @@ class MemorandoController extends BaseController
     public function buscarPorId(int $id) : JsonResponse
     {
         try {
-            $memorando = $this->memorandoService->buscarPorId($id);
+            $with = ['despachos.anexos', 'despachos.remetente', 'despachos.destinatario'];
+            $memorando = $this->memorandoService->buscarPorId($id, $with);
 
             return $this->sucessoResponse( new MemorandoResource($memorando) );
         } catch (\Exception $e) {

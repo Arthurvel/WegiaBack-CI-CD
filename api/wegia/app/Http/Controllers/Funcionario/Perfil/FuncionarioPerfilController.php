@@ -24,6 +24,11 @@ class FuncionarioPerfilController extends BaseController
         PerfilService $perfilService
     )
     {
+        $this->middleware(['auth:sanctum', 'ability:criar-perfil'])->only(['cadastrarPerfil']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-perfil'])->only(['buscarPerfis']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-permissao'])->only(['buscarPermissoesDoPerfil']);
+        $this->middleware(['auth:sanctum', 'ability:vincular-perfil-a-uma-permissao'])->only(['cadastrarPermissao']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-perfil'])->only(['atualizarPerfil']);
         $this->middleware('auth:sanctum')->except([]);
 
         $this->perfilService = $perfilService;

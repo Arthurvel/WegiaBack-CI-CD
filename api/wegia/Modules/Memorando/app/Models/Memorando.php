@@ -2,10 +2,10 @@
 
 namespace Modules\Memorando\app\Models;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\BaseModel\BaseModel;
-use App\Models\Pessoa;
+use app\Models\Pessoa\Pessoa;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Memorando extends BaseModel
 {

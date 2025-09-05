@@ -1,0 +1,132 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Material",
+        "description": "Documentação da API Wegia",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "Servidor Local"
+        }
+    ],
+    "paths": {
+        "/origem/todos": {
+            "get": {
+                "tags": [
+                    "Origem"
+                ],
+                "summary": "Buscar todas as origens ",
+                "operationId": "41c4212b7210e9c5425ebec587d87125",
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/origem": {
+            "post": {
+                "tags": [
+                    "Origem"
+                ],
+                "summary": "Cadastra a origem do material",
+                "operationId": "97fe180bf4c2cce30fd62c11f9853b42",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrigemCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Orgem cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "OrigemCadastrarValidation": {
+                "required": [
+                    "nome_origem",
+                    "telefone"
+                ],
+                "properties": {
+                    "nome_origem": {
+                        "description": "Nome da origem",
+                        "type": "string"
+                    },
+                    "cnpj": {
+                        "description": "CNPJ (14 dígitos)",
+                        "type": "string"
+                    },
+                    "cpf": {
+                        "description": "CPF (11 dígitos)",
+                        "type": "string"
+                    },
+                    "telefone": {
+                        "description": "Telefone com DDD",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Origem",
+            "description": "Operações relacionadas ao Modulo de Material"
+        }
+    ]
+}

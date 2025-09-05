@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers\Atendido;
 
+use app\DTOs\Atendido\AtendidoOcorrenciaBuscarDTO;
+use app\DTOs\Atendido\AtendidoOcorrenciaComFotoCadastrarDTO;
 use App\Http\Controllers\BaseController;
-use Illuminate\Http\Request;
-use App\Services\AtendidoService;
-use App\Validations\Atendido\Ocorrencia\BuscarAtendidoOcorrenciaValidation;
-use App\Validations\Atendido\Ocorrencia\CriarAtendidoOcorrenciaValidation;
+use app\Http\Resources\Atendido\AtendidoOcorrenciaResource;
+use app\Http\Resources\Atendido\AtendidoOcorrenciaTipoResource;
+use App\Http\Resources\Paginacao\PaginacaoResource;
+use app\Services\Atendido\AtendidoOcorrenciaService;
+use app\Services\Atendido\AtendidoService;
+use App\Validations\Atendido\Ocorrencia\AtendidoOcorrenciaBuscarValidation;
+use App\Validations\Atendido\Ocorrencia\AtendidoOcorrenciaCadastrarValidation;
 use Exception;
+use Illuminate\Http\Request;
 
 /**
  * @OA\Tag(
@@ -18,15 +24,17 @@ use Exception;
 class AtendidoOcorrenciaController extends BaseController
 {
 
-    protected $atendidoService;
+    protected AtendidoOcorrenciaService $service;
 
     public function __construct(
-        AtendidoService $atendidoService
+        AtendidoOcorrenciaService $service
     )
     {
+        $this->middleware(['auth:sanctum', 'ability:visualizar-ocorrencia-dos-atendidos'])->only(['index']);
+        $this->middleware(['auth:sanctum', 'ability:criar-ocorrencia-dos-atendidos'])->only(['criarOcorrencia', 'buscarOrrenciaTipos']);
         $this->middleware('auth:sanctum')->except([]);
 
-        $this->atendidoService = $atendidoService;
+        $this->service = $service;
     }
 
     /**
@@ -96,24 +104,22 @@ class AtendidoOcorrenciaController extends BaseController
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
     */
-    public function index(int $id, Request $request)
+    public function index(int $id, AtendidoOcorrenciaBuscarValidation $request)
     {
         try {
-            $this->validarRequest(
-                [
-                    "id_atendido" => $id,
-                    ...$request->query()
-                ],
-                BuscarAtendidoOcorrenciaValidation::rules(),
-                BuscarAtendidoOcorrenciaValidation::messages()
-            );
+            $validated = $request->validated();
 
-            $ocorrencias = $this->atendidoService->buscarOcorrencias($id, $request->query());
+            $dto = AtendidoOcorrenciaBuscarDTO::fromArray([
+                'id_atendido' => $id,
+                ...$validated
+            ]);
 
-            return  $this->sucessoResponse($ocorrencias);
+            $ocorrencias = $this->service->buscarOcorrencias($dto);
+
+            return  $this->sucessoResponse(new PaginacaoResource($ocorrencias, AtendidoOcorrenciaResource::class));
         } catch (Exception $e) {
-            return $this->errorResponse(null,500,$e->getMessage());
-        } 
+            return $this->errorResponse($e);
+        }
     }
 
     /**
@@ -121,7 +127,7 @@ class AtendidoOcorrenciaController extends BaseController
      *     path="/atendido/{id}/ocorrencia",
      *     summary="Adicionar uma nova ocorrencia",
      *     tags={"Atendido"},
-     *     security={{"bearerAuth": {}}}, 
+     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -130,43 +136,35 @@ class AtendidoOcorrenciaController extends BaseController
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
-     *         required=true,
-     *         description="Dados do documento a ser enviado",
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 @OA\Property(property="arquivo", type="string", format="binary", description="Arquivo a ser enviado (PDF, JPG, PNG)"),
-     *                 @OA\Property(property="atendido_ocorrencia_tipos_idatendido_ocorrencia_tipos", type="integer", description="ID do tipo do atendido"),
-     *                 @OA\Property(property="funcionario_id_funcionario", type="integer", description="ID do funcionario que esta atendendo"),
-     *                 @OA\Property(property="data", type="string", format="date", description="Data da ocorrencia"),
-     *                 @OA\Property(property="descricao", type="string", description="Descricao da ocorrencia"), 
-     *             )
-     *         )
-     *     ),
+     *          required=true,
+     *           @OA\MediaType(
+     *               mediaType="multipart/form-data",
+     *               @OA\Schema(ref="#/components/schemas/AtendidoOcorrenciaCadastrarValidation")
+     *           )
+     *      ),
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
      */
-    public function criarOcorrencia(int $id, Request $request)
+    public function criarOcorrencia(int $id, AtendidoOcorrenciaCadastrarValidation $request)
     {
         try {
-            $this->validarRequest(
-                [
-                    "arquivo" => $request->file('arquivo'),
-                    "id_atendido" => $id,
-                    ...$request->all()
-                ],
-                CriarAtendidoOcorrenciaValidation::rules(),
-                CriarAtendidoOcorrenciaValidation::messages()
-            );
+            $validated = $request->validated();
+            $arquivo = $request->file('arquivo') ?? null;
 
-            $ocorrencia = $this->atendidoService->cadastrarOcorrencia($id, $request->all());
+            $dto = AtendidoOcorrenciaComFotoCadastrarDTO::fromArray([
+                ...$validated,
+                'arquivo' => $arquivo,
+                'atendido_idatendido' => $id
+            ]);
+
+            $ocorrencia = $this->service->cadastrarOcorrencia($dto);
 
             return  $this->sucessoResponse($ocorrencia);
         } catch (Exception $e) {
             return $this->errorResponse($e);
-        } 
+        }
     }
 
     /**
@@ -183,11 +181,11 @@ class AtendidoOcorrenciaController extends BaseController
     public function buscarOcorrenciaTipos()
     {
         try {
-            $tipos = $this->atendidoService->buscarOcorrenciaTipos();
+            $tipos = $this->service->buscarOcorrenciaTipos();
 
-            return  $this->sucessoResponse($tipos);
+            return  $this->sucessoResponse(AtendidoOcorrenciaTipoResource::collection($tipos));
         } catch (Exception $e) {
             return $this->errorResponse($e);
-        } 
+        }
     }
 }

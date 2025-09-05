@@ -3,7 +3,7 @@
 namespace App\Models\Funcionario;
 
 use App\Models\BaseModel\BaseModel;
-use App\Models\Pessoa;
+use app\Models\Pessoa\Pessoa;
 
 class FuncionarioDependente extends BaseModel
 {
@@ -19,7 +19,7 @@ class FuncionarioDependente extends BaseModel
         'id_funcionario',
         'id_pessoa',
         'id_parentesco'
-    ]; 
+    ];
 
     public function pessoa()
     {

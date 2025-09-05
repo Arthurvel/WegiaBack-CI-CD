@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Atendido\AtendidoController;
 use App\Http\Controllers\Atendido\AtendidoOcorrenciaController;
 use App\Http\Controllers\Atendido\AtendidoStatusController;
-use App\Http\Controllers\PessoaController;
+use App\Http\Controllers\Atendido\AtendidoTipoController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AvisoController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\Funcionario\FuncionarioController;
 use App\Http\Controllers\Funcionario\FuncionarioDependenteController;
@@ -15,18 +15,13 @@ use App\Http\Controllers\Funcionario\FuncionarioQuadroHorarioController;
 use App\Http\Controllers\Funcionario\FuncionarioRemuneracaoController;
 use App\Http\Controllers\Funcionario\Perfil\FuncionarioPerfilController;
 use App\Http\Controllers\Funcionario\Perfil\FuncionarioPermissaoController;
-use App\Http\Controllers\Pet\AtendimentoController;
-use App\Http\Controllers\Pet\FichaMedicaController;
-use App\Http\Controllers\Pet\MedicacaoController;
-use App\Http\Controllers\Pet\MedicamentoController;
-use App\Http\Controllers\Pet\CorController;
-use App\Http\Controllers\Pet\EspecieController;
-use App\Http\Controllers\Pet\RacaController;
+use app\Http\Controllers\Pessoa\PessoaController;
+use App\Http\Controllers\Pessoa\PessoaDependenteController;
+use app\Http\Controllers\Pessoa\PessoaTipoArquivoController;
+use app\Http\Controllers\Pessoa\PessoaArquivoController;
 use App\Http\Controllers\SituacaoController;
 use App\Http\Controllers\UploadController;
-use App\Http\Controllers\Atendido\AtendidoTipoController;
-use App\Http\Controllers\Pessoa\PessoaDependenteController;
-use App\Http\Controllers\AvisoController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/upload/{path}', [UploadController::class, 'retornarImagem'])
     ->where('path', '.*')
@@ -45,6 +40,7 @@ Route::group([ 'prefix' => 'aviso' ], function () {
 
 Route::group([ 'prefix' => 'pessoa' ], function () {
     Route::get('/logada', [PessoaController::class, 'retornarPessoaLogada']);
+    Route::get('/filtro', [PessoaController::class, 'buscarPessoaParaFiltros']);
     Route::get('/{id_pessoa}/dependente', [PessoaDependenteController::class, 'buscarDependentesPorIdPessoa']);
     Route::get('/{cpf}', [PessoaController::class, 'buscarPessoaPorCpf']);
 
@@ -52,10 +48,23 @@ Route::group([ 'prefix' => 'pessoa' ], function () {
     Route::post('/{id_pessoa}/imagem', [PessoaController::class, 'cadastrarOuAtualizarImagem']);
     Route::post('/{id_pessoa}/dependente/{id_dependente}', [PessoaDependenteController::class, 'create']);
 
-    Route::put('/senha/', [PessoaController::class, 'mudarPropriaSenha']);
-    Route::put('/{id_pessoa}', [PessoaController::class, 'update']);
-
+    Route::get('/dependente/{id}', [PessoaDependenteController::class, 'buscarDependentePorId']);
     Route::delete('/dependente/{id_dependente}', [PessoaDependenteController::class, 'destroy']);
+
+    Route::get('/{id}/arquivo', [PessoaArquivoController::class, 'index']);
+    Route::post('/{id}/arquivo', [PessoaArquivoController::class, 'cadastrar']);
+
+
+    Route::group([ 'prefix' => 'arquivo' ], function () {
+        Route::get('/tipo', [PessoaTipoArquivoController::class, 'index']);
+        Route::post('/tipo', [PessoaTipoArquivoController::class, 'cadastrar']);
+
+        Route::delete('/{id}', [PessoaArquivoController::class, 'deletar']);
+    });
+
+    Route::put('/senha', [PessoaController::class, 'mudarPropriaSenha']);
+    Route::put('{id}/senha', [PessoaController::class, 'mudarSenhaDeFuncionarios']);
+    Route::put('/{id_pessoa}', [PessoaController::class, 'update']);
 });
 
 Route::group([ 'prefix' => 'funcionario' ], function () {
@@ -159,31 +168,4 @@ Route::group([ 'prefix' => 'atendido'], function () {
     });
 
     Route::get('/{id}', [AtendidoController::class, 'atendidoPorId']);
-});
-
-Route::group(['prefix' => 'pet'], function ( ){
-    Route::group(['prefix' => 'especie'], function ( ){
-        Route::post('/', [EspecieController::class, 'create']);
-        Route::get('/', [EspecieController::class, 'index']);
-    });
-    Route::group(['prefix' => 'raca'], function ( ){
-        Route::post('/', [RacaController::class, 'create']);
-        Route::get('/', [RacaController::class, 'index']);
-    });
-    Route::post('/{id_pet}/ficha-medica', [FichaMedicaController::class, 'create']);
-    Route::get('/{id_pet}/ficha-medica', [FichaMedicaController::class, 'index']);
-
-    Route::group(['prefix' => 'ficha-medica'], function ( ){
-        Route::put('/{id_ficha_medica}', [FichaMedicaController::class, 'update']);
-        Route::post('/{id_ficha_medica}/atendimento', [AtendimentoController::class, 'create']);
-        Route::delete('/atendimento/{id_atendimento}', [AtendimentoController::class, 'delete']);
-        Route::put('/atendimento/{id_atendimento}', [AtendimentoController::class, 'update']);
-        Route::get('/{id_ficha_medica}/atendimento', [AtendimentoController::class, 'index']);
-        Route::post('/atendimento/{id_pet_atendimento}/medicacao', [MedicacaoController::class, 'create']);
-        Route::delete('/atendimento/medicacao/{id_medicacao}', [MedicacaoController::class, 'delete']);
-        Route::get('/atendimento/{id_pet_atendimento}/medicacao', [MedicacaoController::class, 'index']);
-        Route::post('/atendimento/medicacao/medicamento', [MedicamentoController::class, 'create']);
-        Route::delete('/atendimento/medicacao/medicamento/{id_medicamento}', [MedicamentoController::class, 'delete']);
-        Route::get('/atendimento/medicacao/medicamento', [MedicamentoController::class, 'index']);
-    });
 });

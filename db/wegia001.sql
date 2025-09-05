@@ -87,6 +87,41 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pessoa_dependente` (
     FOREIGN KEY (id_dependente_pessoa) REFERENCES pessoa(id_pessoa)
 );
 
+-- -----------------------------------------------------
+-- Table `wegia`.`pessoa_tipo_arquivo`
+-- -----------------------------------------------------
+
+CREATE TABLE pessoa_tipo_arquivo (
+    id_pessoa_tipo_arquivo INT AUTO_INCREMENT PRIMARY KEY,
+    descricao VARCHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -----------------------------------------------------
+-- Table `wegia`.`pessoa_arquivo`
+-- -----------------------------------------------------
+
+CREATE TABLE pessoa_arquivo (
+    id_pessoa_arquivo INT AUTO_INCREMENT PRIMARY KEY,
+    id_pessoa INT NOT NULL,
+    id_pessoa_tipo_arquivo INT NOT NULL,
+    data DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    extensao_arquivo VARCHAR(10) NOT NULL,
+    nome_arquivo VARCHAR(255) NOT NULL,
+    arquivo LONGBLOB NOT NULL,
+    CONSTRAINT fk_pessoa_arquivo_pessoa FOREIGN KEY (id_pessoa)
+        REFERENCES pessoa (id_pessoa)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT fk_pessoa_arquivo_tipo FOREIGN KEY (id_pessoa_tipo_arquivo)
+        REFERENCES pessoa_tipo_arquivo (id_pessoa_tipo_arquivo)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -----------------------------------------------------
+-- Table `wegia`.`permissao`
+-- -----------------------------------------------------
+
 CREATE TABLE permissao (
     id_permissao INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -399,40 +434,6 @@ CREATE TABLE IF NOT EXISTS `wegia`.`estoque` (
   CONSTRAINT `estoque_ibfk_2`
     FOREIGN KEY (`id_almoxarifado`)
     REFERENCES `wegia`.`almoxarifado` (`id_almoxarifado`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `wegia`.`funcionario_docfuncional`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`funcionario_docfuncional` (
-  `id_docfuncional` INT NOT NULL AUTO_INCREMENT,
-  `nome_docfuncional` VARCHAR(50) NOT NULL,
-  `descricao_docfuncional` VARCHAR(256) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_docfuncional`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `wegia`.`funcionario_docs`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`funcionario_docs` (
-  `id_fundocs` INT NOT NULL AUTO_INCREMENT,
-  `id_funcionario` INT NOT NULL,
-  `id_docfuncional` INT NOT NULL,
-  `data` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `extensao_arquivo` VARCHAR(50) NOT NULL,
-  `nome_arquivo` VARCHAR(256) NOT NULL,
-  `arquivo` LONGBLOB NOT NULL,
-  PRIMARY KEY (`id_fundocs`),
-  INDEX `funcionariodocs_ibfk_1` (`id_funcionario` ASC),
-  INDEX `funcionariodocs_ibfk_2` (`id_docfuncional` ASC),
-  CONSTRAINT `funcionariodocs_ibfk_1`
-    FOREIGN KEY (`id_funcionario`)
-    REFERENCES `wegia`.`funcionario` (`id_funcionario`),
-  CONSTRAINT `funcionariodocs_ibfk_2`
-    FOREIGN KEY (`id_docfuncional`)
-    REFERENCES `wegia`.`funcionario_docfuncional` (`id_docfuncional`))
 ENGINE = InnoDB;
 
 
@@ -1042,46 +1043,6 @@ CREATE TABLE IF NOT EXISTS `wegia`.`remessa` (
     ON UPDATE RESTRICT)
 ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- Table `wegia`.`funcionario_docdependentes`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`funcionario_docdependentes` (
-  `id_docdependentes` INT NOT NULL AUTO_INCREMENT,
-  `nome_docdependente` VARCHAR(50) NOT NULL,
-  `descricao_docdependente` VARCHAR(256) NULL,
-  PRIMARY KEY (`id_docdependentes`),
-  UNIQUE INDEX `id_docdependentes_UNIQUE` (`id_docdependentes` ASC),
-  UNIQUE INDEX `nome_docdependente_UNIQUE` (`nome_docdependente` ASC))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `wegia`.`funcionario_dependentes_docs`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`funcionario_dependentes_docs` (
-  `id_doc` INT NOT NULL AUTO_INCREMENT,
-  `id_dependente` INT NOT NULL,
-  `id_docdependentes` INT NOT NULL,
-  `data` TIMESTAMP NOT NULL,
-  `extensao_arquivo` VARCHAR(50) NOT NULL,
-  `nome_arquivo` VARCHAR(256) NOT NULL,
-  `arquivo` LONGBLOB NOT NULL,
-  PRIMARY KEY (`id_doc`),
-  UNIQUE INDEX `id_doc_UNIQUE` (`id_doc` ASC),
-  INDEX `fk_funcionario_dependente_documentos_funcionario_dependente_idx` (`id_dependente` ASC),
-  INDEX `fk_funcionario_dependente_docs_funcionario_docdependentes1_idx` (`id_docdependentes` ASC),
-  CONSTRAINT `fk_funcionario_dependente_documentos_funcionario_dependentes1`
-    FOREIGN KEY (`id_dependente`)
-    REFERENCES `wegia`.`funcionario_dependentes` (`id_dependente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_funcionario_dependente_docs_funcionario_docdependentes1`
-    FOREIGN KEY (`id_docdependentes`)
-    REFERENCES `wegia`.`funcionario_docdependentes` (`id_docdependentes`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `wegia`.`atendido_tipo`
@@ -1131,43 +1092,6 @@ CREATE TABLE IF NOT EXISTS `wegia`.`atendido` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
--- -----------------------------------------------------
--- Table `wegia`.`atendido_docs_atendidos`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`atendido_docs_atendidos` (
-  `idatendido_docs_atendidos` INT NOT NULL AUTO_INCREMENT,
-  `descricao` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`idatendido_docs_atendidos`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `wegia`.`atendido_documentacao`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`atendido_documentacao` (
-  `idatendido_documentacao` INT NOT NULL AUTO_INCREMENT,
-  `atendido_idatendido` INT NOT NULL,
-  `atendido_docs_atendidos_idatendido_docs_atendidos` INT NOT NULL,
-  `data` TIMESTAMP NOT NULL,
-  `arquivo_nome` VARCHAR(255) NOT NULL,
-  `arquivo_extensao` VARCHAR(10) NOT NULL,
-  `arquivo` LONGBLOB NOT NULL,
-  PRIMARY KEY (`idatendido_documentacao`),
-  INDEX `fk_atendido_documentacao_atendido1_idx` (`atendido_idatendido` ASC),
-  INDEX `fk_atendido_documentacao_atendido_docs_atendidos1_idx` (`atendido_docs_atendidos_idatendido_docs_atendidos` ASC),
-  CONSTRAINT `fk_atendido_documentacao_atendido1`
-    FOREIGN KEY (`atendido_idatendido`)
-    REFERENCES `wegia`.`atendido` (`idatendido`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_atendido_documentacao_atendido_docs_atendidos1`
-    FOREIGN KEY (`atendido_docs_atendidos_idatendido_docs_atendidos`)
-    REFERENCES `wegia`.`atendido_docs_atendidos` (`idatendido_docs_atendidos`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `wegia`.`atendido_contato`
@@ -1587,7 +1511,7 @@ ENGINE = InnoDB;
 -- -------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`pet_foto` (
     `id_pet_foto` INT NOT NULL AUTO_INCREMENT,
-    `arquivo_foto_pet` LONGBLOB NOT NULL,
+    `arquivo_foto_pet` VARCHAR(255) NOT NULL,
     `arquivo_foto_pet_nome` varchar(200) NOT NULL,
     `arquivo_foto_pet_extensao` varchar(50) NOT NULL,
     PRIMARY KEY (`id_pet_foto`)
@@ -1611,16 +1535,6 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pet_raca` (
     PRIMARY KEY (`id_pet_raca`))
 ENGINE = InnoDB;
 
--- ---------------------------------------------------------
--- Table `wegia`.`pet_cor`
--- ---------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`pet_cor` (
-    `id_pet_cor` INT NOT NULL AUTO_INCREMENT,
-    `descricao` VARCHAR(50) NOT NULL,
-    PRIMARY KEY (`id_pet_cor`))
-ENGINE = InnoDB;
-
-
 -- -----------------------------------------------------
 -- Table `wegia`.`pet`
 -- -----------------------------------------------------
@@ -1634,22 +1548,34 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pet` (
     `id_pet_foto` INT NULL,
     `id_pet_especie` INT NOT NULL,
     `id_pet_raca` INT NOT NULL,
-    `id_pet_cor` INT NOT NULL,
+    `cor` ENUM(
+        'Preto',
+        'Branco',
+        'Cinza',
+        'Marrom',
+        'Caramelo',
+        'Amarelo',
+        'Bege',
+        'Dourado',
+        'Ruivo',
+        'Creme',
+        'Azul',
+        'Chocolate',
+        'Bicolor',
+        'Tricolor'
+    )  NOT NULL,
     PRIMARY KEY (`id_pet`),
     CONSTRAINT `fk_pet_especie`
-     FOREIGN KEY (`id_pet_especie`)
-     REFERENCES `wegia`.`pet_especie` (`id_pet_especie`),
+    FOREIGN KEY (`id_pet_especie`)
+    REFERENCES `wegia`.`pet_especie` (`id_pet_especie`),
     CONSTRAINT `fk_pet_raca`
-     FOREIGN KEY (`id_pet_raca`)
-     REFERENCES `wegia`.`pet_raca` (`id_pet_raca`),
-    CONSTRAINT `fk_pet_cor`
-     FOREIGN KEY (`id_pet_cor`)
-     REFERENCES `wegia`.`pet_cor` (`id_pet_cor`),
+    FOREIGN KEY (`id_pet_raca`)
+    REFERENCES `wegia`.`pet_raca` (`id_pet_raca`),
     CONSTRAINT `fk_pet_foto`
-     FOREIGN KEY (`id_pet_foto`)
-     REFERENCES `wegia`.`pet_foto`(`id_pet_foto`)
-)
-ENGINE = InnoDB;
+    FOREIGN KEY (`id_pet_foto`)
+    REFERENCES `wegia`.`pet_foto`(`id_pet_foto`)
+    )
+    ENGINE = InnoDB;
 
 -- ----------------------------------------------------------
 -- Table `wegia`.`pet_adocao`
@@ -1795,7 +1721,7 @@ CREATE TABLE IF NOT EXISTS `wegia`.`pet_atendimento`(
     `id_pet_atendimento` INT NOT NULL AUTO_INCREMENT,
     `id_ficha_medica` INT NOT NULL,
     `data_atendimento` DATE NOT NULL,
-    `descricao` BLOB NOT NULL,
+    `descricao` TEXT NOT NULL,
     PRIMARY KEY (`id_pet_atendimento`),
     CONSTRAINT `fk_ficha_pet_medica`
      FOREIGN KEY (`id_ficha_medica`)
@@ -1902,6 +1828,7 @@ CREATE TABLE IF NOT EXISTS `wegia`.`aviso` (
     `descricao` TEXT NOT NULL,
     `data_criacao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `nivel` ENUM('info', 'alerta', 'erro') NOT NULL DEFAULT 'info',
+    `url` VARCHAR(100) NULL,
     `ativo` BOOLEAN NOT NULL DEFAULT TRUE,
     PRIMARY KEY (`id_aviso`),
     FOREIGN KEY (`id_pessoa`)
@@ -2393,12 +2320,12 @@ BEGIN
 
 END$$
 
-DELIMITER ;
+USE `wegia`$$
 
-CREATE TRIGGER tr_despacho_aviso
-    AFTER INSERT ON despacho
+CREATE TRIGGER `wegia`.`tr_despacho_aviso`
+    AFTER INSERT ON `wegia`.`despacho`
     FOR EACH ROW
-BEGIN
+    BEGIN
     DECLARE memorando_titulo TEXT;
 
     SELECT titulo INTO memorando_titulo
@@ -2409,17 +2336,18 @@ BEGIN
         id_pessoa,
         titulo,
         descricao,
+        url,
         nivel,
         ativo
     ) VALUES (
-        NEW.id_destinatario,
-        memorando_titulo,
-        CONCAT('Você recebeu um novo despacho do memorando: "', memorando_titulo, '"'),
-        'info',
-        1
-    );
-END;
-//
+                 NEW.id_destinatario,
+                 memorando_titulo,
+                 CONCAT('Você recebeu um novo despacho do memorando: "', memorando_titulo, '"'),
+                 CONCAT('/memorando/',  NEW.id_memorando),
+                 'info',
+                 1
+             );
+END$$
 
 DELIMITER ;
 

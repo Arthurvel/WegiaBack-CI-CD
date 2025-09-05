@@ -2,7 +2,6 @@
 
 namespace App\Models\Pessoa;
 
-use App\Models\Pessoa;
 use Illuminate\Database\Eloquent\Model;
 
 class PessoaDependente extends Model
@@ -20,7 +19,7 @@ class PessoaDependente extends Model
     ];
 
     protected $casts = [
-        'parentesco' => PessoaParentescoEnum::class, 
+        'parentesco' => PessoaParentescoEnum::class,
     ];
 
     public function titular()

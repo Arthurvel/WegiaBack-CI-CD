@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Atendido;
 
 use App\Http\Controllers\BaseController;
-use App\Services\AtendidoService;
+use app\Services\Atendido\AtendidoService;
+use app\Services\Atendido\AtendidoStatusService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -16,15 +17,16 @@ use Illuminate\Http\JsonResponse;
 class AtendidoStatusController extends BaseController
 {
 
-    protected $atendidoService;
+    protected AtendidoStatusService $service;
 
     public function __construct(
-        AtendidoService $atendidoService
+        AtendidoStatusService $service
     )
     {
+        $this->middleware(['auth:sanctum', 'ability:visualizar-status-de-atendido'])->only(['index']);
         $this->middleware('auth:sanctum')->except([]);
 
-        $this->atendidoService = $atendidoService;
+        $this->service = $service;
     }
 
      /**
@@ -41,13 +43,13 @@ class AtendidoStatusController extends BaseController
     public function index() : JsonResponse
     {
         try {
-            $atendidos = $this->atendidoService->buscarStatusAtendimento();
+            $atendidos = $this->service->buscarTodos();
 
             return  $this->sucessoResponse($atendidos);
         } catch (Exception $e) {
             return $this->errorResponse($e);
-        } 
+        }
     }
 
-    
+
 }

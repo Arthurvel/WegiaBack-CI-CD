@@ -12,12 +12,7 @@ class PerfilResource extends JsonResource
             'id_perfil'  => $this->id_perfil,
             'nome'       => $this->nome,
             'cargo'      => $this->cargo,
-            'permissoes' => $this->permissoes ? $this->permissoes->map(function ($permissao) {
-                return [
-                    'id_permissao' => $permissao->id_permissao,
-                    'nome'         => $permissao->nome,
-                ];
-            }) : null,
+            'permissoes' =>  $this->relationLoaded('permissoes') ? PermissaoResource::collection($this->permissoes) : null,
         ];
     }
 }

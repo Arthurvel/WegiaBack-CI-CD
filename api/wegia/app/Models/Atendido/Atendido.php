@@ -3,7 +3,7 @@
 namespace App\Models\Atendido;
 
 use App\Models\BaseModel\BaseModel;
-use App\Models\Pessoa;
+use app\Models\Pessoa\Pessoa;
 
 class Atendido extends BaseModel
 {
@@ -19,7 +19,7 @@ class Atendido extends BaseModel
         'pessoa_id_pessoa',
         'atendido_tipo_idatendido_tipo',
         'atendido_status_idatendido_status'
-    ]; 
+    ];
 
 
     public function pessoa()
@@ -31,7 +31,7 @@ class Atendido extends BaseModel
     {
         return $this->belongsTo(AtendidoTipo::class, 'atendido_tipo_idatendido_tipo', 'idatendido_tipo');
     }
-    
+
     public function atendidoStatus()
     {
         return $this->belongsTo(AtendidoStatus::class, 'atendido_status_idatendido_status', 'idatendido_status');

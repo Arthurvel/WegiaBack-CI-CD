@@ -3,6 +3,7 @@
 namespace App\Models\Atendido;
 
 use App\Models\BaseModel\BaseModel;
+use App\Models\Funcionario\Funcionario;
 
 class Ocorrencia extends BaseModel
 {
@@ -20,15 +21,25 @@ class Ocorrencia extends BaseModel
         'funcionario_id_funcionario',
         'data',
         'descricao',
-    ]; 
+    ];
 
-    public function tipos() 
+    public function tipos()
     {
         return $this->hasOne(OcorrenciaTipos::class, 'idatendido_ocorrencia_tipos', 'atendido_ocorrencia_tipos_idatendido_ocorrencia_tipos');
     }
 
-    public function documento() 
+    public function documento()
     {
         return $this->hasOne(OcorrenciaDoc::class, 'atentido_ocorrencia_idatentido_ocorrencias', 'idatendido_ocorrencias');
+    }
+
+    public function atendido()
+    {
+        return $this->hasOne(Atendido::class, 'idatendido', 'atendido_idatendido');
+    }
+
+    public function funcionario()
+    {
+        return $this->hasOne(Funcionario::class, 'id_funcionario', 'funcionario_id_funcionario');
     }
 }

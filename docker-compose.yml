@@ -6,28 +6,13 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-      - 9000:9000
+      - 8000:80
     volumes:
       - ./api/wegia:/var/www/html
     networks:
       - wegia-network
     depends_on:
       - db
-
-  nginx:
-    image: nginx:alpine
-    container_name: nginx
-    restart: unless-stopped
-    ports:
-      - "8000:80"
-    volumes:
-      - ./api/wegia:/var/www/html
-      - ./api/config/nginx.conf:/etc/nginx/conf.d/default.conf
-    networks:
-      - wegia-network
-    depends_on:
-      - api
-
 
   db:
     image: mariadb:10.11

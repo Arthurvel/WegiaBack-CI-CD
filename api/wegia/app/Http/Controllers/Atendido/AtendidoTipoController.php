@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Atendido;
 
 use App\Http\Controllers\BaseController;
-use App\Services\AtendidoService;
+use app\Http\Resources\Atendido\AtendidoTipoResource;
+use app\Services\Atendido\AtendidoTipoService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -16,15 +17,16 @@ use Illuminate\Http\JsonResponse;
 class AtendidoTipoController extends BaseController
 {
 
-    protected $atendidoService;
+    protected AtendidoTipoService $service;
 
     public function __construct(
-        AtendidoService $atendidoService
+        AtendidoTipoService $service
     )
     {
+        $this->middleware(['auth:sanctum', 'ability:visualizar-tipo-de-atendido'])->only(['index']);
         $this->middleware('auth:sanctum')->except([]);
 
-        $this->atendidoService = $atendidoService;
+        $this->service = $service;
     }
 
      /**
@@ -41,13 +43,13 @@ class AtendidoTipoController extends BaseController
     public function index() : JsonResponse
     {
         try {
-            $atendidos = $this->atendidoService->buscarTipoAtendimento();
+            $atendidos = $this->service->buscarTodos();
 
-            return  $this->sucessoResponse($atendidos);
+            return  $this->sucessoResponse(AtendidoTipoResource::collection($atendidos));
         } catch (Exception $e) {
             return $this->errorResponse($e);
-        } 
+        }
     }
 
-    
+
 }

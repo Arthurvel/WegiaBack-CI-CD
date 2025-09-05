@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\PessoaService;
 use App\Services\AuthService;
-use Illuminate\Http\Request;
+use app\Services\Pessoa\PessoaService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 
 /**
@@ -79,7 +79,7 @@ class AuthController extends BaseController
 
             $pessoa = $this->pessoaService->buscarPessoaPorCpfSemFormatacao($request->cpf);
 
-            if ($pessoa && $pessoa->validarSenha($request->senha)) {
+            if ($pessoa->validarSenha($request->senha)) {
 
                 return $this->sucessoResponse([
                     'pessoa' => $pessoa,
@@ -89,7 +89,7 @@ class AuthController extends BaseController
 
             return $this->errorResponse(null, 401, 'CPF ou senha incorretos');
         } catch (\Exception $e) {
-            return $this->errorResponse(null, 500, $e->getMessage());
+            return $this->errorResponse($e);
         }
 
     }

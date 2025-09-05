@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Atendido;
 
+use app\DTOs\Atendido\AtendidoBuscarDTO;
+use app\DTOs\Atendido\AtendidoCadastrarDTO;
 use App\Http\Controllers\BaseController;
-use Illuminate\Http\Request;
-use App\Services\AtendidoService;
-use App\Validations\Atendido\BuscarAtendidoIdValidation;
-use App\Validations\Atendido\BuscarAtendidoValidation;
-use App\Validations\Atendido\CriarAtendido;
+use app\Http\Resources\Atendido\AtendidoResource;
+use App\Http\Resources\Paginacao\PaginacaoResource;
+use app\Services\Atendido\AtendidoService;
+use App\Validations\Atendido\AtendidoBuscarPorIdValidation;
+use App\Validations\Atendido\AtendidoBuscarValidation;
+use App\Validations\Atendido\AtendidoCadastrarValidation;
 use Exception;
+use Illuminate\Http\Request;
 
 /**
  * @OA\Tag(
@@ -19,12 +23,14 @@ use Exception;
 class AtendidoController extends BaseController
 {
 
-    protected $atendidoService;
+    protected AtendidoService $atendidoService;
 
     public function __construct(
         AtendidoService $atendidoService
     )
     {
+        $this->middleware(['auth:sanctum', 'ability:criar-atendido'])->only(['create']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-atendido'])->only(['atendidoPorId', 'index']);
         $this->middleware('auth:sanctum')->except([]);
 
         $this->atendidoService = $atendidoService;
@@ -91,21 +97,19 @@ class AtendidoController extends BaseController
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
     */
-    public function index(Request $request)
+    public function index(AtendidoBuscarValidation $request)
     {
         try {
-            $this->validarRequest(
-                $request->query(),
-                BuscarAtendidoValidation::rules(),
-                BuscarAtendidoValidation::messages()
-            );
+            $validated = $request->validated();
 
-            $atendidos = $this->atendidoService->buscarAtendimentos($request->query());
+            $dto = AtendidoBuscarDTO::fromArray($validated);
 
-            return  $this->sucessoResponse($atendidos);
+            $atendidos = $this->atendidoService->buscarAtendimentos($dto);
+
+            return  $this->sucessoResponse(new PaginacaoResource($atendidos, AtendidoResource::class));
         } catch (Exception $e) {
-            return $this->errorResponse(null,500,$e->getMessage());
-        } 
+            return $this->errorResponse($e);
+        }
     }
 
     /**
@@ -133,21 +137,19 @@ class AtendidoController extends BaseController
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
     */
-    public function atendidoPorId($id, Request $request)
+    public function atendidoPorId($id, AtendidoBuscarPorIdValidation $request)
     {
         try {
-            $this->validarRequest(
-                ["id" => $id, ...$request->query()],
-                BuscarAtendidoIdValidation::rules(),
-                BuscarAtendidoValidation::messages()
-            );
+            $validated = $request->validated();
 
-            $atendido = $this->atendidoService->buscarAtendidoPorId($id, $request->query('with'));
+            $with = isset($validated['with']) ? [$validated['with']] : [];
 
-            return  $this->sucessoResponse($atendido->toArray());
+            $atendido = $this->atendidoService->buscarPorId($id, $with);
+
+            return  $this->sucessoResponse(new AtendidoResource($atendido));
         } catch (Exception $e) {
-            return $this->errorResponse(null,500,$e->getMessage());
-        } 
+            return $this->errorResponse($e);
+        }
     }
 
     /**
@@ -158,33 +160,26 @@ class AtendidoController extends BaseController
      *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(
-     *             required={"pessoa_id_pessoa", "atendido_tipo_idatendido_tipo", "atendido_status_idatendido_status"},
-     *             @OA\Property(property="pessoa_id_pessoa", type="integer", description="id da pessoa"),
-     *             @OA\Property(property="atendido_tipo_idatendido_tipo", type="integer", description="id do tipo do atendido"),
-     *             @OA\Property(property="atendido_status_idatendido_status", type="integer", description="id do status do atendido"),
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/AtendidoCadastrarValidation")
      *     ),
      *     @OA\Response(response="200", description="Cadastro realizado com sucesso", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
      * )
     */
-    public function create(Request $request) 
+    public function create(AtendidoCadastrarValidation $request)
     {
         try {
-            $this->validarRequest(
-                $request->all(),
-                CriarAtendido::rules(),
-                CriarAtendido::messages()
-            );
+            $validated = $request->validated();
 
-            $atendidos = $this->atendidoService->cadastrarAtendido($request->all());
+            $dto = AtendidoCadastrarDTO::fromArray($validated);
 
-            return  $this->sucessoResponse($atendidos);
+            $this->atendidoService->criar($dto);
+
+            return  $this->sucessoResponse(true, 201);
         } catch (Exception $e) {
             return $this->errorResponse($e);
-        } 
+        }
     }
 
 }
