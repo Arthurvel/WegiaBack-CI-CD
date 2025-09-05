@@ -87,7 +87,7 @@ class AuthController extends BaseController
                 ]);
             }
 
-            return $this->errorResponse(null, 401, 'CPF ou senha incorretos');
+            abort(401, 'CPF ou senha incorretos');
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }
