@@ -30,7 +30,7 @@ class PessoaRepository extends BaseRepository
 
     }
 
-    public function buscarPessoaPorCpf(string $cpf) : Pessoa
+    public function buscarPessoaPorCpf(string $cpf)
     {
         return $this->model->where('cpf', $cpf)->firstOrFail();
     }
