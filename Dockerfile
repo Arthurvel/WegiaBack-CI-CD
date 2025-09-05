@@ -27,6 +27,8 @@ COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 COPY ./api/wegia /var/www/html
 WORKDIR /var/www/html
 
+RUN composer install --no-dev --optimize-autoloader
+
 COPY ./api/wegia/.env /var/www/html/.env
 
 COPY ./api/config/opcache.ini /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
@@ -37,6 +39,8 @@ RUN chmod +x /usr/local/bin/custom-entrypoint.sh
 
 RUN sed -i 's|listen = .*|listen = 127.0.0.1:9000|' /usr/local/etc/php-fpm.d/www.conf
 
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 EXPOSE 8000
 

@@ -3,7 +3,6 @@
 namespace Modules\Memorando\app\Http\Controllers;
 
 /**
-/**
  * @OA\Info(
  *     title="API Memorando",
  *     version="1.0.0",
@@ -18,8 +17,8 @@ namespace Modules\Memorando\app\Http\Controllers;
  * )
  *
  * @OA\Server(
- *     url="http://localhost:8000/api",
- *     description="Servidor Local"
+ * url=L5_SWAGGER_CONST_HOST,
+ * description="Servidor"
  * )
  */
 class SwaggerController
