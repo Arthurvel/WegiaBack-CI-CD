@@ -37,7 +37,7 @@ class UploadSeguroHelper
         }
 
         $url = URL::temporarySignedRoute(
-            'file.upload', now()->addMinutes($validadeURL), ['path' => $caminho]
+            'file.upload', now()->addMinutes($validadeURL), ['path' => $caminho], false
         );
 
         return $url;
