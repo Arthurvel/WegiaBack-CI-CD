@@ -34,6 +34,7 @@ COPY ./api/wegia/.env /var/www/html/.env
 COPY ./api/config/opcache.ini /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
 COPY ./api/config/nginx.conf /etc/nginx/nginx.conf
 COPY ./api/config/custom-entrypoint.sh /usr/local/bin/custom-entrypoint.sh
+COPY ./api/config/www.conf /usr/local/etc/php-fpm.d/www.conf
 
 RUN chmod +x /usr/local/bin/custom-entrypoint.sh
 
