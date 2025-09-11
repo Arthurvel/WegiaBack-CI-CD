@@ -1,0 +1,17 @@
+name: build.yml
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: "Checkout do codigo"
+        uses: actions/checkout@v4
+
+      - name: "Buidando docker"
+        run: |
+          docker compose build --no-cache
+          docker compose up

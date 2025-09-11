@@ -1,0 +1,27 @@
+name: atualizacao-vps.yml
+on:
+  workflow_run:
+    workflows: ["proibir-push-master"]
+    types:
+      - completed
+
+jobs:
+  depoloy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'master' }}
+    runs-on: ubuntu-24
+
+    strategy:
+      matrix:
+        host:
+          - "192.168.0.10"
+
+    steps:
+      - name: Atualizando o servidor ${{ matrix.host }}
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ matrix.host }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /root/projeto
+            ./init.sh atualizar_back
