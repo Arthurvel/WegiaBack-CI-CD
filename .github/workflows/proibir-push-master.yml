@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checar se é merge de PR
+      - name: "Checar se é merge de PR"
         if: ${{ github.event_name != 'pull_request' && github.event.pull_request == null }}
         run: |
           echo "Push direto detectado! Abortando workflow."
