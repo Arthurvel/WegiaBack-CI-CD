@@ -1253,63 +1253,34 @@ ENGINE = InnoDB;
 -- Table `wegia`.`saude_fichamedica`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`saude_fichamedica` (
-  `id_fichamedica` INT NOT NULL AUTO_INCREMENT,
-  `id_pessoa` INT(11) NOT NULL UNIQUE,
-  PRIMARY KEY (`id_fichamedica`),
-  INDEX `fk_saude_fichamedica_pessoa1_idx` (`id_pessoa` ASC),
-  CONSTRAINT `fk_saude_fichamedica_pessoa1`
+    `id_fichamedica` INT NOT NULL AUTO_INCREMENT,
+    `id_pessoa` INT NOT NULL,
+    `prontuario` TEXT NOT NULL,
+    PRIMARY KEY (`id_fichamedica`),
+    INDEX `fk_saude_fichamedica_pessoa_idx` (`id_pessoa` ASC),
+    CONSTRAINT `fk_saude_fichamedica_pessoa`
     FOREIGN KEY (`id_pessoa`)
     REFERENCES `wegia`.`pessoa` (`id_pessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
--- Table `wegia`.`saude_fichamedica_descricoes`
+-- Table `wegia`.`saude_fichamedica_prontuario_historico`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`saude_fichamedica_descricoes` (
-  `id_descricao` INT NOT NULL AUTO_INCREMENT,
-  `id_fichamedica` INT(11) NOT NULL,
-  `descricao` VARCHAR(2048) NOT NULL,
-  PRIMARY KEY (`id_descricao`),
-  INDEX fk_ficha_medica_descricoes_ficha_medica_idx (`id_fichamedica` ASC),
-  CONSTRAINT fk_fichamedica_descricoes_fichamedica
-    FOREIGN KEY (`id_fichamedica`) REFERENCES `wegia`.`saude_fichamedica` (`id_fichamedica`)
+CREATE TABLE IF NOT EXISTS `wegia`.`saude_fichamedica_prontuario_historico` (
+    `id_prontuario_historico` INT NOT NULL AUTO_INCREMENT,
+    `id_fichamedica` INT NOT NULL,
+    `prontuario` TEXT NOT NULL,
+    `data` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id_prontuario_historico`),
+    INDEX `fk_saude_fichamedica_prontuario_historico_fichamedica_idx` (`id_fichamedica` ASC),
+    CONSTRAINT `fk_saude_fichamedica_prontuario_historico_fichamedica`
+    FOREIGN KEY (`id_fichamedica`)
+    REFERENCES `wegia`.`saude_fichamedica` (`id_fichamedica`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
- ENGINE = InnoDB;
-
-
--- Table `wegia`.`saude_fichamedica_historico`
-
-CREATE TABLE IF NOT EXISTS `wegia`.`saude_fichamedica_historico` (
-  `id_fichamedica_historico` INT NOT NULL AUTO_INCREMENT,
-  `id_pessoa` INT(11) NOT NULL,
-  `data` DATETIME NOT NULL,
-  PRIMARY KEY (`id_fichamedica_historico`),
-  INDEX `fk_saude_fichamedica_historico_pessoa1_idx` (`id_pessoa` ASC),
-  CONSTRAINT `fk_saude_fichamedica_historico_pessoa1`
-    FOREIGN KEY (`id_pessoa`)
-    REFERENCES `wegia`.`pessoa` (`id_pessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
--- Table `wegia`.`saude_fichamedica_historico_descricoes`
-
-CREATE TABLE IF NOT EXISTS `wegia`.`saude_fichamedica_historico_descricoes` (
-  `id_fichamedica_historico_descricao` INT NOT NULL AUTO_INCREMENT,
-  `id_fichamedica_historico` INT(11) NOT NULL,
-  `descricao` VARCHAR(2048) NOT NULL,
-  PRIMARY KEY (`id_fichamedica_historico_descricao`),
-  INDEX `fk_ficha_medica_historico_descricoes_ficha_medica_idx` (`id_fichamedica_historico` ASC),
-  CONSTRAINT `fk_fichamedica_historico_descricoes`
-    FOREIGN KEY (`id_fichamedica_historico`) REFERENCES `wegia`.`saude_fichamedica_historico` (`id_fichamedica_historico`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
- ENGINE = InnoDB;
-
+    ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `wegia`.`saude_tabelacid`
@@ -1365,11 +1336,11 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `wegia`.`saude_exames` (
   `id_exame` INT NOT NULL AUTO_INCREMENT,
   `id_fichamedica` INT NOT NULL,
-  `id_exame_tipos` INT NOT NULL,
+  `id_exame_tipo` INT NOT NULL,
   `data` TIMESTAMP NOT NULL,
   `arquivo_nome` VARCHAR(255) NOT NULL,
   `arquivo_extensao` VARCHAR(10) NULL,
-  `arquivo` LONGBLOB NOT NULL,
+  `arquivo` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id_exame`),
   INDEX `fk_saude_exames_saude_fichamedica1_idx` (`id_fichamedica` ASC),
   INDEX `fk_saude_exames_saude_exame_tipos1_idx` (`id_exame_tipos` ASC),
