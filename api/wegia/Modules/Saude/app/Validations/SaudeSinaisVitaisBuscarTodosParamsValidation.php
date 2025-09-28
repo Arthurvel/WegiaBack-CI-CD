@@ -4,7 +4,7 @@ namespace Modules\Saude\app\Validations;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SaudeExameBuscarTodosParamsValidation extends FormRequest
+class SaudeSinaisVitaisBuscarTodosParamsValidation extends FormRequest
 {
 
     protected function prepareForValidation() : void
@@ -19,7 +19,7 @@ class SaudeExameBuscarTodosParamsValidation extends FormRequest
         return [
             'id_fichamedica' => 'required|integer|exists:saude_fichamedica,id_fichamedica',
             'buscar'         => 'sometimes|string',
-            'ordenacao'      => 'sometimes|string|in:descricao,arquivo_nome,data',
+            'ordenacao'      => 'sometimes|string|in:data,saturacao,pressao_arterial,frequencia_cardiaca,frequencia_respiratoria,temperatura,hgt',
             'tipoOrdenacao'  => 'sometimes|string|in:ASC,asc,DESC,desc',
             'pagina'         => 'sometimes|integer|min:1',
             'itensPorPagina' => 'sometimes|integer|min:1',

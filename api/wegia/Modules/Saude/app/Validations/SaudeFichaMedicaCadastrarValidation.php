@@ -14,6 +14,13 @@ use Illuminate\Foundation\Http\FormRequest;
  */
 class SaudeFichaMedicaCadastrarValidation extends FormRequest
 {
+    protected function prepareForValidation() : void
+    {
+        $this->merge([
+            'id_fichamedica' => $this->route('id'),
+        ]);
+    }
+
     public function rules() : array
     {
         return [

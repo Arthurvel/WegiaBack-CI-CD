@@ -4,58 +4,59 @@ namespace Modules\Saude\app\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Paginacao\PaginacaoResource;
-use Modules\Saude\app\DTO\SaudeExameBuscarParamsDTO;
-use Modules\Saude\app\DTO\SaudeExameCadastrarDTO;
-use Modules\Saude\app\Http\Resources\SaudeExameResource;
-use Modules\Saude\app\Services\SaudeExameService;
-use Modules\Saude\app\Validations\SaudeExameBuscarTodosParamsValidation;
-use Modules\Saude\app\Validations\SaudeExameCadastrarValidation;
+use Modules\Saude\app\DTO\SaudeFichaMedicaAlergiaBuscarTodosParamsDTO;
+use Modules\Saude\app\DTO\SaudeFichaMedicaAlergiaCadastrarDTO;
+use Modules\Saude\app\Http\Resources\SaudeFichaMedicaAlergiaResource;
+use Modules\Saude\app\Services\SaudeFichaMedicaAlergiaService;
+use Modules\Saude\app\Validations\SaudeFichaMedicaAlergiaBuscarTodosParamsValidation;
+use Modules\Saude\app\Validations\SaudeFichaMedicaAlergiaCadastrarValidation;
 
 /**
  * @OA\Tag(
- *     name="Exame",
+ *     name="Alergia",
  *     description="Operações relacionadas ao Modulo de Saude"
  * )
  */
-class SaudeExameController extends BaseController
+class SaudeFichaMedicaAlergiaController extends BaseController
 {
 
-    private SaudeExameService $service;
+    public SaudeFichaMedicaAlergiaService $service;
 
     public function __construct(
-        SaudeExameService $service
+        SaudeFichaMedicaAlergiaService $service
     )
     {
-        $this->middleware(['auth:sanctum', 'ability:criar-saude-exame'])->only(['cadastrar']);
-        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-exame'])->only(['buscarTodos']);
-        $this->middleware(['auth:sanctum', 'ability:deletar-saude-exame'])->only(['deletar']);
+        $this->middleware(['auth:sanctum', 'ability:cadastrar-saude-alergia-na-ficha-medica'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-alergia-na-ficha-medica'])->only(['buscarTodosPaginado']);
+        $this->middleware(['auth:sanctum', 'ability:deletar-saude-alergia-na-ficha-medica'])->only(['deletar']);
         $this->middleware(['auth:sanctum'])->except(['']);
+
         $this->service = $service;
     }
 
     /**
      * @OA\Post(
-     *     path="/saude/ficha-medica/{id}/exame",
-     *     summary="Cadastra um exame na ficha medica",
-     *     tags={"Exame"},
+     *     path="/saude/ficha-medica/{id_fichamedica}/alergia/{id_alergia}",
+     *     summary="Cadastra uma alergia",
+     *     tags={"Alergia"},
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
-     *          name="id",
+     *          name="id_fichamedica",
      *          in="path",
      *          description="ID da ficha medica",
      *          required=true,
      *          @OA\Schema(type="integer")
-     *      ),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *               mediaType="multipart/form-data",
-     *               @OA\Schema(ref="#/components/schemas/SaudeExameCadastrarValidation")
-     *         )
+     *     ),
+     *     @OA\Parameter(
+     *           name="id_alergia",
+     *           in="path",
+     *           description="ID da alergia",
+     *           required=true,
+     *           @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Operacao cadastrado com sucesso",
+     *         description="Operacao realizada com sucesso",
      *         @OA\JsonContent()
      *     ),
      *     @OA\Response(
@@ -65,19 +66,14 @@ class SaudeExameController extends BaseController
      *     )
      * )
      */
-    public function cadastrar(int $id, SaudeExameCadastrarValidation $request)
+    public function cadastrar(SaudeFichaMedicaAlergiaCadastrarValidation $request)
     {
         try {
             $validated = $request->validated();
-            $arquivo = $request->file('arquivo') ?? null;
 
-            $dto = SaudeExameCadastrarDTO::fromArray([
-                'id_fichamedica' => $id,
-                'arquivo'        => $arquivo,
-                ...$validated
-            ]);
+            $dto = SaudeFichaMedicaAlergiaCadastrarDTO::fromArray($validated);
 
-            $criado = $this->service->criarComFoto($dto);
+            $criado = $this->service->criar($dto);
 
             return $this->sucessoResponse($criado, 201);
         } catch (\Exception $e) {
@@ -87,9 +83,9 @@ class SaudeExameController extends BaseController
 
     /**
      * @OA\get(
-     *     path="/saude/ficha-medica/{id}/exame",
-     *     summary="Buscar todos os exames da ficha medica paginadas",
-     *     tags={"Exame"},
+     *     path="/saude/ficha-medica/{id}/alergia",
+     *     summary="Buscar todas as alergias de uma ficha medica",
+     *     tags={"Alergia"},
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *           name="id",
@@ -97,7 +93,7 @@ class SaudeExameController extends BaseController
      *           description="ID da ficha medica",
      *           required=true,
      *           @OA\Schema(type="integer")
-     *     ),
+     *       ),
      *     @OA\Parameter(
      *          name="buscar",
      *          in="query",
@@ -108,9 +104,9 @@ class SaudeExameController extends BaseController
      *      @OA\Parameter(
      *          name="ordenacao",
      *          in="query",
-     *          description="Campo de ordenação",
+     *          description="Campo de ordenação (nome)",
      *          required=false,
-     *          @OA\Schema(type="string", enum={"descricao", "arquivo_nome", "data"})
+     *          @OA\Schema(type="string", enum={"nome"})
      *      ),
      *      @OA\Parameter(
      *          name="tipoOrdenacao",
@@ -145,16 +141,16 @@ class SaudeExameController extends BaseController
      *     )
      * )
      */
-    public function buscarTodos(SaudeExameBuscarTodosParamsValidation $request)
+    public function buscarTodosPaginado(SaudeFichaMedicaAlergiaBuscarTodosParamsValidation $request)
     {
         try {
             $validated = $request->validated();
 
-            $dto = SaudeExameBuscarParamsDTO::fromArray($validated);
+            $dto = SaudeFichaMedicaAlergiaBuscarTodosParamsDTO::fromArray($validated);
 
-            $exames = $this->service->buscarTodosPaginado($dto);
+            $buscar = $this->service->buscarTodosPaginado($dto);
 
-            return $this->sucessoResponse(new PaginacaoResource($exames, SaudeExameResource::class), 200);
+            return $this->sucessoResponse(new PaginacaoResource($buscar, SaudeFichaMedicaAlergiaResource::class) );
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }
@@ -162,19 +158,19 @@ class SaudeExameController extends BaseController
 
     /**
      * @OA\delete(
-     *     path="/saude/exame/{id}",
-     *     summary="Buscar todos os exames da ficha medica paginadas",
-     *     tags={"Exame"},
+     *     path="/saude/ficha-medica/alergia/{id}",
+     *     summary="Deleta uma alergia da ficha medica",
+     *     tags={"Alergia"},
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *           name="id",
      *           in="path",
-     *           description="ID do exame",
+     *           description="ID da alergia",
      *           required=true,
      *           @OA\Schema(type="integer")
-     *     ),
+     *       ),
      *     @OA\Response(
-     *         response=200,
+     *         response=204,
      *         description="Operacao realizada com sucesso",
      *         @OA\JsonContent()
      *     ),
@@ -188,11 +184,12 @@ class SaudeExameController extends BaseController
     public function deletar(int $id)
     {
         try {
-            $this->service->deletarComFoto($id);
+            $this->service->deletar($id);
 
             return $this->sucessoResponse(null, 204);
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }
     }
+
 }

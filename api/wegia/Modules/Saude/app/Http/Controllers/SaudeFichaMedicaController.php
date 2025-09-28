@@ -28,7 +28,9 @@ class SaudeFichaMedicaController extends BaseController
         SaudeFichaMedicaService $service
     )
     {
-        $this->middleware(['auth:sanctum'])->only(['']);
+        $this->middleware(['auth:sanctum', 'ability:criar-saude-ficha-medica'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-ficha-medica'])->only(['buscarPorId', 'buscarTodasFichasMedicas']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-saude-ficha-medica'])->only(['atualizarFichaMedica']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;

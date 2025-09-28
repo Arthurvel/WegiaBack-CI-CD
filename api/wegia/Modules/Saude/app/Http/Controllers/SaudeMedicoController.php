@@ -3,45 +3,46 @@
 namespace Modules\Saude\app\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
-use Modules\Saude\app\DTO\SaudeCIDCadastrarDTO;
-use Modules\Saude\app\Http\Resources\SaudeCIDResource;
-use Modules\Saude\app\Services\SaudeCIDService;
-use Modules\Saude\app\Validations\SaudeCIDCadastrarValidation;
+use Modules\Saude\app\DTO\SaudeMedicoCadastrarDTO;
+use Modules\Saude\app\Http\Resources\SaudeMedicoResource;
+use Modules\Saude\app\Services\SaudeMedicoService;
+use Modules\Saude\app\Validations\SaudeMedicoCadastrarValidation;
 
 /**
  * @OA\Tag(
- *     name="CID",
+ *     name="Medico",
  *     description="Operações relacionadas ao Modulo de Saude"
  * )
  */
-class SaudeCIDController extends BaseController
+class SaudeMedicoController extends BaseController
 {
 
-    private SaudeCIDService $service;
+    public SaudeMedicoService $service;
 
     public function __construct(
-        SaudeCIDService $service
+        SaudeMedicoService $service
     )
     {
-        $this->middleware(['auth:sanctum', 'ability:criar-saude-cid'])->only(['cadastrar']);
-        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-cid'])->only(['buscarTodos']);
+        $this->middleware(['auth:sanctum', 'ability:criar-saude-medico'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-medico'])->only(['buscarTodos']);
         $this->middleware(['auth:sanctum'])->except(['']);
+
         $this->service = $service;
     }
 
     /**
      * @OA\Post(
-     *     path="/saude/cid",
-     *     summary="Cadastra uma cid",
-     *     tags={"CID"},
+     *     path="/saude/medico",
+     *     summary="Cadastra um medico",
+     *     tags={"Medico"},
      *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/SaudeCIDCadastrarValidation")
-     *     ),
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/SaudeMedicoCadastrarValidation")
+     *      ),
      *     @OA\Response(
      *         response=201,
-     *         description="Operacao cadastrado com sucesso",
+     *         description="Operacao realizada com sucesso",
      *         @OA\JsonContent()
      *     ),
      *     @OA\Response(
@@ -51,12 +52,12 @@ class SaudeCIDController extends BaseController
      *     )
      * )
      */
-    public function cadastrar(SaudeCIDCadastrarValidation $request)
+    public function cadastrar(SaudeMedicoCadastrarValidation $request)
     {
         try {
             $validated = $request->validated();
 
-            $dto = SaudeCIDCadastrarDTO::fromArray($validated);
+            $dto = SaudeMedicoCadastrarDTO::fromArray($validated);
 
             $criado = $this->service->criar($dto);
 
@@ -67,10 +68,10 @@ class SaudeCIDController extends BaseController
     }
 
     /**
-     * @OA\Get(
-     *     path="/saude/cid",
-     *     summary="Buscar todos os cid",
-     *     tags={"CID"},
+     * @OA\get(
+     *     path="/saude/medico",
+     *     summary="Buscar todos os medicos",
+     *     tags={"Medico"},
      *     security={{"bearerAuth": {}}},
      *     @OA\Response(
      *         response=200,
@@ -87,12 +88,11 @@ class SaudeCIDController extends BaseController
     public function buscarTodos()
     {
         try {
-            $cids = $this->service->buscarTodos();
+            $medico = $this->service->buscarTodos();
 
-            return $this->sucessoResponse(SaudeCIDResource::collection($cids));
+            return $this->sucessoResponse(SaudeMedicoResource::collection($medico));
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }
     }
-
 }

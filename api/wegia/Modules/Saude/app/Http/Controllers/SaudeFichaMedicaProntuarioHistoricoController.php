@@ -14,7 +14,7 @@ class SaudeFichaMedicaProntuarioHistoricoController extends BaseController
         SaudeFichaMedicaProntuarioHistoricoService $service
     )
     {
-        $this->middleware(['auth:sanctum'])->only(['']);
+        $this->middleware(['auth:sanctum', 'ability:criar-saude-historico-prontuario'])->only(['cadastrar']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;

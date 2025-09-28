@@ -23,7 +23,8 @@ class SaudeExameTiposController extends BaseController
         SaudeExameTiposService $service
     )
     {
-        $this->middleware(['auth:sanctum'])->only(['']);
+        $this->middleware(['auth:sanctum', 'ability:criar-saude-tipos-de-exame'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-tipos-de-exame'])->only(['buscarTodos']);
         $this->middleware(['auth:sanctum'])->except(['']);
         $this->service = $service;
     }

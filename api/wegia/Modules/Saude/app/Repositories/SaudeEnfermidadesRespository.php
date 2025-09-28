@@ -40,9 +40,9 @@ class SaudeEnfermidadesRespository extends BaseRepository
             })
             ->when(!is_null($ordenacao), function ($q) use ($ordenacao, $tipoOrdenacao) {
 
-                if($ordenacao == 'tipo') {
-                    return $q->join('saude_exame_tipos', 'saude_exames.id_exame_tipo', '=', 'saude_exame_tipos.id_exame_tipo')
-                        ->orderBy("saude_exame_tipos.{$ordenacao}", $tipoOrdenacao);
+                if($ordenacao == 'CID' || $ordenacao == 'descricao') {
+                    return $q->join('saude_tabelacid', 'saude_tabelacid.id_CID', '=', 'saude_enfermidades.id_CID')
+                        ->orderBy("saude_tabelacid.{$ordenacao}", $tipoOrdenacao);
                 } else {
                     return $q->orderBy($ordenacao, $tipoOrdenacao);
                 }

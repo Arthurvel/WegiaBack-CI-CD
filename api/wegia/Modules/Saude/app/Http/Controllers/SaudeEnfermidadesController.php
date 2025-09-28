@@ -28,7 +28,9 @@ class SaudeEnfermidadesController extends BaseController
         SaudeEnfermidadesService $service
     )
     {
-        $this->middleware(['auth:sanctum'])->only(['']);
+        $this->middleware(['auth:sanctum', 'ability:criar-saude-enfermidade'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-enfermidade'])->only(['buscarTodos']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-saude-enfermidade'])->only(['atualizar']);
         $this->middleware(['auth:sanctum'])->except(['']);
         $this->service = $service;
     }
