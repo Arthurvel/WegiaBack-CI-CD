@@ -101,7 +101,26 @@ class SaudeFichaMedicaController extends BaseController
     public function buscarPorId(int $id)
     {
         try {
-            $with = ['historico', 'pessoa'];
+            $tiposDesejados = ['CPF', 'Carteira de Identidade', 'Carteira do SUS', 'Plano de saúde'];
+
+            $with = [
+                'historico',
+                'pessoa',
+                'pessoa.arquivos' => function ($q) use ($tiposDesejados) {
+                    $q->with('tipoArquivo')
+                        ->whereHas('tipoArquivo', function ($tipo) use ($tiposDesejados) {
+                            $tipo->where(function ($query) use ($tiposDesejados) {
+                                foreach ($tiposDesejados as $tipoItem) {
+                                    $query->orWhereRaw('LOWER(descricao) LIKE ?', ['%' . strtolower($tipoItem) . '%']);
+                                }
+                            });
+                        })
+                        ->orderBy('data', 'desc')
+                        ->get()
+                        ->unique('id_pessoa_tipo_arquivo');
+                }
+            ];
+
             $ficha = $this->service->buscarPorId($id, $with);
 
             return $this->sucessoResponse(new SaudeFichaMedicaResource($ficha));
