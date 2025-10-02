@@ -1,0 +1,2274 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Saude",
+        "description": "Documentação da API Wegia",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "Servidor"
+        }
+    ],
+    "paths": {
+        "/saude/alergia": {
+            "get": {
+                "tags": [
+                    "Alergia"
+                ],
+                "summary": "Buscar todas as alergias para filtros",
+                "operationId": "8ea2dea3a53eba62f6528e3c20483672",
+                "parameters": [
+                    {
+                        "name": "id_fichamedica",
+                        "in": "query",
+                        "description": "id da ficha medica para trazer os que a ficha medica nao tem",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Alergia"
+                ],
+                "summary": "Cadastra uma alergia",
+                "operationId": "06a9baf7207aed33b15f4670b4ea5bee",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeAlergiaCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/ficha-medica/{id}/atendimento": {
+            "get": {
+                "tags": [
+                    "Atendimento"
+                ],
+                "summary": "Buscar todas os atendimentos de uma ficha medica",
+                "operationId": "96fc8c4d20c71666909da9586bc73923",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação (nome)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "nome"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Atendimento"
+                ],
+                "summary": "Cadastra um atendimento",
+                "operationId": "630ced327103ec6ba0eae8eefd24da88",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeAtendimentoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/cid": {
+            "get": {
+                "tags": [
+                    "CID"
+                ],
+                "summary": "Buscar todos os cid",
+                "operationId": "ef5f1d7b959ad406f30a471215658dae",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "CID"
+                ],
+                "summary": "Cadastra uma cid",
+                "operationId": "0dde97efd88368dcaad3340c83d2af03",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeCIDCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/ficha-medica/{id}/enfermidade": {
+            "get": {
+                "tags": [
+                    "Saude Ficha Medica"
+                ],
+                "summary": "Buscar todas as enfermidades de uma ficha medica",
+                "operationId": "987736bfd86e4f66d4a14e8eaa9b896b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Filtro de busca (CID, descricao)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação (descricao, cid, data_diagnostico)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "descricao",
+                                "CID",
+                                "data_diagnostico"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Ativo (1), Inativo (0)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                1,
+                                0
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Saude Ficha Medica"
+                ],
+                "summary": "Cadastra uma enfermidade",
+                "operationId": "41af87a4c0f9e81e633add7d721cbcd1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeEnfermidadeCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/ficha-medica/enfermidade/{id}": {
+            "put": {
+                "tags": [
+                    "Saude Ficha Medica"
+                ],
+                "summary": "Cadastra uma enfermidade",
+                "operationId": "aee763cef487b9055a42784309bf8a7b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da enfermidade",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeEnfermidadeAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/ficha-medica/{id}/exame": {
+            "get": {
+                "tags": [
+                    "Exame"
+                ],
+                "summary": "Buscar todos os exames da ficha medica paginadas",
+                "operationId": "11fac6a2ca857c1ac82655c42c98433e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "descricao",
+                                "arquivo_nome",
+                                "data"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Exame"
+                ],
+                "summary": "Cadastra um exame na ficha medica",
+                "operationId": "7f19aaf892b00f9c9452e856dcc9c1da",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeExameCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/exame/{id}": {
+            "delete": {
+                "tags": [
+                    "Exame"
+                ],
+                "summary": "Buscar todos os exames da ficha medica paginadas",
+                "operationId": "df161103b63bdf010a8fd37ad42e01f5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do exame",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/exame-tipo": {
+            "get": {
+                "tags": [
+                    "Exame"
+                ],
+                "summary": "Buscar todos os tipos de exame",
+                "operationId": "c3a6b019a9e63b071344e15571686971",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Exame"
+                ],
+                "summary": "Cadastra uma tipo de exame",
+                "operationId": "eede9087fe8527af1783649a7e603683",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeExameTipoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/ficha-medica/{id_fichamedica}/alergia/{id_alergia}": {
+            "post": {
+                "tags": [
+                    "Alergia"
+                ],
+                "summary": "Cadastra uma alergia",
+                "operationId": "1891a0d577088cbcc2c6a658007efeca",
+                "parameters": [
+                    {
+                        "name": "id_fichamedica",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "id_alergia",
+                        "in": "path",
+                        "description": "ID da alergia",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/ficha-medica/{id}/alergia": {
+            "get": {
+                "tags": [
+                    "Alergia"
+                ],
+                "summary": "Buscar todas as alergias de uma ficha medica",
+                "operationId": "9be0341f8b53bfa765c395fb6f4e2e20",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação (nome)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "nome"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/ficha-medica/alergia/{id}": {
+            "delete": {
+                "tags": [
+                    "Alergia"
+                ],
+                "summary": "Deleta uma alergia da ficha medica",
+                "operationId": "b9535fc838c8c4635c05c5c0102d1fb3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da alergia",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/ficha-medica": {
+            "get": {
+                "tags": [
+                    "Saude Ficha Medica"
+                ],
+                "summary": "Buscar todas as fichas medicas paginadas",
+                "operationId": "a42cf37de6d760e60f88e173f8b22fd1",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação (nome)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "nome"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Saude Ficha Medica"
+                ],
+                "summary": "Cadastra uma ficha medica",
+                "operationId": "4870fa70ef95928e92e988b832e088e6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeFichaMedicaCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Ficha medica cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/ficha-medica/{id}": {
+            "get": {
+                "tags": [
+                    "Saude Ficha Medica"
+                ],
+                "summary": "Buscar uma ficha medica",
+                "operationId": "9995a7a14905df246d9d21a4a39e348a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Saude Ficha Medica"
+                ],
+                "summary": "Atualizar uma ficha medica",
+                "operationId": "c6525a473bbfd9a303b235c24c2b6e2c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeFichaMedicaAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Ficha medica cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/ficha-medica/{id}/historico": {
+            "post": {
+                "tags": [
+                    "Saude Ficha Medica"
+                ],
+                "summary": "Cadastra uma Historico do prontuario medica",
+                "operationId": "3de1f2c188ad9f024bcaf3fc08318ad7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Historico cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/ficha-medica/{id}/intercorrencia": {
+            "get": {
+                "tags": [
+                    "Intercorrencia"
+                ],
+                "summary": "Buscar todas as intercorrencias de uma ficha medica",
+                "operationId": "3d01ecda720151c15ebc8a21a3542604",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "medicamento",
+                                "dosagem",
+                                "horario",
+                                "duracao",
+                                "status"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Intercorrencia"
+                ],
+                "summary": "Cadastra uma intercorrencia",
+                "operationId": "36e9e4c19260c5a6da018021379a9fb3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeIntercorrenciaCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/ficha-medica/{id}/medicacao": {
+            "get": {
+                "tags": [
+                    "Medicacao"
+                ],
+                "summary": "Buscar todas os atendimentos de uma ficha medica",
+                "operationId": "7ec4a277cc188b0ad88dac437b00e654",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "medicamento",
+                                "dosagem",
+                                "horario",
+                                "duracao",
+                                "status"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status atual da medicacao",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Tratamento",
+                                "Concluido",
+                                "Substituido",
+                                "Cancelado"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/medicacao/{id}": {
+            "put": {
+                "tags": [
+                    "Medicacao"
+                ],
+                "summary": "Atualizar um medicamento",
+                "operationId": "33bc1e5e48d1ae42c1f8ca17563cfd81",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeMedicacaoAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/medicacao/{id}/aplicacao": {
+            "get": {
+                "tags": [
+                    "Medicacao"
+                ],
+                "summary": "Buscar historico de administracao do medicamento",
+                "operationId": "be998bf366a71b55c84edcbd9d643840",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da medicacao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Medicacao"
+                ],
+                "summary": "Cadastra um medico",
+                "operationId": "1e5848e4d2244ab6741851e8f1455746",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da medicacao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeMedicacaoAdministracaoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/medico": {
+            "get": {
+                "tags": [
+                    "Medico"
+                ],
+                "summary": "Buscar todos os medicos",
+                "operationId": "8f44b0765b623560ea6a99392f04d61d",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Medico"
+                ],
+                "summary": "Cadastra um medico",
+                "operationId": "5ef8c95a1b5ef94fa2ab8d96f4a3a38b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeMedicoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/saude/ficha-medica/{id}/sinal-vital": {
+            "get": {
+                "tags": [
+                    "Sinais Vitais"
+                ],
+                "summary": "Buscar todas os sinais vitais de uma ficha medica",
+                "operationId": "07d6b7bbb1f1407f70edc952d3b5e4a1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome do funcionario",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação (nome)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "data",
+                                "saturacao",
+                                "pressao_arterial",
+                                "frequencia_cardiaca",
+                                "frequencia_respiratoria",
+                                "temperatura",
+                                "hgt"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Sinais Vitais"
+                ],
+                "summary": "Cadastra sinais vitais",
+                "operationId": "f5a1949378a11d4d60c65cd0d327010e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da ficha medica",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeSinaisVitaisCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "SaudeAlergiaCadastrarValidation": {
+                "required": [
+                    "nome"
+                ],
+                "properties": {
+                    "nome": {
+                        "description": "Nome da alergia",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SaudeAtendimentoCadastrarValidation": {
+                "required": [
+                    "id_funcionario",
+                    "id_medico"
+                ],
+                "properties": {
+                    "id_funcionario": {
+                        "description": "id do funcionário",
+                        "type": "integer"
+                    },
+                    "id_medico": {
+                        "description": "id do médico",
+                        "type": "integer"
+                    },
+                    "data_atendimento": {
+                        "description": "Data do atendimento",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "descricao": {
+                        "description": "Descrição do atendimento",
+                        "type": "string"
+                    },
+                    "medicacoes": {
+                        "description": "Lista de medicações vinculadas ao atendimento",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "medicamento": {
+                                    "description": "Nome do medicamento",
+                                    "type": "string"
+                                },
+                                "dosagem": {
+                                    "description": "Dosagem prescrita",
+                                    "type": "string"
+                                },
+                                "horario": {
+                                    "description": "Horário de uso",
+                                    "type": "string"
+                                },
+                                "duracao": {
+                                    "description": "Duração do tratamento",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "SaudeCIDCadastrarValidation": {
+                "required": [
+                    "CID",
+                    "descricao"
+                ],
+                "properties": {
+                    "CID": {
+                        "description": "codigo CID",
+                        "type": "string"
+                    },
+                    "descricao": {
+                        "description": "descricao do CID",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SaudeEnfermidadeAtualizarValidation": {
+                "properties": {
+                    "status": {
+                        "description": "Status da enfermidade",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ]
+                    },
+                    "data_diagnostico": {
+                        "description": "descricao do CID",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SaudeEnfermidadeCadastrarValidation": {
+                "required": [
+                    "id_CID",
+                    "status"
+                ],
+                "properties": {
+                    "id_CID": {
+                        "description": "codigo CID",
+                        "type": "integer"
+                    },
+                    "data_diagnostico": {
+                        "description": "descricao do CID",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "Status da enfermidade",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "SaudeExameCadastrarValidation": {
+                "required": [
+                    "id_exame_tipo",
+                    "data",
+                    "arquivo"
+                ],
+                "properties": {
+                    "id_exame_tipo": {
+                        "description": "id do tipo de exame",
+                        "type": "integer"
+                    },
+                    "data": {
+                        "description": "Data do exame",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "arquivo": {
+                        "description": "Foto do exame(jpeg, jpg, png, máx. 5MB)",
+                        "type": "string",
+                        "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
+            "SaudeExameTipoCadastrarValidation": {
+                "required": [
+                    "descricao"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "descricao do tipo",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SaudeFichaMedicaAtualizarValidation": {
+                "required": [
+                    "prontuario"
+                ],
+                "properties": {
+                    "prontuario": {
+                        "description": "Prontuario da pessoa",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SaudeFichaMedicaCadastrarValidation": {
+                "required": [
+                    "id_pessoa",
+                    "prontuario"
+                ],
+                "properties": {
+                    "id_pessoa": {
+                        "description": "id da pessoa",
+                        "type": "string"
+                    },
+                    "prontuario": {
+                        "description": "Prontuario da pessoa",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SaudeIntercorrenciaCadastrarValidation": {
+                "required": [
+                    "descricao",
+                    "id_funcionario"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "Descricao da intercorrencia",
+                        "type": "string"
+                    },
+                    "id_funcionario": {
+                        "description": "",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "SaudeMedicacaoAdministracaoCadastrarValidation": {
+                "required": [
+                    "aplicacao",
+                    "funcionario_id_funcionario"
+                ],
+                "properties": {
+                    "aplicacao": {
+                        "description": "",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "funcionario_id_funcionario": {
+                        "description": "Nome do medico",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "SaudeMedicacaoAtualizarValidation": {
+                "required": [
+                    "status"
+                ],
+                "properties": {
+                    "status": {
+                        "description": "status da medicacao",
+                        "type": "string",
+                        "enum": [
+                            "Tratamento",
+                            "Concluído",
+                            "Substituido",
+                            "Cancelado"
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "SaudeMedicoCadastrarValidation": {
+                "required": [
+                    "crm",
+                    "nome"
+                ],
+                "properties": {
+                    "crm": {
+                        "description": "crm do medico",
+                        "type": "string"
+                    },
+                    "nome": {
+                        "description": "Nome do medico",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SaudeSinaisVitaisCadastrarValidation": {
+                "required": [
+                    "id_funcionario",
+                    "data"
+                ],
+                "properties": {
+                    "id_funcionario": {
+                        "description": "ID do funcionário associado",
+                        "type": "integer"
+                    },
+                    "data": {
+                        "description": "Data e hora da coleta dos sinais vitais",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "saturacao": {
+                        "description": "Saturação de oxigênio no sangue",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "pressao_arterial": {
+                        "description": "Pressão arterial medida",
+                        "type": "string",
+                        "maxLength": 10
+                    },
+                    "frequencia_cardiaca": {
+                        "description": "Frequência cardíaca medida",
+                        "type": "integer"
+                    },
+                    "frequencia_respiratoria": {
+                        "description": "Frequência respiratória medida",
+                        "type": "integer"
+                    },
+                    "temperatura": {
+                        "description": "Temperatura corporal",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "hgt": {
+                        "description": "Nível de glicemia capilar (HGT)",
+                        "type": "number",
+                        "format": "float"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Alergia",
+            "description": "Operações relacionadas ao Modulo de Saude"
+        },
+        {
+            "name": "Atendimento",
+            "description": "Operações relacionadas ao Modulo de Saude"
+        },
+        {
+            "name": "CID",
+            "description": "Operações relacionadas ao Modulo de Saude"
+        },
+        {
+            "name": "Exame",
+            "description": "Operações relacionadas ao Modulo de Saude"
+        },
+        {
+            "name": "Saude Ficha Medica",
+            "description": "Operações relacionadas ao Modulo de Saude"
+        },
+        {
+            "name": "Intercorrencia",
+            "description": "Operações relacionadas ao Modulo de Saude"
+        },
+        {
+            "name": "Medicacao",
+            "description": "Operações relacionadas ao Modulo de Saude"
+        },
+        {
+            "name": "Medico",
+            "description": "Operações relacionadas ao Modulo de Saude"
+        },
+        {
+            "name": "Sinais Vitais",
+            "description": "Operações relacionadas ao Modulo de Saude"
+        }
+    ]
+}
