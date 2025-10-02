@@ -102,6 +102,29 @@ return [
                 ],
             ],
         ],
+
+        'saude' => [
+            'api' => [
+                'title' => 'API Saude',
+            ],
+            'routes' => [
+                'api' => 'api/saude/documentation',
+                'docs' => 'api/saude/docs'
+            ],
+            'paths' => [
+                'docs' => storage_path('saude-api-docs'),
+
+                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
+
+                'docs_json' => 'saude-api-docs.json',
+                'docs_yaml' => 'saude-api-docs.yaml',
+                'format_to_use_for_docs' => env('L5_FORMAT_TO_USE_FOR_DOCS', 'json'),
+
+                'annotations' => [
+                    base_path('Modules/Saude'),
+                ],
+            ],
+        ],
     ],
     'defaults' => [
         'routes' => [

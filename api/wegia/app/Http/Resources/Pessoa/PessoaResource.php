@@ -36,6 +36,7 @@ class PessoaResource extends JsonResource
             'tipo_sanguineo'  => $this->tipo_sanguineo,
             'nivel_acesso'    => $this->nivel_acesso,
             'adm_configurado' => $this->adm_configurado,
+            'arquivos'        => $this->relationLoaded('arquivos') ? PessoaArquivoResource::collection($this->arquivos) : null,
             'funcionario'     => $this->relationLoaded('funcionario') ? new FuncionarioResource($this->funcionario) : null,
             'avisos'          => $this->relationLoaded('avisos') ? AvisoResource::collection($this->avisos) : null
         ];

@@ -6,7 +6,7 @@ export $(grep -v '^#' /var/www/html/.env | xargs)
 
 php artisan l5-swagger:generate --all
 
-php artisan migrate --force
+php artisan migrate
 
 composer install --optimize-autoloader --no-dev
 

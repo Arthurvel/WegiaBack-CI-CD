@@ -43,5 +43,14 @@ class UploadSeguroHelper
         return $url;
     }
 
+    public static function excluirImagem(string $caminho): bool
+    {
+        if (Storage::disk('local_secure')->exists($caminho)) {
+            return Storage::disk('local_secure')->delete($caminho);
+        }
+
+        return false;
+    }
+
 
 }
