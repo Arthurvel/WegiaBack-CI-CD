@@ -1287,7 +1287,7 @@ CREATE TABLE IF NOT EXISTS `wegia`.`saude_fichamedica_prontuario_historico` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS saude_alergia (
     id_alergia INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(150) NOT NULL,
+    nome VARCHAR(150) NOT NULL
 ) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
@@ -1448,6 +1448,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`saude_medicamento_administracao` (
   `idsaude_medicamento_administracao` INT NOT NULL AUTO_INCREMENT,
+  `registro` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `aplicacao` DATETIME NOT NULL,
   `saude_medicacao_id_medicacao` INT NOT NULL,
   `funcionario_id_funcionario` INT(11) NOT NULL,
