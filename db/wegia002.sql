@@ -94,7 +94,7 @@ INSERT INTO `permissao` VALUES
     ('Criar Arquivo para Pessoa','Pessoa'),
     ('Deletar Arquivo da Pessoa','Pessoa'),
     ('Atualizar Memorando','Memorando');
-    ('Criar SauSaúdede Sinais Vitais', 'Saude'),
+    ('Criar Saúde Sinais Vitais', 'Saude'),
     ('Visualizar Saúde Sinais Vitais', 'Saude'),
     ('Criar Saúde Medico', 'Saude'),
     ('Visualizar Saúde Medico', 'Saude'),
@@ -120,8 +120,8 @@ INSERT INTO `permissao` VALUES
     ('Visualizar Saúde CID', 'Saude'),
     ('Criar Saúde Atendimento', 'Saude'),
     ('Visualizar Saúde Atendimento', 'Saude'),
-    ('Cadastrar alergia na ficha medica', 'Saude'),
-    ('Visualizar alergia na ficha medica', 'Saude'),
+    ('Cadastrar Saúde alergia na ficha medica', 'Saude'),
+    ('Visualizar Saúde alergia na ficha medica', 'Saude'),
     ('Deletar Saúde Alergia na Ficha Médica', 'Saude');
 
 INSERT INTO perfil_permissao (id_perfil, id_permissao)
