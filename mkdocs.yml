@@ -1,0 +1,61 @@
+site_name: Documentação Wegia API
+site_description: 'Documentação técnica completa da API do sistema Wegia, construída com Laravel.'
+site_author: 'Equipe de Desenvolvimento'
+
+theme:
+  name: material
+  language: pt
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+plugins:
+  - search
+
+nav:
+  - 'Início': 'index.md'
+  - 'Guia de Instalação': 'instalacao.md'
+  - 'Arquitetura do Software': 'arquitetura.md'
+  - 'Documentação da API': 'api.md'
+  - 'Desenvolvimento':
+      - 'DTO': 'desenvolvimento/DTOs.md'
+      - 'Validação': 'desenvolvimento/validation.md'
+      - 'Model': 'desenvolvimento/model.md'
+      - 'Controller': 'desenvolvimento/controller.md'
+      - 'Service': 'desenvolvimento/service.md'
+      - 'Repository': 'desenvolvimento/repository.md'
+      - 'Trait':
+          - 'Visão Geral': 'desenvolvimento/trait/index.md'
+          - 'Response': 'desenvolvimento/trait/response.md'
+      - 'Resource':
+          - 'Visão Geral': 'desenvolvimento/resource/index.md'
+          - 'Paginação': 'desenvolvimento/resource/paginacao.md'
+      - 'Segurança':
+          - 'Autenticacao': 'desenvolvimento/seguranca/autenticacao.md'
+          - 'Arquivo': 'desenvolvimento/seguranca/arquivo.md'
+      - 'Swagger': 'desenvolvimento/swagger.md'
+
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - attr_list
+  - md_in_html
