@@ -3,17 +3,16 @@
 namespace Modules\Material\app\Services;
 
 use App\Services\Base\BaseService;
-use Modules\Material\app\Repositories\OrigemRepository;
+use Modules\Material\app\Repositories\UnidadeRepository;
 
-class OrigemService extends BaseService
+class UnidadeService extends BaseService
 {
 
     public function __construct
     (
-        OrigemRepository $repository,
+        UnidadeRepository $repository,
     )
     {
         parent::__construct($repository);
     }
-
 }

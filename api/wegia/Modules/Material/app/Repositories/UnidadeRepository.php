@@ -3,15 +3,15 @@
 namespace Modules\Material\app\Repositories;
 
 use App\Repositories\Base\BaseRepository;
-use Modules\Material\app\Models\Origem;
+use Modules\Material\app\Models\Unidade;
 
-class OrigemRepository extends BaseRepository
+class UnidadeRepository extends BaseRepository
 {
+
     public function __construct(
-        Origem $model
+        Unidade $model
     )
     {
         parent::__construct($model);
     }
-
 }
