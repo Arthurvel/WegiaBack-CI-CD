@@ -467,6 +467,52 @@ CREATE TABLE material_transacao_produto (
 );
 
 -- -----------------------------------------------------
+-- Table `wegia`.`material_transacao_produto_logs`
+-- -----------------------------------------------------
+CREATE TABLE material_transacao_produto_logs (
+    id_transacao_produto_log INT AUTO_INCREMENT PRIMARY KEY,
+    id_transacao_produto INT NOT NULL,
+    id_transacao INT NOT NULL,
+    id_produto INT NOT NULL,
+    quantidade INT NOT NULL,
+    valor_unitario DECIMAL(10,2) NOT NULL,
+    id_usuario_acao INT NOT NULL,
+    acao ENUM('create', 'update', 'delete') NOT NULL,
+    data_acao DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- -----------------------------------------------------
+-- View `wegia`.`view_material_relatorio`
+-- -----------------------------------------------------
+CREATE OR REPLACE VIEW view_material_relatorio AS
+SELECT
+    t.id_transacao,
+    tm.id_tipo_movimentacao,
+    t.id_responsavel,
+    a.id_almoxarifado,
+    p.id_produto,
+    t.id_parceiro,
+    t.data,
+    tm.nome AS tipo_movimentacao,
+    tm.tipo AS tipo,
+    a.descricao AS almoxarifado,
+    pa.nome AS parceiro,
+    r.nome AS responsavel,
+    p.descricao AS produto,
+    u.descricao AS unidade,
+    tp.quantidade,
+    tp.valor_unitario,
+    (tp.quantidade * tp.valor_unitario) AS total
+FROM material_transacao t
+         JOIN material_transacao_produto tp ON tp.id_transacao = t.id_transacao
+         JOIN material_produto p ON p.id_produto = tp.id_produto
+         JOIN material_unidade u ON u.id_unidade = p.id_unidade
+         JOIN material_almoxarifado a ON a.id_almoxarifado = t.id_almoxarifado
+         JOIN material_parceiro pa ON pa.id_parceiro = t.id_parceiro
+         JOIN pessoa r ON r.id_pessoa = t.id_responsavel
+         JOIN material_tipo_movimentacao tm ON tm.id_tipo_movimentacao = t.id_tipo_movimentacao;
+
+-- -----------------------------------------------------
 -- Table `wegia`.`estoque`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`estoque` (
@@ -633,7 +679,6 @@ CREATE TABLE IF NOT EXISTS `wegia`.`movimentacao_funcionario` (
     REFERENCES `wegia`.`situacao_funcionario` (`id_situacao_funcionario`))
 ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
 -- Table `wegia`.`recurso`
 -- -----------------------------------------------------
@@ -642,8 +687,6 @@ CREATE TABLE IF NOT EXISTS `wegia`.`recurso` (
   `descricao` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id_recurso`))
 ENGINE = InnoDB;
-
-
 
 -- -----------------------------------------------------
 -- Table `wegia`.`modulos_visiveis`
@@ -2447,6 +2490,41 @@ BEGIN
         JOIN pessoa pes ON pes.id_pessoa = sfm.id_pessoa
     WHERE prm.nome = 'Visualizar Saúde Intercorrência'
         AND f.id_funcionario <> NEW.id_funcionario;
+END$$
+
+USE `wegia`$$
+
+CREATE TRIGGER `wegia`.`tr_material_transacao_produto_insert`
+        AFTER INSERT ON material_transacao_produto
+        FOR EACH ROW
+    BEGIN
+        DECLARE v_responsavel INT;
+
+        SELECT id_responsavel
+        INTO v_responsavel
+        FROM material_transacao
+        WHERE id_transacao = NEW.id_transacao
+            LIMIT 1;
+
+        INSERT INTO material_transacao_produto_logs (
+            id_transacao_produto,
+            id_transacao,
+            id_produto,
+            quantidade,
+            valor_unitario,
+            id_usuario_acao,
+            acao,
+            data_acao
+        ) VALUES (
+                     NEW.id_transacao_produto,
+                     NEW.id_transacao,
+                     NEW.id_produto,
+                     NEW.quantidade,
+                     NEW.valor_unitario,
+                     v_responsavel,
+                     'create',
+                     NOW()
+                 );
 END$$
 
 DELIMITER ;

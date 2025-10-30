@@ -2,9 +2,9 @@
 
 namespace Modules\Material\app\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel\BaseModel;
 
-class TransacaoProduto extends Model
+class TransacaoProduto extends BaseModel
 {
 
     protected $table = 'material_transacao_produto';

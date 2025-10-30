@@ -9,6 +9,7 @@ use Modules\Material\app\DTO\TransacaoAtualizarDTO;
 use Modules\Material\app\DTO\TransacaoBuscarTodosParamsDTO;
 use Modules\Material\app\DTO\TransacaoCadastrarDTO;
 use Modules\Material\app\Http\Resources\TransacaoResource;
+use Modules\Material\app\Http\Resources\TransacaoResponsavelResource;
 use Modules\Material\app\Services\TransacaoService;
 use Modules\Material\app\Validations\TransacaoAtualizarValidation;
 use Modules\Material\app\Validations\TransacaoBuscarTodosParamsValidation;
@@ -192,6 +193,35 @@ class TransacaoController extends BaseController
             $this->service->atualizar($id, $dto);
 
             return $this->sucessoResponse(null, 204);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+
+    /**
+     * @OA\get(
+     *     path="/material/transacao/responsavel",
+     *     summary="Buscar todos os responsaveis das transacoes",
+     *     tags={"Transacao"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Operacao realizada com sucesso",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erro de validação",
+     *         @OA\JsonContent()
+     *     )
+     * )
+     */
+    public function buscarTodosResponsaveisTransacionais()
+    {
+        try {
+            $buscar = $this->service->buscarTodosResponsaveisTransacionais();
+
+            return $this->sucessoResponse( TransacaoResponsavelResource::collection($buscar));
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }

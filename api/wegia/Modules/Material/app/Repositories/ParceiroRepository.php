@@ -3,6 +3,7 @@
 namespace Modules\Material\app\Repositories;
 
 use App\Repositories\Base\BaseRepository;
+use Modules\Material\app\DTO\ParceiroBuscarTodosParamsDTO;
 use Modules\Material\app\Models\Parceiro;
 
 class ParceiroRepository extends BaseRepository
@@ -13,5 +14,26 @@ class ParceiroRepository extends BaseRepository
     )
     {
         parent::__construct($model);
+    }
+
+    public function buscarTodosPaginado(ParceiroBuscarTodosParamsDTO $dto)
+    {
+        $buscar          = $dto->buscar ?? null;
+        $ordenacao       = $dto->ordenacao ?? null;
+        $tipoOrdenacao   = $dto->tipoOrdenacao ?? 'ASC';
+        $itensPorPagina  = $dto->itensPorPagina ?? 10;
+        $pagina          = $dto->pagina ?? 1;
+
+        return $this->model
+            ->when(!is_null($buscar), function ($q) use ($buscar) {
+                return $q->where('nome', 'like', "%{$buscar}%")
+                    ->orWhere('cpf', 'like', "%{$buscar}%")
+                    ->orWhere('cnpj', 'like', "%{$buscar}%")
+                    ->orWhere('telefone', 'like', "%{$buscar}%");
+            })
+            ->when(!is_null($ordenacao), function ($q) use ($ordenacao, $tipoOrdenacao) {
+                return $q->orderBy("$ordenacao", $tipoOrdenacao);
+            })
+            ->paginate($itensPorPagina, ['*'], 'page', $pagina);
     }
 }

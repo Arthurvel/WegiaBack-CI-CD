@@ -8,6 +8,8 @@ use Modules\Material\app\Http\Controllers\UnidadeController;
 use Modules\Material\app\Http\Controllers\CategoriaController;
 use Modules\Material\app\Http\Controllers\ProdutoController;
 use Modules\Material\app\Http\Controllers\TransacaoController;
+use Modules\Material\app\Http\Controllers\TransacaoProdutoController;
+use Modules\Material\app\Http\Controllers\RelatorioController;
 
 Route::prefix('material')->group(function () {
 
@@ -20,16 +22,22 @@ Route::prefix('material')->group(function () {
 
     Route::prefix('parceiro')->group(function () {
         Route::post('/', [ParceiroController::class, 'cadastrar']);
+        Route::put('/{id}', [ParceiroController::class, 'atualizar']);
+        Route::get('/', [ParceiroController::class, 'buscarTodosPaginado']);
         Route::get('/filtros', [ParceiroController::class, 'buscarTodos']);
     });
 
     Route::prefix('tipo-movimentacao')->group(function () {
         Route::post('/', [TipoMovimentacaoController::class, 'cadastrar']);
+        Route::put('/{id}', [TipoMovimentacaoController::class, 'atualizar']);
+        Route::get('/', [TipoMovimentacaoController::class, 'buscarTodosPaginado']);
         Route::get('/filtros', [TipoMovimentacaoController::class, 'buscarTodosFiltro']);
     });
 
     Route::prefix('unidade')->group(function () {
         Route::post('/', [UnidadeController::class, 'cadastrar']);
+        Route::put('/{id}', [UnidadeController::class, 'atualizar']);
+        Route::get('/', [UnidadeController::class, 'buscarTodosPaginado']);
         Route::get('/filtros', [UnidadeController::class, 'buscarTodos']);
     });
 
@@ -50,10 +58,19 @@ Route::prefix('material')->group(function () {
     Route::prefix('transacao')->group(function () {
         Route::post('/', [TransacaoController::class, 'cadastrar']);
         Route::get('/', [TransacaoController::class, 'buscarTodosPaginado']);
+        Route::get('/responsavel', [TransacaoController::class, 'buscarTodosResponsaveisTransacionais']);
         Route::put('/{id}', [TransacaoController::class, 'atualizar']);
     });
 
+    Route::prefix('transacao-produto')->group(function () {
+        Route::put('/{id}', [TransacaoProdutoController::class, 'atualizar']);
+        Route::delete('/{id}', [TransacaoProdutoController::class, 'deletar']);
+    });
+
+    Route::prefix('relatorio')->group(function () {
+        Route::get('/', [RelatorioController::class, 'obterRelatorioMaterial']);
+        Route::get('/estoque', [RelatorioController::class, 'obterRelatorioEstoque']);
+        Route::get('/produto ', [RelatorioController::class, 'obterRelatorioProduto']);
+    });
+
 });
-
-
-

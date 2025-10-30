@@ -73,4 +73,14 @@ class TransacaoRepository extends BaseRepository
             })
             ->paginate($itensPorPagina, ['*'], 'page', $pagina);
     }
+
+    public function buscarTodosResponsaveisTransacionais()
+    {
+        return $this->model
+            ->with(['responsavel:id_pessoa,nome'])
+            ->get()
+            ->pluck('responsavel')
+            ->unique('id_pessoa')
+            ->values();
+    }
 }

@@ -144,7 +144,7 @@ class ProdutoController extends BaseController
      * @OA\get(
      *     path="/material/produto/filtros",
      *     summary="Buscar todas os produtos para filtros",
-     *     tags={"Produtos"},
+     *     tags={"Produto"},
      *     security={{"bearerAuth": {}}},
      *     @OA\Response(
      *         response=200,

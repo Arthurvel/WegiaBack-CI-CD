@@ -30,6 +30,11 @@ class TransacaoService extends BaseService
         return $this->repository->buscarTodosPaginado($dto);
     }
 
+    public function buscarTodosResponsaveisTransacionais()
+    {
+        return $this->repository->buscarTodosResponsaveisTransacionais();
+    }
+
     public function criarTransacaoComProduto(TransacaoCadastrarDTO $transacaoCadastrarDTO, array $produtos)
     {
         return DB::transaction(function () use ($transacaoCadastrarDTO, $produtos) {
