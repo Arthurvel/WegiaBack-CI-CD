@@ -23,8 +23,9 @@ class TransacaoProdutoController extends BaseController
         TransacaoProdutoService $service
     )
     {
-//        $this->middleware(['auth:sanctum', 'ability:criar-saude-alergia'])->only(['cadastrar']);
-//        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-alergia'])->only(['buscarTodos']);
+
+        $this->middleware(['auth:sanctum', 'ability:atualizar-produto-apos-entrada-de-material,atualizar-produto-apos-saida-de-material'])->only(['atualizar']);
+        $this->middleware(['auth:sanctum', 'ability:deletar-produto-apos-entrada-de-material,deletar-produto-apos-saida-de-material'])->only(['deletar']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;

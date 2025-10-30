@@ -29,8 +29,10 @@ class CategoriaController extends BaseController
         CategoriaService $service
     )
     {
-//        $this->middleware(['auth:sanctum', 'ability:criar-saude-alergia'])->only(['cadastrar']);
-//        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-alergia'])->only(['buscarTodos']);
+        $this->middleware(['auth:sanctum', 'ability:criar-categoria-material'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-categoria-material'])->only(['buscarTodosPaginado']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-categoria-material'])->only(['atualizar']);
+        $this->middleware(['auth:sanctum', 'ability:criar-produto-material,atualizar-produto-material'])->only(['buscarTodos']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;

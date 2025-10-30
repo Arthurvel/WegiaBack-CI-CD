@@ -29,8 +29,11 @@ class ParceiroController extends BaseController
         ParceiroService $service
     )
     {
-//        $this->middleware(['auth:sanctum', 'ability:criar-saude-alergia'])->only(['cadastrar']);
-//        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-alergia'])->only(['buscarTodos']);
+
+        $this->middleware(['auth:sanctum', 'ability:criar-origem-e-saida-de-material'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-origem-e-saida-de-material'])->only(['buscarTodosPaginado']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-origem-e-saida-de-material'])->only(['atualizar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-relatorio-material,criar-entrada-de-material,criar-saida-de-material'])->only(['buscarTodos']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;

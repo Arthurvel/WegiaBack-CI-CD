@@ -29,8 +29,10 @@ class UnidadeController extends BaseController
         UnidadeService $service
     )
     {
-//        $this->middleware(['auth:sanctum', 'ability:criar-saude-alergia'])->only(['cadastrar']);
-//        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-alergia'])->only(['buscarTodos']);
+        $this->middleware(['auth:sanctum', 'ability:criar-unidade-material'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-unidade-material'])->only(['buscarTodosPaginado']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-unidade-material'])->only(['atualizar']);
+        $this->middleware(['auth:sanctum', 'ability:criar-produto-material,atualizar-produto-material'])->only(['buscarTodos']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;

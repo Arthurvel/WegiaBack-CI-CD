@@ -59,7 +59,6 @@ Route::prefix('material')->group(function () {
         Route::post('/', [TransacaoController::class, 'cadastrar']);
         Route::get('/', [TransacaoController::class, 'buscarTodosPaginado']);
         Route::get('/responsavel', [TransacaoController::class, 'buscarTodosResponsaveisTransacionais']);
-        Route::put('/{id}', [TransacaoController::class, 'atualizar']);
     });
 
     Route::prefix('transacao-produto')->group(function () {

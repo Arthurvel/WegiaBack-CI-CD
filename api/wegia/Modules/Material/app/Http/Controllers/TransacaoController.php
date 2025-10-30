@@ -5,13 +5,11 @@ namespace Modules\Material\app\Http\Controllers;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Paginacao\PaginacaoResource;
 use Illuminate\Http\JsonResponse;
-use Modules\Material\app\DTO\TransacaoAtualizarDTO;
 use Modules\Material\app\DTO\TransacaoBuscarTodosParamsDTO;
 use Modules\Material\app\DTO\TransacaoCadastrarDTO;
 use Modules\Material\app\Http\Resources\TransacaoResource;
 use Modules\Material\app\Http\Resources\TransacaoResponsavelResource;
 use Modules\Material\app\Services\TransacaoService;
-use Modules\Material\app\Validations\TransacaoAtualizarValidation;
 use Modules\Material\app\Validations\TransacaoBuscarTodosParamsValidation;
 use Modules\Material\app\Validations\TransacaoCadastrarValidation;
 
@@ -30,8 +28,9 @@ class TransacaoController extends BaseController
         TransacaoService $service
     )
     {
-//        $this->middleware(['auth:sanctum', 'ability:criar-saude-alergia'])->only(['cadastrar']);
-//        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-alergia'])->only(['buscarTodos']);
+        $this->middleware(['auth:sanctum', 'ability:criar-entrada-de-material,criar-saida-de-material'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-entrada-de-material,visualizar-saida-de-material'])->only(['buscarTodosPaginado']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-relatorio-material'])->only(['buscarTodosResponsaveisTransacionais']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;
@@ -149,50 +148,6 @@ class TransacaoController extends BaseController
             $buscar = $this->service->buscarTodosPaginado($dto);
 
             return $this->sucessoResponse( new PaginacaoResource($buscar, TransacaoResource::class) );
-        } catch (\Exception $e) {
-            return $this->errorResponse($e);
-        }
-    }
-
-    /**
-     * @OA\Put(
-     *     path="/material/transacao/{id}",
-     *     summary="Atualiza uma transacao",
-     *     tags={"Transacao"},
-     *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(
-     *            name="id",
-     *            in="path",
-     *            description="ID da transcao",
-     *            required=true,
-     *            @OA\Schema(type="integer")
-     *     ),
-     *     @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/TransacaoAtualizarValidation")
-     *      ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Operacao realizada com sucesso",
-     *         @OA\JsonContent()
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Erro de validação",
-     *         @OA\JsonContent()
-     *     )
-     * )
-     */
-    public function atualizar(int $id, TransacaoAtualizarValidation $request)
-    {
-        try {
-            $validated = $request->validated();
-
-            $dto = TransacaoAtualizarDTO::fromArray($validated);
-
-            $this->service->atualizar($id, $dto);
-
-            return $this->sucessoResponse(null, 204);
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }

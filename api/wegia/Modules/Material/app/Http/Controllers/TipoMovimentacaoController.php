@@ -31,8 +31,11 @@ class TipoMovimentacaoController extends BaseController
         TipoMovimentacaoService $service
     )
     {
-//        $this->middleware(['auth:sanctum', 'ability:criar-saude-alergia'])->only(['cadastrar']);
-//        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-alergia'])->only(['buscarTodos']);
+
+        $this->middleware(['auth:sanctum', 'ability:criar-tipo-de-movimentacao-do-material'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-tipo-de-movimentacao-do-material'])->only(['buscarTodosPaginado']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-tipo-de-movimentacao-do-material'])->only(['atualizar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-relatorio-material,criar-entrada-de-material,criar-saida-de-material'])->only(['buscarTodosFiltro']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;

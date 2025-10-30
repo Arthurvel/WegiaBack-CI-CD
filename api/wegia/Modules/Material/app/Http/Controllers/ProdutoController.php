@@ -28,8 +28,11 @@ class ProdutoController extends BaseController
         ProdutoService $service
     )
     {
-//        $this->middleware(['auth:sanctum', 'ability:criar-saude-alergia'])->only(['cadastrar']);
-//        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-alergia'])->only(['buscarTodos']);
+
+        $this->middleware(['auth:sanctum', 'ability:visualizar-produto-material'])->only(['buscarTodos']);
+        $this->middleware(['auth:sanctum', 'ability:criar-produto-material'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-produto-material'])->only(['atualizar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-relatorio-material,criar-entrada-de-material,criar-saida-de-material'])->only(['buscarTodosParaFiltro']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;

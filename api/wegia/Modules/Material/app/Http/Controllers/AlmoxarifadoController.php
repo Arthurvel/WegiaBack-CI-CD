@@ -28,8 +28,11 @@ class AlmoxarifadoController extends BaseController
         AlmoxarifadoService $service
     )
     {
-//        $this->middleware(['auth:sanctum', 'ability:criar-saude-alergia'])->only(['cadastrar']);
-//        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-alergia'])->only(['buscarTodos']);
+
+        $this->middleware(['auth:sanctum', 'ability:criar-almoxarifado-do-material'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-almoxarifado-do-material'])->only(['buscarTodosPaginados']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-almoxarifado-do-material'])->only(['atualizar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-relatorio-material,criar-entrada-de-material,criar-saida-de-material'])->only(['buscarTodos']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;

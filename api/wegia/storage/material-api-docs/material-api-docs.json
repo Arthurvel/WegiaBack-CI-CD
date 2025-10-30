@@ -1478,59 +1478,6 @@
                 ]
             }
         },
-        "/material/transacao/{id}": {
-            "put": {
-                "tags": [
-                    "Transacao"
-                ],
-                "summary": "Atualiza uma transacao",
-                "operationId": "8b6c7935f8a2cf108971db8a78009993",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID da transcao",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/TransacaoAtualizarValidation"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Operacao realizada com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Erro de validação",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/material/transacao/responsavel": {
             "get": {
                 "tags": [
@@ -2060,36 +2007,6 @@
                             "e",
                             "s"
                         ]
-                    }
-                },
-                "type": "object"
-            },
-            "TransacaoAtualizarValidation": {
-                "properties": {
-                    "id_produto": {
-                        "description": "ID do produto vinculado à transação",
-                        "type": "integer"
-                    },
-                    "id_tipo_movimentacao": {
-                        "description": "ID do tipo de movimentação",
-                        "type": "integer"
-                    },
-                    "id_almoxarifado": {
-                        "description": "ID do almoxarifado responsável",
-                        "type": "integer"
-                    },
-                    "id_parceiro": {
-                        "description": "ID do parceiro envolvido",
-                        "type": "integer"
-                    },
-                    "valor_unitario": {
-                        "description": "Valor unitário do produto",
-                        "type": "number",
-                        "format": "float"
-                    },
-                    "quantidade": {
-                        "description": "Quantidade de produtos movimentados",
-                        "type": "integer"
                     }
                 },
                 "type": "object"

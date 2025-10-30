@@ -29,8 +29,11 @@ class RelatorioController extends BaseController
         RelatorioService $service
     )
     {
-//        $this->middleware(['auth:sanctum', 'ability:criar-saude-alergia'])->only(['cadastrar']);
-//        $this->middleware(['auth:sanctum', 'ability:visualizar-saude-alergia'])->only(['buscarTodos']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-relatorio-material'])->only([
+            'obterRelatorioMaterial',
+            'obterRelatorioEstoque',
+            'obterRelatorioProduto'
+        ]);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;
