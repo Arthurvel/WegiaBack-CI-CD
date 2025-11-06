@@ -27,29 +27,25 @@ class ParceiroAtualizarValidation extends FormRequest
             'nome'     => [
                 'required',
                 'string',
-                'max:100',
-                Rule::unique('material_parceiro', 'nome')->ignore($idParceiro, 'id_parceiro'),
+                'max:100'
             ],
             'cpf'      => [
                 'sometimes',
                 'nullable',
                 'string',
-                'max:100',
-                Rule::unique('material_parceiro', 'cpf')->ignore($idParceiro, 'id_parceiro'),
+                'max:100'
             ],
             'cnpj'     => [
                 'sometimes',
                 'nullable',
                 'string',
-                'max:100',
-                Rule::unique('material_parceiro', 'cnpj')->ignore($idParceiro, 'id_parceiro'),
+                'max:100'
             ],
             'telefone' => [
                 'sometimes',
                 'nullable',
                 'string',
-                'max:100',
-                Rule::unique('material_parceiro', 'telefone')->ignore($idParceiro, 'id_parceiro'),
+                'max:100'
             ]
         ];
     }

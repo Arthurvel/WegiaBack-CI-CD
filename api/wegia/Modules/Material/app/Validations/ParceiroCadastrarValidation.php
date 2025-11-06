@@ -21,10 +21,10 @@ class ParceiroCadastrarValidation extends FormRequest
     public function rules() : array
     {
         return [
-            'nome'     => 'required|string|max:100|unique:material_parceiro,nome',
-            'cpf'      => 'sometimes|string|max:100|unique:material_parceiro,cpf',
-            'cnpj'     => 'sometimes|string|max:100|unique:material_parceiro,cnpj',
-            'telefone' => 'sometimes|string|max:100|unique:material_parceiro,telefone'
+            'nome'     => 'required|string|max:100',
+            'cpf'      => 'sometimes|string|max:100',
+            'cnpj'     => 'sometimes|string|max:100',
+            'telefone' => 'sometimes|string|max:100'
         ];
     }
 
