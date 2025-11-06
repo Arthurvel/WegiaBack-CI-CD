@@ -4,17 +4,18 @@ namespace Modules\Material\app\Models;
 
 use App\Models\BaseModel\BaseModel;
 
-class Origem extends BaseModel
+class Parceiro extends BaseModel
 {
-    protected $table = 'origem';
 
-    protected $primaryKey = 'id_origem';
+    protected $table = 'material_parceiro';
+
+    protected $primaryKey = 'id_parceiro';
 
     protected $fillable = [
-        'nome_origem',
-        'cnpj',
+        'nome',
         'cpf',
+        'cnpj',
         'telefone'
     ];
-}
 
+}

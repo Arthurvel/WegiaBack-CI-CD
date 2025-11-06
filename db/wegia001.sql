@@ -20,11 +20,11 @@ USE `wegia` ;
 
 
 -- -----------------------------------------------------
--- Table `wegia`.`almoxarifado`
+-- Table `wegia`.`material_almoxarifado`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`almoxarifado` (
+CREATE TABLE IF NOT EXISTS `wegia`.`material_almoxarifado` (
   `id_almoxarifado` INT(11) NOT NULL AUTO_INCREMENT,
-  `descricao_almoxarifado` VARCHAR(240) NOT NULL,
+  `descricao` VARCHAR(240) NOT NULL,
   PRIMARY KEY (`id_almoxarifado`))
 ENGINE = InnoDB;
 
@@ -305,159 +305,166 @@ CREATE TABLE IF NOT EXISTS `wegia`.`campo_imagem` (
   UNIQUE INDEX `nome_campo` (`nome_campo` ASC))
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `wegia`.`material_parceiro`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `wegia`.`material_parceiro` (
+    id_parceiro INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(14),
+    cnpj VARCHAR(18),
+    telefone VARCHAR(20)
+)ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `wegia`.`categoria_produto`
+-- Table `wegia`.`material_tipo_movimentacao`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`categoria_produto` (
-  `id_categoria_produto` INT(11) NOT NULL AUTO_INCREMENT,
-  `descricao_categoria` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`id_categoria_produto`),
-  UNIQUE INDEX `descricao_categoria` (`descricao_categoria` ASC))
-ENGINE = InnoDB;
-
+CREATE TABLE IF NOT EXISTS `wegia`.`material_tipo_movimentacao` (
+    id_tipo_movimentacao INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    tipo ENUM('e', 's') NOT NULL
+)ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `wegia`.`destino`
+-- Table `wegia`.`material_categoria`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`destino` (
-  `id_destino` INT(11) NOT NULL AUTO_INCREMENT,
-  `nome_destino` VARCHAR(100) NOT NULL,
-  `cnpj` VARCHAR(20) NULL DEFAULT NULL,
-  `cpf` VARCHAR(20) NULL DEFAULT NULL,
-  `telefone` VARCHAR(33) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_destino`))
-ENGINE = InnoDB;
-
--- -----------------------------------------------------
--- Table `wegia`.`origem`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`origem` (
-  `id_origem` INT(11) NOT NULL AUTO_INCREMENT,
-  `nome_origem` VARCHAR(100) NOT NULL,
-  `cnpj` VARCHAR(20) NULL DEFAULT NULL,
-  `cpf` VARCHAR(20) NULL DEFAULT NULL,
-  `telefone` VARCHAR(33) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_origem`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `wegia`.`tipo_entrada`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`tipo_entrada` (
-  `id_tipo` INT(11) NOT NULL AUTO_INCREMENT,
-  `descricao` VARCHAR(120) NOT NULL,
-  PRIMARY KEY (`id_tipo`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `wegia`.`entrada`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`entrada` (
-  `id_entrada` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_origem` INT(11) NOT NULL,
-  `id_almoxarifado` INT(11) NOT NULL,
-  `id_tipo` INT(11) NOT NULL,
-  `id_responsavel` INT(11) NOT NULL,
-  `data` DATE NULL DEFAULT NULL,
-  `hora` TIME NULL DEFAULT NULL,
-  `valor_total` DECIMAL(10,2) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_entrada`),
-  INDEX `id_origem` (`id_origem` ASC),
-  INDEX `id_almoxarifado` (`id_almoxarifado` ASC),
-  INDEX `id_tipo` (`id_tipo` ASC),
-  INDEX `id_responsavel` (`id_responsavel` ASC),
-  CONSTRAINT `entrada_ibfk_1`
-    FOREIGN KEY (`id_origem`)
-    REFERENCES `wegia`.`origem` (`id_origem`),
-  CONSTRAINT `entrada_ibfk_2`
-    FOREIGN KEY (`id_almoxarifado`)
-    REFERENCES `wegia`.`almoxarifado` (`id_almoxarifado`),
-  CONSTRAINT `entrada_ibfk_3`
-    FOREIGN KEY (`id_tipo`)
-    REFERENCES `wegia`.`tipo_entrada` (`id_tipo`),
-  CONSTRAINT `entrada_ibfk_4`
-    FOREIGN KEY (`id_responsavel`)
-    REFERENCES `wegia`.`pessoa` (`id_pessoa`))
+CREATE TABLE IF NOT EXISTS `wegia`.`material_categoria` (
+  `id_categoria` INT(11) NOT NULL AUTO_INCREMENT,
+  `descricao` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id_categoria`),
+  UNIQUE INDEX `descricao` (`descricao` ASC))
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `wegia`.`unidade`
+-- Table `wegia`.`material_unidade`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`unidade` (
+CREATE TABLE IF NOT EXISTS `wegia`.`material_unidade` (
   `id_unidade` INT(11) NOT NULL AUTO_INCREMENT,
-  `descricao_unidade` VARCHAR(100) NOT NULL,
+  `descricao` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id_unidade`),
-  UNIQUE INDEX `descricao_unidade` (`descricao_unidade` ASC))
+  UNIQUE INDEX `descricao` (`descricao` ASC))
 ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
--- Table `wegia`.`produto`
+-- Table `wegia`.`material_produto`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`produto` (
-  `id_produto` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_categoria_produto` INT(11) NOT NULL,
-  `id_unidade` INT(11) NOT NULL,
-  `descricao` VARCHAR(150) NULL DEFAULT NULL,
-  `codigo` VARCHAR(15) NULL DEFAULT NULL,
-  `preco` DECIMAL(10,2) NULL DEFAULT NULL,
-  `oculto` TINYINT NULL DEFAULT FALSE,
-  PRIMARY KEY (`id_produto`),
-  UNIQUE INDEX `descricao` (`descricao` ASC),
-  UNIQUE INDEX `codigo_UNIQUE` (`codigo` ASC),
-  INDEX `id_categoria_produto` (`id_categoria_produto` ASC),
-  INDEX `id_unidade` (`id_unidade` ASC),
-  CONSTRAINT `produto_ibfk_1`
-    FOREIGN KEY (`id_categoria_produto`)
-    REFERENCES `wegia`.`categoria_produto` (`id_categoria_produto`),
-  CONSTRAINT `produto_ibfk_2`
+CREATE TABLE IF NOT EXISTS `wegia`.`material_produto` (
+    `id_produto` INT(11) NOT NULL AUTO_INCREMENT,
+    `id_categoria` INT(11) NOT NULL,
+    `id_unidade` INT(11) NOT NULL,
+    `descricao` VARCHAR(150) NOT NULL DEFAULT NULL,
+    `codigo` VARCHAR(15) NULL DEFAULT NULL,
+    `oculto` TINYINT NULL DEFAULT false,
+    PRIMARY KEY (`id_produto`),
+    UNIQUE INDEX `descricao` (`descricao` ASC),
+    UNIQUE INDEX `codigo_UNIQUE` (`codigo` ASC),
+    INDEX `id_categoria` (`id_categoria` ASC),
+    INDEX `id_unidade` (`id_unidade` ASC),
+    CONSTRAINT `material_produto_ibfk_1`
+    FOREIGN KEY (`id_categoria`)
+    REFERENCES `wegia`.`material_categoria` (`id_categoria`),
+    CONSTRAINT `material_produto_ibfk_2`
     FOREIGN KEY (`id_unidade`)
-    REFERENCES `wegia`.`unidade` (`id_unidade`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `wegia`.`estoque`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`estoque` (
-  `id_produto` INT(11) NOT NULL,
-  `id_almoxarifado` INT(11) NOT NULL,
-  `qtd` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_produto`, `id_almoxarifado`),
-  INDEX `id_almoxarifado` (`id_almoxarifado` ASC),
-  CONSTRAINT `estoque_ibfk_1`
-    FOREIGN KEY (`id_produto`)
-    REFERENCES `wegia`.`produto` (`id_produto`),
-  CONSTRAINT `estoque_ibfk_2`
-    FOREIGN KEY (`id_almoxarifado`)
-    REFERENCES `wegia`.`almoxarifado` (`id_almoxarifado`))
-ENGINE = InnoDB;
-
+    REFERENCES `wegia`.`material_unidade` (`id_unidade`)
+) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `wegia`.`ientrada`
+-- Table `wegia`.`material_transacao`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`ientrada` (
-  `id_ientrada` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_entrada` INT(11) NOT NULL,
-  `id_produto` INT(11) NOT NULL,
-  `qtd` INT(11) NULL DEFAULT NULL,
-  `valor_unitario` DECIMAL(10,2) NULL DEFAULT NULL,
-  `oculto` TINYINT NULL DEFAULT FALSE,
-  PRIMARY KEY (`id_ientrada`),
-  INDEX `id_entrada` (`id_entrada` ASC),
-  INDEX `id_produto` (`id_produto` ASC),
-  CONSTRAINT `ientrada_ibfk_1`
-    FOREIGN KEY (`id_entrada`)
-    REFERENCES `wegia`.`entrada` (`id_entrada`),
-  CONSTRAINT `ientrada_ibfk_2`
-    FOREIGN KEY (`id_produto`)
-    REFERENCES `wegia`.`produto` (`id_produto`))
-ENGINE = InnoDB;
+CREATE TABLE material_transacao (
+    id_transacao INT AUTO_INCREMENT PRIMARY KEY,
+    id_tipo_movimentacao INT NOT NULL,
+    id_almoxarifado INT NOT NULL,
+    id_responsavel INT NOT NULL,
+    id_parceiro INT NOT NULL,
+    data DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
+    FOREIGN KEY (id_tipo_movimentacao) REFERENCES material_tipo_movimentacao(id_tipo_movimentacao),
+    FOREIGN KEY (id_almoxarifado) REFERENCES material_almoxarifado(id_almoxarifado),
+    FOREIGN KEY (id_parceiro) REFERENCES material_parceiro(id_parceiro),
+    FOREIGN KEY (id_responsavel) REFERENCES pessoa(id_pessoa)
+);
+
+-- -----------------------------------------------------
+-- Table `wegia`.`material_transacao_produto`
+-- -----------------------------------------------------
+CREATE TABLE material_transacao_produto (
+    id_transacao_produto INT AUTO_INCREMENT PRIMARY KEY,
+    id_transacao INT NOT NULL,
+    id_produto INT NOT NULL,
+    quantidade INT NOT NULL,
+    valor_unitario DECIMAL(10,2) NOT NULL,
+
+    FOREIGN KEY (id_transacao) REFERENCES material_transacao(id_transacao) ON DELETE CASCADE,
+    FOREIGN KEY (id_produto) REFERENCES material_produto(id_produto)
+);
+
+-- -----------------------------------------------------
+-- Table `wegia`.`material_transacao_produto_logs`
+-- -----------------------------------------------------
+CREATE TABLE material_transacao_produto_logs (
+    id_transacao_produto_log INT AUTO_INCREMENT PRIMARY KEY,
+    id_transacao_produto INT NOT NULL,
+    id_transacao INT NOT NULL,
+    id_produto INT NOT NULL,
+    quantidade INT NOT NULL,
+    valor_unitario DECIMAL(10,2) NOT NULL,
+    id_usuario_acao INT NOT NULL,
+    acao ENUM('create', 'update', 'delete') NOT NULL,
+    data_acao DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- -----------------------------------------------------
+-- View `wegia`.`view_material_relatorio`
+-- -----------------------------------------------------
+CREATE OR REPLACE VIEW view_material_relatorio AS
+SELECT
+    t.id_transacao,
+    tm.id_tipo_movimentacao,
+    t.id_responsavel,
+    a.id_almoxarifado,
+    p.id_produto,
+    t.id_parceiro,
+    t.data,
+    tm.nome AS tipo_movimentacao,
+    tm.tipo AS tipo,
+    a.descricao AS almoxarifado,
+    pa.nome AS parceiro,
+    r.nome AS responsavel,
+    p.descricao AS produto,
+    u.descricao AS unidade,
+    tp.quantidade,
+    tp.valor_unitario,
+    (tp.quantidade * tp.valor_unitario) AS total
+FROM material_transacao t
+         JOIN material_transacao_produto tp ON tp.id_transacao = t.id_transacao
+         JOIN material_produto p ON p.id_produto = tp.id_produto
+         JOIN material_unidade u ON u.id_unidade = p.id_unidade
+         JOIN material_almoxarifado a ON a.id_almoxarifado = t.id_almoxarifado
+         JOIN material_parceiro pa ON pa.id_parceiro = t.id_parceiro
+         JOIN pessoa r ON r.id_pessoa = t.id_responsavel
+         JOIN material_tipo_movimentacao tm ON tm.id_tipo_movimentacao = t.id_tipo_movimentacao;
+
+-- -----------------------------------------------------
+-- View `wegia`.`view_estoque_atual`
+-- -----------------------------------------------------
+CREATE OR REPLACE VIEW view_estoque_atual AS
+SELECT
+    tp.id_produto,
+    mp.descricao AS nome_produto,
+    t.id_almoxarifado,
+    SUM(
+            CASE
+                WHEN tm.tipo = 'e' THEN tp.quantidade
+                WHEN tm.tipo = 's' THEN -tp.quantidade
+                ELSE 0
+                END
+    ) AS estoque
+FROM material_transacao_produto tp
+         JOIN material_transacao t ON tp.id_transacao = t.id_transacao
+         JOIN material_tipo_movimentacao tm ON t.id_tipo_movimentacao = tm.id_tipo_movimentacao
+         JOIN material_produto mp ON tp.id_produto = mp.id_produto
+GROUP BY tp.id_produto, mp.descricao, t.id_almoxarifado;
 
 -- -----------------------------------------------------
 -- Table `wegia`.`imagem`
@@ -470,71 +477,6 @@ CREATE TABLE IF NOT EXISTS `wegia`.`imagem` (
   PRIMARY KEY (`id_imagem`),
   UNIQUE INDEX `nome` (`nome` ASC))
 ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `wegia`.`tipo_saida`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`tipo_saida` (
-  `id_tipo` INT(11) NOT NULL AUTO_INCREMENT,
-  `descricao` VARCHAR(120) NOT NULL,
-  PRIMARY KEY (`id_tipo`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `wegia`.`saida`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`saida` (
-  `id_saida` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_destino` INT(11) NOT NULL,
-  `id_almoxarifado` INT(11) NOT NULL,
-  `id_tipo` INT(11) NOT NULL,
-  `id_responsavel` INT(11) NOT NULL,
-  `data` DATE NULL DEFAULT NULL,
-  `hora` TIME NULL DEFAULT NULL,
-  `valor_total` DECIMAL(10,2) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_saida`),
-  INDEX `id_destino` (`id_destino` ASC),
-  INDEX `id_almoxarifado` (`id_almoxarifado` ASC),
-  INDEX `id_tipo` (`id_tipo` ASC),
-  INDEX `id_responsavel` (`id_responsavel` ASC),
-  CONSTRAINT `saida_ibfk_1`
-    FOREIGN KEY (`id_destino`)
-    REFERENCES `wegia`.`destino` (`id_destino`),
-  CONSTRAINT `saida_ibfk_2`
-    FOREIGN KEY (`id_almoxarifado`)
-    REFERENCES `wegia`.`almoxarifado` (`id_almoxarifado`),
-  CONSTRAINT `saida_ibfk_3`
-    FOREIGN KEY (`id_tipo`)
-    REFERENCES `wegia`.`tipo_saida` (`id_tipo`),
-  CONSTRAINT `saida_ibfk_4`
-    FOREIGN KEY (`id_responsavel`)
-    REFERENCES `wegia`.`pessoa` (`id_pessoa`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `wegia`.`isaida`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`isaida` (
-  `id_isaida` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_saida` INT(11) NOT NULL,
-  `id_produto` INT(11) NOT NULL,
-  `qtd` INT(11) NULL DEFAULT NULL,
-  `valor_unitario` DECIMAL(10,2) NULL DEFAULT NULL,
-  `oculto` TINYINT NULL DEFAULT FALSE,
-  PRIMARY KEY (`id_isaida`),
-  INDEX `id_saida` (`id_saida` ASC),
-  INDEX `id_produto` (`id_produto` ASC),
-  CONSTRAINT `isaida_ibfk_1`
-    FOREIGN KEY (`id_saida`)
-    REFERENCES `wegia`.`saida` (`id_saida`),
-  CONSTRAINT `isaida_ibfk_2`
-    FOREIGN KEY (`id_produto`)
-    REFERENCES `wegia`.`produto` (`id_produto`))
-ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `wegia`.`situacao_funcionario`
@@ -565,7 +507,6 @@ CREATE TABLE IF NOT EXISTS `wegia`.`movimentacao_funcionario` (
     REFERENCES `wegia`.`situacao_funcionario` (`id_situacao_funcionario`))
 ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
 -- Table `wegia`.`recurso`
 -- -----------------------------------------------------
@@ -574,8 +515,6 @@ CREATE TABLE IF NOT EXISTS `wegia`.`recurso` (
   `descricao` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id_recurso`))
 ENGINE = InnoDB;
-
-
 
 -- -----------------------------------------------------
 -- Table `wegia`.`modulos_visiveis`
@@ -1387,7 +1326,7 @@ CREATE TABLE IF NOT EXISTS `wegia`.`saude_medicos` (
     `nome` VARCHAR(50) NULL,
     PRIMARY KEY (`id_medico`),
     CONSTRAINT `uq_nome_crm` UNIQUE (`crm`, `nome`))
-    ENGINE = InnoDB;
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `wegia`.`saude_atendimento`
@@ -2379,6 +2318,41 @@ BEGIN
         JOIN pessoa pes ON pes.id_pessoa = sfm.id_pessoa
     WHERE prm.nome = 'Visualizar Saúde Intercorrência'
         AND f.id_funcionario <> NEW.id_funcionario;
+END$$
+
+USE `wegia`$$
+
+CREATE TRIGGER `wegia`.`tr_material_transacao_produto_insert`
+        AFTER INSERT ON material_transacao_produto
+        FOR EACH ROW
+    BEGIN
+        DECLARE v_responsavel INT;
+
+        SELECT id_responsavel
+        INTO v_responsavel
+        FROM material_transacao
+        WHERE id_transacao = NEW.id_transacao
+            LIMIT 1;
+
+        INSERT INTO material_transacao_produto_logs (
+            id_transacao_produto,
+            id_transacao,
+            id_produto,
+            quantidade,
+            valor_unitario,
+            id_usuario_acao,
+            acao,
+            data_acao
+        ) VALUES (
+                     NEW.id_transacao_produto,
+                     NEW.id_transacao,
+                     NEW.id_produto,
+                     NEW.quantidade,
+                     NEW.valor_unitario,
+                     v_responsavel,
+                     'create',
+                     NOW()
+                 );
 END$$
 
 DELIMITER ;

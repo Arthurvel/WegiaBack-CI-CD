@@ -27,6 +27,14 @@ abstract class BaseService
     }
 
     /**
+     * @param TCriar $dto
+     */
+    public function criarEmMassa(array $dto)
+    {
+        return $this->repository->criarEmMassa($dto);
+    }
+
+    /**
      * @param TAtualizar $dto
      */
     public function atualizar(int $id, object $dto)
