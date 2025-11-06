@@ -12,16 +12,114 @@
         }
     ],
     "paths": {
-        "/origem/todos": {
+        "/material/almoxarifado": {
             "get": {
                 "tags": [
-                    "Origem"
+                    "Almoxarifado"
                 ],
-                "summary": "Buscar todas as origens ",
-                "operationId": "41c4212b7210e9c5425ebec587d87125",
+                "summary": "Buscar todos os almoxarifados paginados",
+                "operationId": "871370f6eae2011a4514ac94005db1da",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "descricao_almoxarifado"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Operação realizada com sucesso",
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Almoxarifado"
+                ],
+                "summary": "Cadastra um almoxarifado",
+                "operationId": "a40a8176a38dbe5a6cbd1d4f3cbec27a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AlmoxarifadoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -44,26 +142,1661 @@
                 ]
             }
         },
-        "/origem": {
-            "post": {
+        "/material/almoxarifado/{id}": {
+            "put": {
                 "tags": [
-                    "Origem"
+                    "Almoxarifado"
                 ],
-                "summary": "Cadastra a origem do material",
-                "operationId": "97fe180bf4c2cce30fd62c11f9853b42",
+                "summary": "Atualizar um almoxarifado",
+                "operationId": "0be16a0298b3956ee7ca0584ef18dc7e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do almoxarifado",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/OrigemCadastrarValidation"
+                                "$ref": "#/components/schemas/AlmoxarifadoAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/almoxarifado/filtros": {
+            "get": {
+                "tags": [
+                    "Almoxarifado"
+                ],
+                "summary": "Buscar todas os almoxarifados para filtros",
+                "operationId": "1f090067b645076afdb122904849ce24",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/categoria": {
+            "get": {
+                "tags": [
+                    "Categoria"
+                ],
+                "summary": "Buscar todas as categorias paginados",
+                "operationId": "0d8f7b1d25ca0f505d07e48284513592",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "descricao",
+                                "codigo",
+                                "descricao_categoria",
+                                "descricao_unidade"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Categoria"
+                ],
+                "summary": "Cadastra uma categoria",
+                "operationId": "26d47c84f52bfe942d7d2a9b6981161c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CategoriaCadastrarValidation"
                             }
                         }
                     }
                 },
                 "responses": {
                     "201": {
-                        "description": "Orgem cadastrado com sucesso",
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/categoria/{id}": {
+            "put": {
+                "tags": [
+                    "Categoria"
+                ],
+                "summary": "Atualizar uma categoria",
+                "operationId": "1602967f5875f1a25122aa6f48a5be82",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da categoria",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CategoriaAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/categoria/filtros": {
+            "get": {
+                "tags": [
+                    "Categoria"
+                ],
+                "summary": "Buscar todas as categorias para filtros",
+                "operationId": "d188fd972e57aca5749f56ddfd71e3b8",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/parceiro": {
+            "get": {
+                "tags": [
+                    "Parceiro"
+                ],
+                "summary": "Buscar todas os parceiros paginados",
+                "operationId": "540d406f367879aefc16bb778626b5ce",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome, cpf e cnpj",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "nome",
+                                "cpf",
+                                "cnpj",
+                                "telefone"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Parceiro"
+                ],
+                "summary": "Cadastra um parceiro de transacao",
+                "operationId": "6323c12445e219e74ce1fff29c4b366b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ParceiroCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/parceiro/{id}": {
+            "put": {
+                "tags": [
+                    "Parceiro"
+                ],
+                "summary": "Atualiza um parceiro",
+                "operationId": "e77064f6d7d388c4d0916505453d9432",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do parceiro",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UnidadeAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/parceiro/filtros": {
+            "get": {
+                "tags": [
+                    "Parceiro"
+                ],
+                "summary": "Buscar todas os parceiros para filtros",
+                "operationId": "df8267f1ab0a2eb53d9a6420864b9df5",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/produto": {
+            "post": {
+                "tags": [
+                    "Produto"
+                ],
+                "summary": "Cadastra um produto de transacao",
+                "operationId": "3ca6a53a7a18888a733db0fac9ab4cb1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProdutoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/produto/": {
+            "get": {
+                "tags": [
+                    "Produto"
+                ],
+                "summary": "Buscar todas os produtos paginados",
+                "operationId": "fde16b84157d7302b9c90e3f9936106d",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "descricao",
+                                "codigo",
+                                "descricao_categoria",
+                                "descricao_unidade"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/produto/filtros": {
+            "get": {
+                "tags": [
+                    "Produto"
+                ],
+                "summary": "Buscar todas os produtos para filtros",
+                "operationId": "f0feb202d1279f000e8d213f054db27e",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/produto/{id}": {
+            "put": {
+                "tags": [
+                    "Produto"
+                ],
+                "summary": "Atualiza um produto",
+                "operationId": "2b9fbd758ce02bf4d2ce8d6576613660",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do produto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProdutoAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/relatorio": {
+            "get": {
+                "tags": [
+                    "Relatorio"
+                ],
+                "summary": "Buscar o relatorio",
+                "operationId": "1576bde8f0850c1d59288be7fd69880a",
+                "parameters": [
+                    {
+                        "name": "periodo_inicial",
+                        "in": "query",
+                        "description": "Periodo de inicio da busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "periodo_final",
+                        "in": "query",
+                        "description": "Periodo de fim da busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "id_tipo_movimentacao",
+                        "in": "query",
+                        "description": "id do tipo de movimentacao",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "tipo_movimentacao",
+                        "in": "query",
+                        "description": "Tipo de movimentacao realizada",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "e",
+                                "s"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "id_parceiro",
+                        "in": "query",
+                        "description": "id da origem ou saida",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "id_responsavel",
+                        "in": "query",
+                        "description": "id do responsavel por criar",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "id_almoxarifado",
+                        "in": "query",
+                        "description": "id do almoxarifado responsavel",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/relatorio/estoque": {
+            "get": {
+                "tags": [
+                    "Relatorio"
+                ],
+                "summary": "Buscar o relatorio do estoque",
+                "operationId": "7b2e04834f80e0274a801ae583743f9d",
+                "parameters": [
+                    {
+                        "name": "id_almoxarifado",
+                        "in": "query",
+                        "description": "id do almoxarifado responsavel",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/relatorio/produto": {
+            "get": {
+                "tags": [
+                    "Relatorio"
+                ],
+                "summary": "Buscar o relatorio",
+                "operationId": "f1e228f12422d73ec7c37b128f07d72a",
+                "parameters": [
+                    {
+                        "name": "periodo_inicial",
+                        "in": "query",
+                        "description": "Periodo de inicio da busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "periodo_final",
+                        "in": "query",
+                        "description": "Periodo de fim da busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "id_almoxarifado",
+                        "in": "query",
+                        "description": "id do almoxarifado responsavel",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "id_produto",
+                        "in": "query",
+                        "description": "id do produto",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/tipo-movimentacao": {
+            "get": {
+                "tags": [
+                    "Tipo Movimentacacao"
+                ],
+                "summary": "Buscar todas os tipos de movimentacao paginados",
+                "operationId": "f9c056dac5948d625893f12fa54c6ed5",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "nome",
+                                "tipo"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Tipo Movimentacacao"
+                ],
+                "summary": "Cadastra um tipo de movimentacao",
+                "operationId": "9b9a65734ad522378741e3d25a38a8de",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TipoMovimentacaoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/tipo-movimentacao/{id}": {
+            "put": {
+                "tags": [
+                    "Tipo Movimentacacao"
+                ],
+                "summary": "Atualizar o tipo de movimentacacao",
+                "operationId": "55b3423999c7d05270d45f7dbba073d5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do tipo de movimentacao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TipoMovimentacaoAtualizacaoValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/tipo-movimentacao/filtros": {
+            "get": {
+                "tags": [
+                    "Tipo Movimentacacao"
+                ],
+                "summary": "Buscar todas os tipos de movimentacao para filtros",
+                "operationId": "254923b5d254685c307bcca6ce6fff34",
+                "parameters": [
+                    {
+                        "name": "tipo",
+                        "in": "query",
+                        "description": "tipo de movimentacao",
+                        "required": false,
+                        "schema": {
+                            "enum": [
+                                "e",
+                                "s"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/transacao": {
+            "get": {
+                "tags": [
+                    "Transacao"
+                ],
+                "summary": "Buscar todas as transacoes paginados",
+                "operationId": "5bbfdfb4b3bfa21b6c8b4789a933695f",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tipo",
+                        "in": "query",
+                        "description": "Tipo de movimentacao",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "data",
+                                "descricao_produto",
+                                "descricao_almoxarifado",
+                                "descricao_tipo_movimentacao"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Transacao"
+                ],
+                "summary": "Cadastra uma transacao",
+                "operationId": "283981a4374d223011bd47217e7eef7a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TransacaoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/transacao/responsavel": {
+            "get": {
+                "tags": [
+                    "Transacao"
+                ],
+                "summary": "Buscar todos os responsaveis das transacoes",
+                "operationId": "bc7dea2c29fc59f41b78c9e588911b85",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/transacao-produto/{id}": {
+            "put": {
+                "tags": [
+                    "Transacao Produto"
+                ],
+                "summary": "Atualizar produto de uma transacao",
+                "operationId": "5e47e5e27637ca1d5851f25783ffc4b5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da transacao produto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TransacaoProdutoAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Transacao Produto"
+                ],
+                "summary": "Deletar produto de uma transacao",
+                "operationId": "daf40a73fb60ab7cd510672a7eda0da3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da transacao produto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/unidade": {
+            "get": {
+                "tags": [
+                    "Unidade"
+                ],
+                "summary": "Buscar todas as unidades paginados",
+                "operationId": "40e5f7ef32ab01b5a458b0547886679e",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "descricao"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Unidade"
+                ],
+                "summary": "Cadastra uma unidade",
+                "operationId": "d4cbcc0f7b6cd860a81b77b42f8df830",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UnidadeCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/unidade/{id}": {
+            "put": {
+                "tags": [
+                    "Unidade"
+                ],
+                "summary": "Cadastra uma unidade",
+                "operationId": "11ba65989c027fb7946479cbc221582e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da unidade",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UnidadeAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/material/unidade/filtros": {
+            "get": {
+                "tags": [
+                    "Unidade"
+                ],
+                "summary": "Buscar todas as unidades para filtros",
+                "operationId": "43ff34356603c54fac88790711685d04",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -89,26 +1822,278 @@
     },
     "components": {
         "schemas": {
-            "OrigemCadastrarValidation": {
+            "AlmoxarifadoAtualizarValidation": {
                 "required": [
-                    "nome_origem",
-                    "telefone"
+                    "descricao"
                 ],
                 "properties": {
-                    "nome_origem": {
-                        "description": "Nome da origem",
+                    "descricao": {
+                        "description": "Nome do almoxarifado",
                         "type": "string"
-                    },
-                    "cnpj": {
-                        "description": "CNPJ (14 dígitos)",
+                    }
+                },
+                "type": "object"
+            },
+            "AlmoxarifadoCadastrarValidation": {
+                "required": [
+                    "descricao"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "Nome do almoxarifado",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "CategoriaAtualizarValidation": {
+                "required": [
+                    "descricao"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "Nome da unidade",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "CategoriaCadastrarValidation": {
+                "required": [
+                    "descricao"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "Nome da unidade",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ParceiroAtualizarValidation": {
+                "required": [
+                    "nome"
+                ],
+                "properties": {
+                    "nome": {
+                        "description": "Nome do parceiro",
                         "type": "string"
                     },
                     "cpf": {
-                        "description": "CPF (11 dígitos)",
+                        "description": "CPF do parceiro (obrigatório se CNPJ não informado)",
+                        "type": "string"
+                    },
+                    "cnpj": {
+                        "description": "CNPJ do parceiro (obrigatório se CPF não informado)",
                         "type": "string"
                     },
                     "telefone": {
-                        "description": "Telefone com DDD",
+                        "description": "Telefone do parceiro",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ParceiroCadastrarValidation": {
+                "required": [
+                    "nome"
+                ],
+                "properties": {
+                    "nome": {
+                        "description": "Nome do parceiro",
+                        "type": "string"
+                    },
+                    "cpf": {
+                        "description": "CPF do parceiro (obrigatório se CNPJ não informado)",
+                        "type": "string"
+                    },
+                    "cnpj": {
+                        "description": "CNPJ do parceiro (obrigatório se CPF não informado)",
+                        "type": "string"
+                    },
+                    "telefone": {
+                        "description": "Telefone do parceiro",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ProdutoAtualizarValidation": {
+                "properties": {
+                    "id_categoria": {
+                        "description": "ID da categoria do produto",
+                        "type": "integer"
+                    },
+                    "id_unidade": {
+                        "description": "ID da unidade do produto",
+                        "type": "integer"
+                    },
+                    "descricao": {
+                        "description": "Descrição do produto",
+                        "type": "string"
+                    },
+                    "codigo": {
+                        "description": "Código único do produto",
+                        "type": "string"
+                    },
+                    "oculto": {
+                        "description": "Define se o produto está oculto (0 = visível, 1 = oculto)",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "ProdutoCadastrarValidation": {
+                "required": [
+                    "id_categoria",
+                    "id_unidade",
+                    "descricao"
+                ],
+                "properties": {
+                    "id_categoria": {
+                        "description": "ID da categoria do produto",
+                        "type": "integer"
+                    },
+                    "id_unidade": {
+                        "description": "ID da unidade do produto",
+                        "type": "integer"
+                    },
+                    "descricao": {
+                        "description": "Descrição do produto",
+                        "type": "string"
+                    },
+                    "codigo": {
+                        "description": "Código único do produto",
+                        "type": "string"
+                    },
+                    "oculto": {
+                        "description": "Define se o produto está oculto (0 = visível, 1 = oculto)",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "TipoMovimentacaoAtualizacaoValidation": {
+                "properties": {
+                    "nome": {
+                        "description": "Nome da movimentacao",
+                        "type": "string"
+                    },
+                    "tipo": {
+                        "description": "Tipo de transacao (entrada e saida)",
+                        "type": "string",
+                        "enum": [
+                            "e",
+                            "s"
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "TipoMovimentacaoCadastrarValidation": {
+                "required": [
+                    "nome",
+                    "tipo"
+                ],
+                "properties": {
+                    "nome": {
+                        "description": "Nome da movimentacao",
+                        "type": "string"
+                    },
+                    "tipo": {
+                        "description": "Tipo de transacao (entrada e saida)",
+                        "type": "string",
+                        "enum": [
+                            "e",
+                            "s"
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "TransacaoCadastrarValidation": {
+                "required": [
+                    "id_tipo_movimentacao",
+                    "id_almoxarifado",
+                    "id_parceiro",
+                    "produtos"
+                ],
+                "properties": {
+                    "id_tipo_movimentacao": {
+                        "description": "ID do tipo de movimentação vinculada à transação",
+                        "type": "integer"
+                    },
+                    "id_almoxarifado": {
+                        "description": "ID do almoxarifado responsável pela transação",
+                        "type": "integer"
+                    },
+                    "id_parceiro": {
+                        "description": "ID do parceiro envolvido na transação",
+                        "type": "integer"
+                    },
+                    "produtos": {
+                        "description": "Lista de produtos incluídos nesta transação",
+                        "type": "array",
+                        "items": {
+                            "required": [
+                                "id_produto",
+                                "quantidade",
+                                "valor_unitario"
+                            ],
+                            "properties": {
+                                "id_produto": {
+                                    "description": "ID do produto movimentado",
+                                    "type": "integer"
+                                },
+                                "quantidade": {
+                                    "description": "Quantidade de produtos movimentados",
+                                    "type": "integer"
+                                },
+                                "valor_unitario": {
+                                    "description": "Valor unitário do produto",
+                                    "type": "number",
+                                    "format": "float"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "TransacaoProdutoAtualizarValidation": {
+                "properties": {
+                    "quantidade": {
+                        "description": "Quantidade de produtos movimentados",
+                        "type": "integer"
+                    },
+                    "valor_unitario": {
+                        "description": "Valor unitário do produto",
+                        "type": "number",
+                        "format": "float"
+                    }
+                },
+                "type": "object"
+            },
+            "UnidadeAtualizarValidation": {
+                "required": [
+                    "descricao"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "Nome da unidade",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "UnidadeCadastrarValidation": {
+                "required": [
+                    "descricao"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "Nome da unidade",
                         "type": "string"
                     }
                 },
@@ -125,8 +2110,40 @@
     },
     "tags": [
         {
-            "name": "Origem",
-            "description": "Operações relacionadas ao Modulo de Material"
+            "name": "Almoxarifado",
+            "description": "Operações relacionadas ao Modulo de material"
+        },
+        {
+            "name": "Parceiro",
+            "description": "Operações relacionadas ao Modulo de material"
+        },
+        {
+            "name": "Produto",
+            "description": "Operações relacionadas ao Modulo de material"
+        },
+        {
+            "name": "Relatorio",
+            "description": "Operações relacionadas ao Modulo de material"
+        },
+        {
+            "name": "Tipo Movimentacacao",
+            "description": "Operações relacionadas ao Modulo de material"
+        },
+        {
+            "name": "Transacao",
+            "description": "Operações relacionadas ao Modulo de material"
+        },
+        {
+            "name": "Transacao Produto",
+            "description": "Operações relacionadas ao Modulo de material"
+        },
+        {
+            "name": "Unidade",
+            "description": "Operações relacionadas ao Modulo de material"
+        },
+        {
+            "name": "Categoria",
+            "description": "Categoria"
         }
     ]
 }

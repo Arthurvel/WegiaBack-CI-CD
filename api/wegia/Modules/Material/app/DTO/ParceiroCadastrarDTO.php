@@ -4,10 +4,12 @@ namespace Modules\Material\app\DTO;
 
 use App\DTOs\BaseDTO;
 
-class OrigemCadastrarDTO extends BaseDTO
+class ParceiroCadastrarDTO extends BaseDTO
 {
-    public string $nome_origem;
+
+    public string $nome;
     public ?string $cpf;
     public ?string $cnpj;
-    public string $telefone;
+    public ?string $telefone;
+
 }
