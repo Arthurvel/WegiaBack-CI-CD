@@ -1,0 +1,11 @@
+{
+    "name": "ContribuicaoSocios",
+    "alias": "contribuicaosocios",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ContribuicaoSocios\\Providers\\ContribuicaoSociosServiceProvider"
+    ],
+    "files": []
+}
