@@ -12,6 +12,191 @@
         }
     ],
     "paths": {
+        "/contribuicao/regra/meio-pagamento": {
+            "get": {
+                "tags": [
+                    "Contribuição Regras"
+                ],
+                "summary": "Busca todos as regras dos meios de pagamento paginados",
+                "operationId": "cfcc05dccb3bc1859b892ea247d9abfe",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por meio de pagamento e regra",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "regra",
+                                "meio",
+                                "valor"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Contribuição Regras"
+                ],
+                "summary": "Atribua uma regra a um meio de pagamento",
+                "operationId": "8fc29ec3287ee8f7aad44fd5cb8de2cb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContribuicaoConjuntoRegrasCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/contribuicao/regra/meio-pagamento/{id}": {
+            "put": {
+                "tags": [
+                    "Contribuição Regras"
+                ],
+                "summary": "Atualizar uma regra de um meio de pagamento",
+                "operationId": "1f511ea49cfd5382430efc3f2879d0f5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da regra de um meio de pagamento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContribuicaoConjuntoRegrasAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/contribuicao/gateway": {
             "get": {
                 "tags": [
@@ -441,10 +626,92 @@
                     }
                 ]
             }
+        },
+        "/contribuicao/regra/filtro": {
+            "get": {
+                "tags": [
+                    "Contribuição Regras"
+                ],
+                "summary": "Busca todas as regras de contribuicao para usar como filtro",
+                "operationId": "fada758d184333ad20e326145655b4bb",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
         "schemas": {
+            "ContribuicaoConjuntoRegrasAtualizarValidation": {
+                "properties": {
+                    "id_meioPagamento": {
+                        "description": "id do meio de pagamento",
+                        "type": "integer"
+                    },
+                    "id_regra": {
+                        "description": "id da regra",
+                        "type": "integer"
+                    },
+                    "valor": {
+                        "description": "token do gateway",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "status": {
+                        "description": "status",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "ContribuicaoConjuntoRegrasCadastrarValidation": {
+                "required": [
+                    "id_meioPagamento",
+                    "id_regra",
+                    "valor",
+                    "status"
+                ],
+                "properties": {
+                    "id_meioPagamento": {
+                        "description": "id do meio de pagamento",
+                        "type": "integer"
+                    },
+                    "id_regra": {
+                        "description": "id da regra",
+                        "type": "integer"
+                    },
+                    "valor": {
+                        "description": "token do gateway",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "status": {
+                        "description": "status",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
             "ContribuicaoGatewayPagamentoAtualizarValidation": {
                 "properties": {
                     "plataforma": {
@@ -542,6 +809,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Contribuição Regras",
+            "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
+        },
         {
             "name": "Contribuição Gateway",
             "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"

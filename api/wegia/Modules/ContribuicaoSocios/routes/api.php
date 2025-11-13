@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Modules\ContribuicaoSocios\app\Http\Controllers\ContribuicaoGatewayPagamentoController;
 use Modules\ContribuicaoSocios\app\Http\Controllers\ContribuicaoMeioDePagamentoController;
+use Modules\ContribuicaoSocios\app\Http\Controllers\ContribuicaoRegrasController;
+use Modules\ContribuicaoSocios\app\Http\Controllers\ContribuicaoConjuntoRegrasController;
 
 Route::prefix('contribuicao')->group(function () {
 
@@ -18,6 +20,17 @@ Route::prefix('contribuicao')->group(function () {
         Route::get('filtro', [ContribuicaoMeioDePagamentoController::class, 'buscarTodosParaFiltro']);
         Route::post('', [ContribuicaoMeioDePagamentoController::class, 'cadastrar']);
         Route::put('{id}', [ContribuicaoMeioDePagamentoController::class, 'atualizar']);
+    });
+
+    Route::prefix('regra')->group(function () {
+        Route::get('filtro', [ContribuicaoRegrasController::class, 'buscarTodosParaFiltro']);
+
+        Route::prefix('meio-pagamento')->group(function () {
+            Route::get('', [ContribuicaoConjuntoRegrasController::class, 'buscarTodosPaginado']);
+            Route::get('filtro', [ContribuicaoConjuntoRegrasController::class, 'buscarTodosParaFiltro']);
+            Route::post('', [ContribuicaoConjuntoRegrasController::class, 'cadastrar']);
+            Route::put('{id}', [ContribuicaoConjuntoRegrasController::class, 'atualizar']);
+        });
     });
 
 });
