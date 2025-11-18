@@ -25,15 +25,15 @@ class ContribuicaoConjuntoRegrasRepository extends BaseRepository
         $pagina          = $dto->pagina ?? 1;
 
         $query = $this->model
-            ->with(['meioPagamento', 'regra'])
+            ->with(['meioPagamento.gateway', 'regra'])
             ->when($buscar, function ($q) use ($buscar) {
                 $q->where(function ($sub) use ($buscar) {
                     $sub->where('valor', 'like', "%{$buscar}%")
                         ->orWhereHas('meioPagamento', fn($mq) =>
-                        $mq->where('meio', 'like', "%{$buscar}%")
+                            $mq->where('meio', 'like', "%{$buscar}%")
                         )
                         ->orWhereHas('regra', fn($rq) =>
-                        $rq->where('regra', 'like', "%{$buscar}%")
+                            $rq->where('regra', 'like', "%{$buscar}%")
                         );
                 });
             });

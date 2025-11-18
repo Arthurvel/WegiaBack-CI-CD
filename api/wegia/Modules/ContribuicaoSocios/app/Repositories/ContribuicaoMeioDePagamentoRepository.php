@@ -16,6 +16,11 @@ class ContribuicaoMeioDePagamentoRepository extends BaseRepository
         parent::__construct($model);
     }
 
+    public function buscarTodos()
+    {
+        return $this->model->with(['gateway'])->get();
+    }
+
     public function buscarTodosPaginado(PaginacaoFiltrosDTO $dto)
     {
         $buscar          = $dto->buscar ?? null;

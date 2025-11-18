@@ -25,7 +25,7 @@ class ContribuicaoConjuntoRegrasAtualizarValidation extends FormRequest
                 'sometimes',
                 'integer',
                 'exists:contribuicao_regras,id',
-                Rule::unique('contribuicao_conjunto_regras')
+                Rule::unique('contribuicao_conjuntoRegras')
                     ->where(fn($q) => $q->where('id_meioPagamento', $this->id_meioPagamento))
                     ->ignore($this->route('id')),
             ],
