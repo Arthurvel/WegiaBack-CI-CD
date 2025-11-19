@@ -29,7 +29,10 @@ class ContribuicaoMeioDePagamentoController extends BaseController
     )
     {
 
-//        $this->middleware(['auth:sanctum', 'ability:criar-almoxarifado-do-material'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:criar-meio-de-pagamento-de-contribuicao'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-meio-de-pagamento-de-contribuicao'])->only(['buscarTodosPaginado']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-meio-de-pagamento-de-contribuicao'])->only(['atualizar']);
+        $this->middleware(['auth:sanctum', 'ability:criar-regras-de-pagamento-de-contribuicao'])->only(['buscarTodosParaFiltro']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;

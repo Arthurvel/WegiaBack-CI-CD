@@ -22,7 +22,7 @@ class ContribuicaoRegrasController extends BaseController
     )
     {
 
-//        $this->middleware(['auth:sanctum', 'ability:criar-almoxarifado-do-material'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:criar-regras-de-pagamento-de-contribuicao'])->only(['buscarTodosParaFiltro']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;

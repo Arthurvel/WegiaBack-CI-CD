@@ -29,7 +29,9 @@ class ContribuicaoConjuntoRegrasController extends BaseController
     )
     {
 
-//        $this->middleware(['auth:sanctum', 'ability:criar-almoxarifado-do-material'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:criar-regras-de-pagamento-de-contribuicao'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-regras-de-pagamento-de-contribuicao'])->only(['buscarTodosPaginado']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-regras-de-pagamento-de-contribuicao'])->only(['atualizar']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;
