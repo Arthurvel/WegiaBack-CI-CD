@@ -125,6 +125,29 @@ return [
                 ],
             ],
         ],
+
+        'contribuicaoSocios' => [
+            'api' => [
+                'title' => 'API Contribuição Socios',
+            ],
+            'routes' => [
+                'api' => 'api/contribuicaoSocios/documentation',
+                'docs' => 'api/contribuicaoSocios/docs'
+            ],
+            'paths' => [
+                'docs' => storage_path('contribuicao-socios-api-docs'),
+
+                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
+
+                'docs_json' => 'contribuicao-socios-api-docs.json',
+                'docs_yaml' => 'contribuicao-socios-api-docs.yaml',
+                'format_to_use_for_docs' => env('L5_FORMAT_TO_USE_FOR_DOCS', 'json'),
+
+                'annotations' => [
+                    base_path('Modules/ContribuicaoSocios'),
+                ],
+            ],
+        ]
     ],
     'defaults' => [
         'routes' => [

@@ -4,11 +4,11 @@ set -e
 
 export $(grep -v '^#' /var/www/html/.env | xargs)
 
+composer install --optimize-autoloader --no-dev
+
 php artisan l5-swagger:generate --all
 
 php artisan migrate
-
-composer install --optimize-autoloader --no-dev
 
 # Configuracao das imagens
 mkdir -p /var/www/html/storage/app/private && \
