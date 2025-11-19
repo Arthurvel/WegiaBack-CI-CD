@@ -3,5 +3,6 @@
     "Material": true,
     "Pet": true,
     "Blog": true,
-    "Saude": true
+    "Saude": true,
+    "ContribuicaoSocios": true
 }

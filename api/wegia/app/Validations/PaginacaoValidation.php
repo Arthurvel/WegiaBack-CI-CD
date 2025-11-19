@@ -6,13 +6,15 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class PaginacaoValidation extends FormRequest
 {
+    protected array $ordenacoesPermitidas = [];
+
     public function rules()
     {
         return [
             'buscar'         => 'nullable|string',
             'itensPorPagina' => 'nullable|integer',
             'pagina'         => 'nullable|integer',
-            'ordenacao'      => 'nullable|string',
+            'ordenacao'      => ['nullable', 'string', 'in:' . implode(',', $this->ordenacoesPermitidas)],
             'tipoOrdenacao'  => 'nullable|string',
         ];
     }
