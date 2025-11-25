@@ -30,11 +30,6 @@ INSERT INTO `permissao` VALUES
     ('Visualizar Pet','Pet'),
     ('Atualizar Pet','Pet'),
     ('Deletar Pet','Pet'),
-    ('Criar Contribuição','Contribuição'),
-    ('Visualizar Contribuição','Contribuição'),
-    ('Atualizar Contribuição','Contribuição'),
-    ('Deletar Contribuição','Contribuição'),
-    ('Criar Funcionário','Pessoa'),
     ('Visualizar Funcionário','Pessoa'),
     ('Atualizar Funcionário','Pessoa'),
     ('Deletar Funcionário','Pessoa'),
@@ -151,7 +146,16 @@ INSERT INTO `permissao` VALUES
     ('Atualizar origem e saida de material', 'Material'),
     ('Visualizar almoxarifado do material', 'Material'),
     ('Atualizar almoxarifado do material', 'Material'),
-    ('Visualizar relatorio material', 'Material');
+    ('Visualizar relatorio material', 'Material'),
+    ('Criar Gateway de contribuição','Contribuição'),
+    ('Visualizar Gateway de contribuição','Contribuição'),
+    ('Atualizar Gateway de contribuição','Contribuição'),
+    ('Criar regras de pagamento de contribuição','Contribuição'),
+    ('Visualizar regras de pagamento de contribuição','Contribuição'),
+    ('Atualizar regras de pagamento de contribuição','Contribuição'),
+    ('Criar meio de pagamento de contribuição','Contribuição'),
+    ('Visualizar meio de pagamento de contribuição','Contribuição'),
+    ('Atualizar meio de pagamento de contribuição','Contribuição');
 
 INSERT INTO perfil_permissao (id_perfil, id_permissao)
 SELECT 1, id_permissao

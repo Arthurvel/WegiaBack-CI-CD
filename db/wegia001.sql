@@ -773,7 +773,7 @@ CREATE TABLE `wegia`.`contribuicao_conjuntoRegras` (
 -- -----------------------------------------------------
 -- Table `wegia`.`contribuicao_log`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS wegia.contribuicao_log (
+    CREATE TABLE IF NOT EXISTS wegia.contribuicao_log (
 id INT NOT NULL AUTO_INCREMENT,
 id_socio INT(11) NOT NULL,
 id_gateway INT(11) NOT NULL,
