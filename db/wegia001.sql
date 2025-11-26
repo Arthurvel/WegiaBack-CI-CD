@@ -771,32 +771,55 @@ CREATE TABLE `wegia`.`contribuicao_conjuntoRegras` (
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
+-- Table `wegia`.`recorrencia`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS wegia.recorrencia (
+    id INT NOT NULL AUTO_INCREMENT,
+    id_socio INT(11) NOT NULL,
+    id_gateway INT(11) NOT NULL,
+    codigo VARCHAR(255) NOT NULL UNIQUE,
+    valor DECIMAL(10,2) NOT NULL,
+    data_inicio DATE NOT NULL,
+    data_termino DATE,
+    status BOOLEAN DEFAULT TRUE,
+    PRIMARY KEY (id),
+    CONSTRAINT FK_recorrencia_socios
+    FOREIGN KEY (id_socio)
+    REFERENCES wegia.socio (id_socio),
+    CONSTRAINT FK_recorrencia_gateways
+    FOREIGN KEY (id_gateway)
+    REFERENCES wegia.contribuicao_gatewayPagamento (id)
+)ENGINE = InnoDB;
+
+-- -----------------------------------------------------
 -- Table `wegia`.`contribuicao_log`
 -- -----------------------------------------------------
-    CREATE TABLE IF NOT EXISTS wegia.contribuicao_log (
-id INT NOT NULL AUTO_INCREMENT,
-id_socio INT(11) NOT NULL,
-id_gateway INT(11) NOT NULL,
-id_meio_pagamento INT(11) NOT NULL,
-codigo VARCHAR(255) NOT NULL UNIQUE,
-valor DECIMAL(10,2) NOT NULL,
-data_geracao DATE NOT NULL,
-data_vencimento DATE NOT NULL,
-data_pagamento DATE,
-status_pagamento BOOLEAN NOT NULL,
-PRIMARY KEY (id),
-CONSTRAINT FK_id_socios
-FOREIGN KEY (id_socio)
-REFERENCES wegia.socio (id_socio),
-CONSTRAINT FK_id_gateways
-FOREIGN KEY (id_gateway)
-REFERENCES wegia.contribuicao_gatewayPagamento (id),
-CONSTRAINT FK_id_meio_pagamentos
-FOREIGN KEY (id_meio_pagamento)
-REFERENCES wegia.contribuicao_meioPagamento (id)
-)
-ENGINE = InnoDB;
-
+CREATE TABLE IF NOT EXISTS wegia.contribuicao_log (
+    id INT NOT NULL AUTO_INCREMENT,
+    id_socio INT(11) NOT NULL,
+    id_gateway INT(11) NOT NULL,
+    id_meio_pagamento INT(11) NOT NULL,
+    id_recorrencia INT(11) DEFAULT NULL,
+    codigo VARCHAR(255) NOT NULL UNIQUE,
+    valor DECIMAL(10,2) NOT NULL,
+    data_geracao DATE NOT NULL,
+    data_vencimento DATE NOT NULL,
+    data_pagamento DATE,
+    status_pagamento BOOLEAN NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT FK_id_socios
+    FOREIGN KEY (id_socio)
+    REFERENCES wegia.socio (id_socio),
+    CONSTRAINT FK_id_gateways
+    FOREIGN KEY (id_gateway)
+    REFERENCES wegia.contribuicao_gatewayPagamento (id),
+    CONSTRAINT FK_id_meio_pagamentos
+    FOREIGN KEY (id_meio_pagamento)
+    REFERENCES wegia.contribuicao_meioPagamento (id),
+    CONSTRAINT FK_id_recorrencia
+    FOREIGN KEY (id_recorrencia)
+    REFERENCES wegia.recorrencia (id)
+)ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `wegia`.`socio_status`
@@ -882,38 +905,6 @@ CREATE TABLE IF NOT EXISTS `wegia`.`socio_log` (
 )ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `wegia`.`log_contribuicao`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`log_contribuicao` (
-  `id_log` INT NULL DEFAULT NULL AUTO_INCREMENT,
-  `id_socio` INT(11) NOT NULL,
-  `ip` VARCHAR(256) NOT NULL,
-  `data` DATE NOT NULL,
-  `hora` TIME NOT NULL,
-  `id_sistema` INT(11) NOT NULL,
-  `valor_boleto` DECIMAL(10,2) NOT NULL,
-  `data_venc_boleto` DATE NOT NULL,
-  `id_sociotipo` INT NOT NULL,
-  `referencia` VARCHAR(255) NULL DEFAULT NULL,
-  `status` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id_log`),
-  UNIQUE INDEX (`referencia` ASC),
-  INDEX `id_sistema` (`id_sistema` ASC),
-  INDEX `FK_socio_log` (`id_socio` ASC),
-  INDEX `FK_sociotipo_log` (`id_sociotipo` ASC),
-  CONSTRAINT `FK_socio_log`
-    FOREIGN KEY (`id_socio`)
-    REFERENCES `wegia`.`socio` (`id_socio`),
-  CONSTRAINT `FK_sociotipo_log`
-    FOREIGN KEY (`id_sociotipo`)
-    REFERENCES `wegia`.`socio_tipo` (`id_sociotipo`),
-  CONSTRAINT `log_ibfk_1`
-    FOREIGN KEY (`id_sistema`)
-    REFERENCES `wegia`.`sistema_pagamento` (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `wegia`.`endereco_instituicao`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wegia`.`endereco_instituicao` (
@@ -928,34 +919,6 @@ CREATE TABLE IF NOT EXISTS `wegia`.`endereco_instituicao` (
   `complemento` VARCHAR(256) NULL DEFAULT NULL,
   `ibge` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`id_inst`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `wegia`.`cobrancas`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wegia`.`cobrancas` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `codigo` INT NULL DEFAULT NULL,
-  `descricao` VARCHAR(255) NULL DEFAULT NULL,
-  `data_emissao` DATE NULL DEFAULT NULL,
-  `data_vencimento` DATE NULL DEFAULT NULL,
-  `data_pagamento` DATE NULL DEFAULT NULL,
-  `valor` DECIMAL(10,2) NULL DEFAULT NULL,
-  `valor_pago` DECIMAL(10,2) NULL DEFAULT NULL,
-  `status` VARCHAR(255) NULL DEFAULT NULL,
-  `link_cobranca` VARCHAR(255) NULL DEFAULT NULL,
-  `link_boleto` VARCHAR(255) NULL DEFAULT NULL,
-  `linha_digitavel` VARCHAR(255) NULL DEFAULT NULL,
-  `id_socio` INT NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX (`codigo` ASC),
-  INDEX `fk_cobranca_socio` (`id_socio` ASC),
-  CONSTRAINT `fk_cobranca_socio`
-    FOREIGN KEY (`id_socio`)
-    REFERENCES `wegia`.`socio` (`id_socio`)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT)
 ENGINE = InnoDB;
 
 -- -------------------------------------------------------

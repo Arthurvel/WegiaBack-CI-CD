@@ -658,6 +658,285 @@
                     }
                 ]
             }
+        },
+        "/socio/status/filtro": {
+            "get": {
+                "tags": [
+                    "Socio Status"
+                ],
+                "summary": "Busca todas os status dos socios para usar como filtro",
+                "operationId": "8b7fc0c405ee1bedf79d2aafa5891f07",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/tag": {
+            "get": {
+                "tags": [
+                    "Socio Tag"
+                ],
+                "summary": "Busca todos as tags dos socios paginados",
+                "operationId": "d37d475a90bc463f42776af7bb6f9db0",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome da plataforma",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "tag"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Socio Tag"
+                ],
+                "summary": "Cadastrar uma tag de socio",
+                "operationId": "cee9deff9dd862570f387803b9a30abd",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SocioTagCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/tag/filtro": {
+            "get": {
+                "tags": [
+                    "Socio Tag"
+                ],
+                "summary": "Busca todas as tags dos socios para usar como filtro",
+                "operationId": "cdcc8abbef1713f7fba71c1a7998de38",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/tag/{id}": {
+            "put": {
+                "tags": [
+                    "Socio Tag"
+                ],
+                "summary": "Atualizar uma tag do socio",
+                "operationId": "1bd80f8c3202c5473ece6636fe61c5d7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da tag",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SocioTagAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/tipo/filtro": {
+            "get": {
+                "tags": [
+                    "Socio Tipo"
+                ],
+                "summary": "Busca todas os tipos dos socios para usar como filtro",
+                "operationId": "1f9478b252db7d3dacfa1e40a367629f",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -798,6 +1077,30 @@
                     }
                 },
                 "type": "object"
+            },
+            "SocioTagAtualizarValidation": {
+                "required": [
+                    "tag"
+                ],
+                "properties": {
+                    "tag": {
+                        "description": "Tag do socio",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SocioTagCadastrarValidation": {
+                "required": [
+                    "tag"
+                ],
+                "properties": {
+                    "tag": {
+                        "description": "Tag do socio",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
             }
         },
         "securitySchemes": {
@@ -819,6 +1122,18 @@
         },
         {
             "name": "Contribuição Meio de Pagamento",
+            "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
+        },
+        {
+            "name": "Socio Status",
+            "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
+        },
+        {
+            "name": "Socio Tag",
+            "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
+        },
+        {
+            "name": "Socio Tipo",
             "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
         }
     ]
