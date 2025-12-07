@@ -8,6 +8,7 @@ use Modules\ContribuicaoSocios\app\Http\Controllers\ContribuicaoConjuntoRegrasCo
 use Modules\ContribuicaoSocios\app\Http\Controllers\SocioStatusController;
 use Modules\ContribuicaoSocios\app\Http\Controllers\SocioTipoController;
 use Modules\ContribuicaoSocios\app\Http\Controllers\SocioTagController;
+use Modules\ContribuicaoSocios\app\Http\Controllers\SocioController;
 
 Route::prefix('contribuicao')->group(function () {
 
@@ -39,6 +40,12 @@ Route::prefix('contribuicao')->group(function () {
 });
 
 Route::prefix('socio')->group(function () {
+
+    Route::get('', [SocioController::class, 'buscarTodosPaginado']);
+    Route::get('aniversariante', [SocioController::class, 'buscarTodosAniversariantesMesPaginado']);
+    Route::post('', [SocioController::class, 'cadastrar']);
+    Route::post('pessoa', [SocioController::class, 'cadastrarSocioPessoa']);
+    Route::put('{id_socio}/pessoa/{id_pessoa}', [SocioController::class, 'atualizarComPessoa']);
 
     Route::prefix('status')->group(function () {
         Route::get('filtro', [SocioStatusController::class, 'buscarTodosParaFiltro']);
