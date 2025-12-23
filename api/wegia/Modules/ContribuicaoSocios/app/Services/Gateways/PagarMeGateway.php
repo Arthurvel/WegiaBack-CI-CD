@@ -21,12 +21,12 @@ class PagarMeGateway implements PagamentoGatewayInterface
 
     use GerarCodigoTrait;
 
-    private string $url = "https://api.pagar.me/core/v5";
     private SocioRepository $socioRepository;
     private ContribuicaoLogRepository $contribuicaoLogRepository;
 
     public function __construct(
         protected string $secretKey,
+        protected string $baseUrl
     )
     {
         $this->socioRepository = app(SocioRepository::class);
@@ -249,7 +249,7 @@ class PagarMeGateway implements PagamentoGatewayInterface
 
     private function chamada($data, $complemento = '/orders')
     {
-        $ch = curl_init($this->url . $complemento);
+        $ch = curl_init($this->baseUrl . $complemento);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));

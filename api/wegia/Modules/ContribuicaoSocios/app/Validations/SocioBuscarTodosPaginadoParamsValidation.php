@@ -12,7 +12,8 @@ class SocioBuscarTodosPaginadoParamsValidation extends PaginacaoValidation
         'telefone',
         'endereco',
         'cpf',
-        'tipo'
+        'tipo',
+        'data_nascimento'
     ];
 }
 

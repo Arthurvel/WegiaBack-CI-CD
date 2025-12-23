@@ -21,7 +21,6 @@ class SocioTipoController extends BaseController
         SocioTipoService $service
     )
     {
-        //$this->middleware(['auth:sanctum', 'ability:criar-regras-de-pagamento-de-contribuicao'])->only(['buscarTodosParaFiltro']);
         $this->middleware(['auth:sanctum'])->except(['buscarTodosParaFiltro']);
 
         $this->service = $service;

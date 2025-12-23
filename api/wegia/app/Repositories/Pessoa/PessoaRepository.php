@@ -66,6 +66,7 @@ class PessoaRepository extends BaseRepository
         return Pessoa::findOrFail($id);
     }
 
+
     public function criarParentesco(CadastrarPessoaDependenteDTO $dependente) : PessoaDependente
     {
         return PessoaDependente::create($dependente->toArray());

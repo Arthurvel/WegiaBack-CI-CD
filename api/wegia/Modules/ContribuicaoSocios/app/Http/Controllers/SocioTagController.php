@@ -27,7 +27,9 @@ class SocioTagController extends BaseController
         SocioTagService $service
     )
     {
-        //$this->middleware(['auth:sanctum', 'ability:criar-regras-de-pagamento-de-contribuicao'])->only(['buscarTodosParaFiltro']);
+        $this->middleware(['auth:sanctum', 'ability:criar-tag-de-socio'])->only(['cadastrar']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-tag-de-socio'])->only(['buscarTodosPaginado']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-tag-de-socio'])->only(['atualizar']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;

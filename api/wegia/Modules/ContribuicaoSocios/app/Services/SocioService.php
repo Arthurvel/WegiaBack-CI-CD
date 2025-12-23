@@ -20,7 +20,7 @@ class SocioService extends BaseService
 
     public function __construct
     (
-        SocioRepository $repository,
+        SocioRepository  $repository,
         PessoaRepository $pessoaRepository
     )
     {
@@ -47,6 +47,11 @@ class SocioService extends BaseService
     public function buscarSocioPorCpf(string $cpfCnpj)
     {
         return $this->pessoaRepository->buscarPessoaPorCpf($cpfCnpj, ['socio']);
+    }
+
+    public function buscarEstatisticasComTipoSocio()
+    {
+        return $this->repository->buscarEstatisticasComTipoSocio();
     }
 
     public function atualizarComPessoa(int $idSocio, int $idPessoa, SocioAtualizarDTO $socioDTO, PessoaAtualizarDTO $pessoaDTO)

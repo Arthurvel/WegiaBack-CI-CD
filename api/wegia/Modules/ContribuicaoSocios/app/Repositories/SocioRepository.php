@@ -6,51 +6,20 @@ use App\DTOs\PaginacaoFiltrosDTO;
 use App\Repositories\Base\BaseRepository;
 use Modules\ContribuicaoSocios\app\DTO\SocioRelatorioBuscarTodosParamsDTO;
 use Modules\ContribuicaoSocios\app\Models\Socio;
+use Modules\ContribuicaoSocios\app\Models\SocioTipo;
 
 class SocioRepository extends BaseRepository
 {
 
+    private SocioTipo $socioTipo;
+
     public function __construct(
-        Socio $model
+        Socio $model,
+        SocioTipo $socioTipo
     )
     {
         parent::__construct($model);
-    }
-
-    private function buscarTodosPaginadoSemExecutado(PaginacaoFiltrosDTO $dto)
-    {
-        $buscar = $dto->buscar ?? null;
-        $ordenacao = $dto->ordenacao ?? null;
-        $tipoOrdenacao = $dto->tipoOrdenacao ?? 'ASC';
-
-        return $this->model
-            ->with(['pessoa', 'socioStatus', 'socioTipo', 'socioTag'])
-            ->when($buscar, function ($q) use ($buscar) {
-                $q->where(function ($query) use ($buscar) {
-                    $query->whereHas('pessoa', function ($p) use ($buscar) {
-                        $p->where('nome', 'like', "%{$buscar}%");
-                    })
-                        ->orWhereHas('socioStatus', function ($s) use ($buscar) {
-                            $s->where('descricao', 'like', "%{$buscar}%");
-                        })
-                        ->orWhereHas('socioTipo', function ($t) use ($buscar) {
-                            $t->where('descricao', 'like', "%{$buscar}%");
-                        })
-                        ->orWhereHas('socioTag', function ($tag) use ($buscar) {
-                            $tag->where('tag', 'like', "%{$buscar}%");
-                        });
-                });
-            })
-            ->when($ordenacao, function ($q) use ($ordenacao, $tipoOrdenacao) {
-
-                if (in_array($ordenacao, ['nome', 'cpf'])) {
-                    $q->join('pessoa', 'pessoa.id_pessoa', '=', 'socio.id_pessoa')
-                        ->orderBy("pessoa.$ordenacao", $tipoOrdenacao)
-                        ->select('socio.*');
-                } else {
-                    $q->orderBy($ordenacao, $tipoOrdenacao);
-                }
-            });
+        $this->socioTipo = $socioTipo;
     }
 
     public function buscarTodosPaginado(PaginacaoFiltrosDTO $dto)
@@ -130,4 +99,58 @@ class SocioRepository extends BaseRepository
             ->get();
     }
 
+    public function buscarEstatisticasComTipoSocio()
+    {
+        return $this->socioTipo
+            ->leftJoin('socio', 'socio_tipo.id_sociotipo', '=', 'socio.id_sociotipo')
+            ->selectRaw("
+                TRIM(
+                    SUBSTRING_INDEX(
+                        SUBSTRING_INDEX(socio_tipo.tipo, '-', 2),
+                        '-',
+                        -1
+                    )
+                ) as tipo_intermediario,
+                COUNT(socio.id_socio) as total_socios
+            ")
+            ->groupBy('tipo_intermediario')
+            ->orderBy('total_socios', 'DESC')
+            ->get();
+    }
+
+    private function buscarTodosPaginadoSemExecutado(PaginacaoFiltrosDTO $dto)
+    {
+        $buscar = $dto->buscar ?? null;
+        $ordenacao = $dto->ordenacao ?? null;
+        $tipoOrdenacao = $dto->tipoOrdenacao ?? 'ASC';
+
+        return $this->model
+            ->with(['pessoa', 'socioStatus', 'socioTipo', 'socioTag'])
+            ->when($buscar, function ($q) use ($buscar) {
+                $q->where(function ($query) use ($buscar) {
+                    $query->whereHas('pessoa', function ($p) use ($buscar) {
+                        $p->where('nome', 'like', "%{$buscar}%");
+                    })
+                        ->orWhereHas('socioStatus', function ($s) use ($buscar) {
+                            $s->where('status', 'like', "%{$buscar}%");
+                        })
+                        ->orWhereHas('socioTipo', function ($t) use ($buscar) {
+                            $t->where('tipo', 'like', "%{$buscar}%");
+                        })
+                        ->orWhereHas('socioTag', function ($tag) use ($buscar) {
+                            $tag->where('tag', 'like', "%{$buscar}%");
+                        });
+                });
+            })
+            ->when($ordenacao, function ($q) use ($ordenacao, $tipoOrdenacao) {
+
+                if (in_array($ordenacao, ['nome', 'cpf', 'data_nascimento'])) {
+                    $q->join('pessoa', 'pessoa.id_pessoa', '=', 'socio.id_pessoa')
+                        ->orderBy("pessoa.$ordenacao", $tipoOrdenacao)
+                        ->select('socio.*');
+                } else {
+                    $q->orderBy($ordenacao, $tipoOrdenacao);
+                }
+            });
+    }
 }

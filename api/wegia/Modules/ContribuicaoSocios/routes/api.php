@@ -19,17 +19,13 @@ Route::prefix('contribuicao')->group(function () {
     Route::post('pagamento', [PagamentoController::class, 'criarPagamento']);
 
     Route::prefix('gateway')->group(function () {
-        Route::get('', [ContribuicaoGatewayPagamentoController::class, 'buscarTodosPaginado']);
         Route::get('filtro', [ContribuicaoGatewayPagamentoController::class, 'buscarTodosParaFiltro']);
-        Route::post('', [ContribuicaoGatewayPagamentoController::class, 'cadastrar']);
-        Route::put('{id}', [ContribuicaoGatewayPagamentoController::class, 'atualizar']);
     });
 
     Route::prefix('meio-pagamento')->group(function () {
         Route::get('', [ContribuicaoMeioDePagamentoController::class, 'buscarTodosPaginado']);
         Route::get('filtro', [ContribuicaoMeioDePagamentoController::class, 'buscarTodosParaFiltro']);
         Route::get('ativos', [ContribuicaoMeioDePagamentoController::class, 'buscarMeioPagamentosAtivos']);
-        Route::post('', [ContribuicaoMeioDePagamentoController::class, 'cadastrar']);
         Route::put('{id}', [ContribuicaoMeioDePagamentoController::class, 'atualizar']);
     });
 
@@ -51,6 +47,7 @@ Route::prefix('socio')->group(function () {
     Route::get('', [SocioController::class, 'buscarTodosPaginado']);
     Route::get('aniversariante', [SocioController::class, 'buscarTodosAniversariantesMesPaginado']);
     Route::get('relatorio', [SocioController::class, 'buscarSocioRelatorio']);
+    Route::get('tipo/estatistica', [SocioController::class, 'buscarEstatisticasComTipoSocio']);
     Route::get('pessoa/{cpfCnpj}', [SocioController::class, 'buscarSocioPorCpf']);
     Route::post('', [SocioController::class, 'cadastrar']);
     Route::post('pessoa', [SocioController::class, 'cadastrarSocioPessoa']);

@@ -61,7 +61,7 @@ class PagamentoCadastrarValidation extends FormRequest
             ],
 
             'cartao_hash' => [
-                'sometimes',
+                'nullable',
                 'string',
                 new PagamentoCartaoRule($this->meio),
             ]

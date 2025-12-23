@@ -21,7 +21,6 @@ class SocioStatusController extends BaseController
         SocioStatusService $service
     )
     {
-        //$this->middleware(['auth:sanctum', 'ability:criar-regras-de-pagamento-de-contribuicao'])->only(['buscarTodosParaFiltro']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;

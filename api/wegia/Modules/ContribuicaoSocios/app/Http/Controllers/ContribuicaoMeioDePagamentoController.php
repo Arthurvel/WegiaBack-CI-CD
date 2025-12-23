@@ -30,50 +30,12 @@ class ContribuicaoMeioDePagamentoController extends BaseController
     )
     {
 
-        $this->middleware(['auth:sanctum', 'ability:criar-meio-de-pagamento-de-contribuicao'])->only(['cadastrar']);
         $this->middleware(['auth:sanctum', 'ability:visualizar-meio-de-pagamento-de-contribuicao'])->only(['buscarTodosPaginado']);
         $this->middleware(['auth:sanctum', 'ability:atualizar-meio-de-pagamento-de-contribuicao'])->only(['atualizar']);
         $this->middleware(['auth:sanctum', 'ability:criar-regras-de-pagamento-de-contribuicao'])->only(['buscarTodosParaFiltro']);
         $this->middleware(['auth:sanctum'])->except(['buscarMeioPagamentosAtivos']);
 
         $this->service = $service;
-    }
-
-    /**
-     * @OA\Post(
-     *     path="/contribuicao/meio-pagamento",
-     *     summary="Cadastra um meio de pagamento",
-     *     tags={"Contribuição Meio de Pagamento"},
-     *     security={{"bearerAuth": {}}},
-     *     @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/ContribuicaoMeioPagamentoCadastrarValidation")
-     *      ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Operacao realizada com sucesso",
-     *         @OA\JsonContent()
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Erro de validação",
-     *         @OA\JsonContent()
-     *     )
-     * )
-     */
-    public function cadastrar(ContribuicaoMeioPagamentoCadastrarValidation $request)
-    {
-        try {
-            $validated = $request->validated();
-
-            $dto = ContribuicaoMeioPagamentoCadastrarDTO::fromArray($validated);
-
-            $criado = $this->service->criar($dto);
-
-            return $this->sucessoResponse($criado, 201);
-        } catch (\Exception $e) {
-            return $this->errorResponse($e);
-        }
     }
 
     /**

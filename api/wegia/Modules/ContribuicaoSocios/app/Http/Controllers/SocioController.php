@@ -36,7 +36,11 @@ class SocioController extends BaseController
         SocioService $service
     )
     {
-        //$this->middleware(['auth:sanctum', 'ability:criar-regras-de-pagamento-de-contribuicao'])->only(['buscarTodosParaFiltro']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-os-socios'])->only(['buscarTodosPaginado']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-os-socios-aniversariante'])->only(['buscarTodosAniversariantesMesPaginado']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-os-socios-grafico'])->only(['buscarEstatisticasComTipoSocio']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-os-socios-relatorio'])->only(['buscarSocioRelatorio']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-o-socio'])->only(['atualizarComPessoa']);
         $this->middleware(['auth:sanctum'])->except(['buscarSocioPorCpf', 'cadastrarSocioPessoa', 'cadastrar']);
 
         $this->service = $service;
@@ -358,6 +362,28 @@ class SocioController extends BaseController
             $pessoa = $this->service->buscarSocioPorCpf($validated['cpfCnpj']);
 
             return $this->sucessoResponse(new SocioPublicoResource($pessoa));
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/socio/tipo/estatistica",
+     *     summary="Estatistica do socio pelo tipo",
+     *     tags={"Socio"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(response="200", description="Operação realizado com sucesso"),
+     *     @OA\Response(response="422", description="Erro de validação"),
+     *     @OA\Response(response="500", description="Erro interno")
+     * )
+     */
+    public function buscarEstatisticasComTipoSocio()
+    {
+        try {
+            $estatistica = $this->service->buscarEstatisticasComTipoSocio();
+
+            return $this->sucessoResponse($estatistica);
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }

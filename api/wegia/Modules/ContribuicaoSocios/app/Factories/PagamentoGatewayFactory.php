@@ -15,7 +15,8 @@ class PagamentoGatewayFactory
 
         return match ($nome) {
             'pagarme' => new PagarMeGateway(
-                secretKey: $gateway['token']
+                secretKey: config('contribuicaosocios.gateways.pagarme.private_key'),
+                baseUrl: config('contribuicaosocios.gateways.pagarme.base_url'),
             ),
 
             default => throw new \Exception("Gateway não implementado: $gateway")

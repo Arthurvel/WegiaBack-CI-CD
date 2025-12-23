@@ -197,136 +197,6 @@
                 ]
             }
         },
-        "/contribuicao/gateway": {
-            "get": {
-                "tags": [
-                    "Contribuição Gateway"
-                ],
-                "summary": "Busca todos os Gateway de pagamento paginados",
-                "operationId": "31259ee15b1a52a3688511eea3c69dd9",
-                "parameters": [
-                    {
-                        "name": "buscar",
-                        "in": "query",
-                        "description": "Texto para busca por nome da plataforma",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "ordenacao",
-                        "in": "query",
-                        "description": "Campo de ordenação",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "plataforma"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "tipoOrdenacao",
-                        "in": "query",
-                        "description": "Tipo de ordenação ASC ou DESC",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "ASC",
-                                "asc",
-                                "DESC",
-                                "desc"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "pagina",
-                        "in": "query",
-                        "description": "Número da página (mínimo 1)",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 1
-                        }
-                    },
-                    {
-                        "name": "itensPorPagina",
-                        "in": "query",
-                        "description": "Quantidade de itens por página (mínimo 1)",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 1
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Operacao realizada com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Erro de validação",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
-            "post": {
-                "tags": [
-                    "Contribuição Gateway"
-                ],
-                "summary": "Cadastra um Gateway de pagamento",
-                "operationId": "32c53528a223e16a41cf0afd59f8952f",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ContribuicaoGatewayPagamentoCadastrarValidation"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Operacao realizada com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Erro de validação",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/contribuicao/gateway/filtro": {
             "get": {
                 "tags": [
@@ -336,59 +206,6 @@
                 "operationId": "090dc403e843f15106b768f7078a10c2",
                 "responses": {
                     "200": {
-                        "description": "Operacao realizada com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Erro de validação",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/contribuicao/gateway/{id}": {
-            "put": {
-                "tags": [
-                    "Contribuição Gateway"
-                ],
-                "summary": "Atualizar um Gateway de pagamento",
-                "operationId": "cd60838cb6cb6aa1f082853d001dd62e",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID do gateway de pagamento",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ContribuicaoGatewayPagamentoAtualizarValidation"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
                         "description": "Operacao realizada com sucesso",
                         "content": {
                             "application/json": {
@@ -606,46 +423,6 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Operacao realizada com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Erro de validação",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
-            "post": {
-                "tags": [
-                    "Contribuição Meio de Pagamento"
-                ],
-                "summary": "Cadastra um meio de pagamento",
-                "operationId": "89bd37a0214964671699200f7bd040ef",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ContribuicaoMeioPagamentoCadastrarValidation"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
                         "description": "Operacao realizada com sucesso",
                         "content": {
                             "application/json": {
@@ -1262,6 +1039,31 @@
                 }
             }
         },
+        "/socio/tipo/estatistica": {
+            "get": {
+                "tags": [
+                    "Socio"
+                ],
+                "summary": "Estatistica do socio pelo tipo",
+                "operationId": "a77ccb50184a81ff6d92fbc1d4a5a148",
+                "responses": {
+                    "200": {
+                        "description": "Operação realizado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/socio/{id_socio}/pessoa/{id_pessoa}": {
             "put": {
                 "tags": [
@@ -1651,82 +1453,8 @@
                 },
                 "type": "object"
             },
-            "ContribuicaoGatewayPagamentoAtualizarValidation": {
-                "properties": {
-                    "plataforma": {
-                        "description": "Nome da plataforma",
-                        "type": "string"
-                    },
-                    "endPoint": {
-                        "description": "endpoint do gateway",
-                        "type": "string"
-                    },
-                    "token": {
-                        "description": "token do gateway",
-                        "type": "string"
-                    },
-                    "status": {
-                        "description": "status",
-                        "type": "boolean"
-                    }
-                },
-                "type": "object"
-            },
-            "ContribuicaoGatewayPagamentoCadastrarValidation": {
-                "required": [
-                    "plataforma",
-                    "endPoint",
-                    "token",
-                    "status"
-                ],
-                "properties": {
-                    "plataforma": {
-                        "description": "Nome da plataforma",
-                        "type": "string"
-                    },
-                    "endPoint": {
-                        "description": "endpoint do gateway",
-                        "type": "string"
-                    },
-                    "token": {
-                        "description": "token do gateway",
-                        "type": "string"
-                    },
-                    "status": {
-                        "description": "status",
-                        "type": "boolean"
-                    }
-                },
-                "type": "object"
-            },
             "ContribuicaoMeioPagamentoAtualizarValidation": {
                 "properties": {
-                    "meio": {
-                        "description": "Nome do meio de pagamento",
-                        "type": "string"
-                    },
-                    "id_plataforma": {
-                        "description": "id da plataforma",
-                        "type": "integer"
-                    },
-                    "status": {
-                        "description": "status",
-                        "type": "boolean"
-                    }
-                },
-                "type": "object"
-            },
-            "ContribuicaoMeioPagamentoCadastrarValidation": {
-                "required": [
-                    "meio",
-                    "id_plataforma",
-                    "status"
-                ],
-                "properties": {
-                    "meio": {
-                        "description": "Nome do meio de pagamento",
-                        "type": "string"
-                    },
                     "id_plataforma": {
                         "description": "id da plataforma",
                         "type": "integer"

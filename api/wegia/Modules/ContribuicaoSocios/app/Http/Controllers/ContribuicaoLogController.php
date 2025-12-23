@@ -26,7 +26,7 @@ class ContribuicaoLogController extends BaseController
     )
     {
 
-        //$this->middleware(['auth:sanctum', 'ability:criar-regras-de-pagamento-de-contribuicao'])->only(['buscarTodosParaFiltro']);
+        $this->middleware(['auth:sanctum', 'ability:visualizar-as-contribuicoes'])->only(['buscarTodasPaginado']);
         $this->middleware(['auth:sanctum'])->except(['']);
 
         $this->service = $service;
