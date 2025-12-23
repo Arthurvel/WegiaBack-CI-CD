@@ -10,6 +10,7 @@ use App\Services\Base\BaseService;
 use Illuminate\Support\Facades\DB;
 use Modules\ContribuicaoSocios\app\DTO\SocioAtualizarDTO;
 use Modules\ContribuicaoSocios\app\DTO\SocioCadastrarDTO;
+use Modules\ContribuicaoSocios\app\DTO\SocioRelatorioBuscarTodosParamsDTO;
 use Modules\ContribuicaoSocios\app\Repositories\SocioRepository;
 
 class SocioService extends BaseService
@@ -36,6 +37,16 @@ class SocioService extends BaseService
     public function buscarTodosAniversariantesMesPaginado(PaginacaoFiltrosDTO $dto)
     {
         return $this->repository->buscarTodosAniversariantesMesPaginado($dto);
+    }
+
+    public function buscarSocioRelatorio(SocioRelatorioBuscarTodosParamsDTO $dto)
+    {
+        return $this->repository->buscarSocioRelatorio($dto);
+    }
+
+    public function buscarSocioPorCpf(string $cpfCnpj)
+    {
+        return $this->pessoaRepository->buscarPessoaPorCpf($cpfCnpj, ['socio']);
     }
 
     public function atualizarComPessoa(int $idSocio, int $idPessoa, SocioAtualizarDTO $socioDTO, PessoaAtualizarDTO $pessoaDTO)

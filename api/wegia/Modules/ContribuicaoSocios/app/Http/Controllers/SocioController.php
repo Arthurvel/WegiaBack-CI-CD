@@ -7,14 +7,19 @@ use App\DTOs\Pessoa\PessoaAtualizarDTO;
 use app\DTOs\Pessoa\PessoaCadastrarDTO;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Paginacao\PaginacaoResource;
+use Illuminate\Http\JsonResponse;
 use Modules\ContribuicaoSocios\app\DTO\SocioAtualizarDTO;
 use Modules\ContribuicaoSocios\app\DTO\SocioCadastrarDTO;
+use Modules\ContribuicaoSocios\app\DTO\SocioRelatorioBuscarTodosParamsDTO;
+use Modules\ContribuicaoSocios\app\Http\Resources\SocioPublicoResource;
 use Modules\ContribuicaoSocios\app\Http\Resources\SocioResource;
 use Modules\ContribuicaoSocios\app\Services\SocioService;
 use Modules\ContribuicaoSocios\app\Validations\SocioAtualizarValidation;
 use Modules\ContribuicaoSocios\app\Validations\SocioBuscarTodosPaginadoParamsValidation;
 use Modules\ContribuicaoSocios\app\Validations\SocioCadastrarValidation;
+use Modules\ContribuicaoSocios\app\Validations\SocioPessoaBuscarPorCPFValidation;
 use Modules\ContribuicaoSocios\app\Validations\SocioPessoaCadastrarValidation;
+use Modules\ContribuicaoSocios\app\Validations\SocioRelatorioBuscarTodosParamsValidation;
 
 /**
  * @OA\Tag(
@@ -32,7 +37,7 @@ class SocioController extends BaseController
     )
     {
         //$this->middleware(['auth:sanctum', 'ability:criar-regras-de-pagamento-de-contribuicao'])->only(['buscarTodosParaFiltro']);
-        $this->middleware(['auth:sanctum'])->except(['']);
+        $this->middleware(['auth:sanctum'])->except(['buscarSocioPorCpf', 'cadastrarSocioPessoa', 'cadastrar']);
 
         $this->service = $service;
     }
@@ -247,6 +252,112 @@ class SocioController extends BaseController
             $buscados = $this->service->buscarTodosAniversariantesMesPaginado($dto);
 
             return $this->sucessoResponse( new PaginacaoResource($buscados, SocioResource::class));
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/socio/relatorio",
+     *     summary="Busca todos os socios para relatorio",
+     *     tags={"Socio"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="tipo_socio",
+     *         in="query",
+     *         description="Tipo de sócio",
+     *         required=false,
+     *         @OA\Schema(type="string", enum={"Casual", "Mensal", "Bimestral", "Trimestral", "Semestral"})
+     *     ),
+     *     @OA\Parameter(
+     *         name="id_status",
+     *         in="query",
+     *         description="ID do status do sócio",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="id_tag",
+     *         in="query",
+     *         description="ID da tag do sócio",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="tipo_pessoa",
+     *         in="query",
+     *         description="Tipo de pessoa (f=Física, j=Jurídica)",
+     *         required=false,
+     *         @OA\Schema(type="string", enum={"f", "j"}, maxLength=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="valor_filtro",
+     *         in="query",
+     *         description="Tipo de filtro para valor",
+     *         required=false,
+     *         @OA\Schema(type="string", enum={"maior", "maior_igual", "menor", "menor_igual", "igual"})
+     *     ),
+     *     @OA\Parameter(
+     *         name="valor",
+     *         in="query",
+     *         description="Valor para filtro (mínimo 0)",
+     *         required=false,
+     *         @OA\Schema(type="number", format="float", minimum=0)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Operacao realizada com sucesso",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erro de validação",
+     *         @OA\JsonContent()
+     *     )
+     * )
+     */
+        public function buscarSocioRelatorio(SocioRelatorioBuscarTodosParamsValidation $request)
+        {
+            try {
+                $validated = $request->validated();
+
+            $dto = SocioRelatorioBuscarTodosParamsDTO::fromArray($validated);
+
+            $buscados = $this->service->buscarSocioRelatorio($dto);
+
+            return $this->sucessoResponse( SocioResource::collection($buscados));
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/socio/pessoa/{cpfCnpj}",
+     *     summary="Buscar pessoa por cpf ou cnpj e trazer socio",
+     *     tags={"Socio"},
+     *     @OA\Parameter(
+     *         name="cpfCnpj",
+     *         in="path",
+     *         description="CPF ou CNPJ da pessoa",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response="200", description="Operação realizado com sucesso"),
+     *     @OA\Response(response="422", description="Erro de validação"),
+     *     @OA\Response(response="500", description="Erro interno")
+     * )
+     */
+    public function buscarSocioPorCpf(SocioPessoaBuscarPorCPFValidation $request) : JsonResponse
+    {
+        try {
+
+            $validated = $request->validated();
+
+            $pessoa = $this->service->buscarSocioPorCpf($validated['cpfCnpj']);
+
+            return $this->sucessoResponse(new SocioPublicoResource($pessoa));
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }

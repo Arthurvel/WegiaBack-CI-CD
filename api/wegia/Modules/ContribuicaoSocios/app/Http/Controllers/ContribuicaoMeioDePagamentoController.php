@@ -7,6 +7,7 @@ use App\Http\Controllers\BaseController;
 use App\Http\Resources\Paginacao\PaginacaoResource;
 use Modules\ContribuicaoSocios\app\DTO\ContribuicaoMeioPagamentoAtualizarDTO;
 use Modules\ContribuicaoSocios\app\DTO\ContribuicaoMeioPagamentoCadastrarDTO;
+use Modules\ContribuicaoSocios\app\Http\Resources\ContribuicaoMeioPagamentoAtivosResource;
 use Modules\ContribuicaoSocios\app\Http\Resources\ContribuicaoMeioPagamentoResource;
 use Modules\ContribuicaoSocios\app\Services\ContribuicaoMeioDePagamentoService;
 use Modules\ContribuicaoSocios\app\Validations\ContribuicaoMeioPagamentoAtualizarValidation;
@@ -33,7 +34,7 @@ class ContribuicaoMeioDePagamentoController extends BaseController
         $this->middleware(['auth:sanctum', 'ability:visualizar-meio-de-pagamento-de-contribuicao'])->only(['buscarTodosPaginado']);
         $this->middleware(['auth:sanctum', 'ability:atualizar-meio-de-pagamento-de-contribuicao'])->only(['atualizar']);
         $this->middleware(['auth:sanctum', 'ability:criar-regras-de-pagamento-de-contribuicao'])->only(['buscarTodosParaFiltro']);
-        $this->middleware(['auth:sanctum'])->except(['']);
+        $this->middleware(['auth:sanctum'])->except(['buscarMeioPagamentosAtivos']);
 
         $this->service = $service;
     }
@@ -167,6 +168,34 @@ class ContribuicaoMeioDePagamentoController extends BaseController
             $buscados = $this->service->buscarTodos();
 
             return $this->sucessoResponse( ContribuicaoMeioPagamentoResource::collection($buscados));
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/contribuicao/meio-pagamento/ativos",
+     *     summary="Busca todos os meios de pagamentos ativos para usar",
+     *     tags={"Contribuição Meio de Pagamento"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Operacao realizada com sucesso",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erro de validação",
+     *         @OA\JsonContent()
+     *     )
+     * )
+     */
+    public function buscarMeioPagamentosAtivos()
+    {
+        try {
+            $buscados = $this->service->buscarMeioPagamentosAtivos();
+
+            return $this->sucessoResponse(ContribuicaoMeioPagamentoAtivosResource::collection($buscados));
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }

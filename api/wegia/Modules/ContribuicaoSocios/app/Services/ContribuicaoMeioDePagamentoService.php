@@ -22,4 +22,9 @@ class ContribuicaoMeioDePagamentoService extends BaseService
         return $this->repository->buscarTodosPaginado($dto);
     }
 
+    public function buscarMeioPagamentosAtivos()
+    {
+        return $this->repository->buscarMeioPagamentosAtivos();
+    }
+
 }

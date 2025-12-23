@@ -9,8 +9,14 @@ use Modules\ContribuicaoSocios\app\Http\Controllers\SocioStatusController;
 use Modules\ContribuicaoSocios\app\Http\Controllers\SocioTipoController;
 use Modules\ContribuicaoSocios\app\Http\Controllers\SocioTagController;
 use Modules\ContribuicaoSocios\app\Http\Controllers\SocioController;
+use Modules\ContribuicaoSocios\app\Http\Controllers\PagamentoController;
+use Modules\ContribuicaoSocios\app\Http\Controllers\ContribuicaoLogController;
 
 Route::prefix('contribuicao')->group(function () {
+
+    Route::get('', [ContribuicaoLogController::class, 'buscarTodasPaginado']);
+
+    Route::post('pagamento', [PagamentoController::class, 'criarPagamento']);
 
     Route::prefix('gateway')->group(function () {
         Route::get('', [ContribuicaoGatewayPagamentoController::class, 'buscarTodosPaginado']);
@@ -22,6 +28,7 @@ Route::prefix('contribuicao')->group(function () {
     Route::prefix('meio-pagamento')->group(function () {
         Route::get('', [ContribuicaoMeioDePagamentoController::class, 'buscarTodosPaginado']);
         Route::get('filtro', [ContribuicaoMeioDePagamentoController::class, 'buscarTodosParaFiltro']);
+        Route::get('ativos', [ContribuicaoMeioDePagamentoController::class, 'buscarMeioPagamentosAtivos']);
         Route::post('', [ContribuicaoMeioDePagamentoController::class, 'cadastrar']);
         Route::put('{id}', [ContribuicaoMeioDePagamentoController::class, 'atualizar']);
     });
@@ -43,6 +50,8 @@ Route::prefix('socio')->group(function () {
 
     Route::get('', [SocioController::class, 'buscarTodosPaginado']);
     Route::get('aniversariante', [SocioController::class, 'buscarTodosAniversariantesMesPaginado']);
+    Route::get('relatorio', [SocioController::class, 'buscarSocioRelatorio']);
+    Route::get('pessoa/{cpfCnpj}', [SocioController::class, 'buscarSocioPorCpf']);
     Route::post('', [SocioController::class, 'cadastrar']);
     Route::post('pessoa', [SocioController::class, 'cadastrarSocioPessoa']);
     Route::put('{id_socio}/pessoa/{id_pessoa}', [SocioController::class, 'atualizarComPessoa']);

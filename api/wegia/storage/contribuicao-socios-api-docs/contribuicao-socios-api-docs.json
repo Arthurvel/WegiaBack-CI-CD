@@ -412,6 +412,133 @@
                 ]
             }
         },
+        "/contribuicao": {
+            "get": {
+                "tags": [
+                    "Contribuição"
+                ],
+                "summary": "Busca todas contribuicoes paginadas",
+                "operationId": "a6d52753cbe2faef68b3f4cd249071a8",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo para ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "nome",
+                                "plataforma",
+                                "meio_pagamento",
+                                "data_geracao",
+                                "data_vencimento",
+                                "data_pagamento",
+                                "valor",
+                                "status_pagamento"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "DESC"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "periodo",
+                        "in": "query",
+                        "description": "Número de dias para filtrar contribuições (busca últimos X dias)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "id_socio",
+                        "in": "query",
+                        "description": "ID do sócio",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status da contribuição (0=Inativo, 1=Ativo)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                0,
+                                1
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/contribuicao/meio-pagamento": {
             "get": {
                 "tags": [
@@ -574,6 +701,33 @@
                 ]
             }
         },
+        "/contribuicao/meio-pagamento/ativos": {
+            "get": {
+                "tags": [
+                    "Contribuição Meio de Pagamento"
+                ],
+                "summary": "Busca todos os meios de pagamentos ativos para usar",
+                "operationId": "5fe29973c99d292df3c5b1c0ce8ae5b0",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/contribuicao/meio-pagamento/{id}": {
             "put": {
                 "tags": [
@@ -657,6 +811,43 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/contribuicao/pagamento": {
+            "post": {
+                "tags": [
+                    "Pagamento"
+                ],
+                "summary": "Cadastrar um pagamento",
+                "operationId": "7dc86ebdd24b43e4644682719d6aa2e5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PagamentoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
             }
         },
         "/socio": {
@@ -929,6 +1120,146 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/socio/relatorio": {
+            "get": {
+                "tags": [
+                    "Socio"
+                ],
+                "summary": "Busca todos os socios para relatorio",
+                "operationId": "102a5fd005065bfcc1a25a0237739224",
+                "parameters": [
+                    {
+                        "name": "tipo_socio",
+                        "in": "query",
+                        "description": "Tipo de sócio",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Casual",
+                                "Mensal",
+                                "Bimestral",
+                                "Trimestral",
+                                "Semestral"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "id_status",
+                        "in": "query",
+                        "description": "ID do status do sócio",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "id_tag",
+                        "in": "query",
+                        "description": "ID da tag do sócio",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "tipo_pessoa",
+                        "in": "query",
+                        "description": "Tipo de pessoa (f=Física, j=Jurídica)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 1,
+                            "enum": [
+                                "f",
+                                "j"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "valor_filtro",
+                        "in": "query",
+                        "description": "Tipo de filtro para valor",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "maior",
+                                "maior_igual",
+                                "menor",
+                                "menor_igual",
+                                "igual"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "valor",
+                        "in": "query",
+                        "description": "Valor para filtro (mínimo 0)",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "format": "float",
+                            "minimum": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/pessoa/{cpfCnpj}": {
+            "get": {
+                "tags": [
+                    "Socio"
+                ],
+                "summary": "Buscar pessoa por cpf ou cnpj e trazer socio",
+                "operationId": "690bae8c75d8676a9d4fb3c00c9db3ff",
+                "parameters": [
+                    {
+                        "name": "cpfCnpj",
+                        "in": "path",
+                        "description": "CPF ou CNPJ da pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                }
             }
         },
         "/socio/{id_socio}/pessoa/{id_pessoa}": {
@@ -1264,12 +1595,7 @@
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         }
     },
@@ -1408,6 +1734,40 @@
                     "status": {
                         "description": "status",
                         "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "PagamentoCadastrarValidation": {
+                "required": [
+                    "id_socio",
+                    "id_contribuicao_conjuntoRegras",
+                    "valor"
+                ],
+                "properties": {
+                    "id_socio": {
+                        "description": "id do socio",
+                        "type": "integer"
+                    },
+                    "id_contribuicao_meioPagamento": {
+                        "description": "id do meio de pagamento",
+                        "type": "integer"
+                    },
+                    "valor": {
+                        "description": "valor do pagamento",
+                        "type": "integer"
+                    },
+                    "parcelas": {
+                        "description": "quantidade de parcelas",
+                        "type": "integer"
+                    },
+                    "data_vencimento": {
+                        "description": "valor do pagamento",
+                        "type": "integer"
+                    },
+                    "cartao_hash": {
+                        "description": "hash do cartao",
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -1668,6 +2028,10 @@
             "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
         },
         {
+            "name": "Pagamento",
+            "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
+        },
+        {
             "name": "Socio",
             "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
         },
@@ -1682,6 +2046,10 @@
         {
             "name": "Socio Tipo",
             "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
+        },
+        {
+            "name": "Contribuição",
+            "description": "Contribuição"
         }
     ]
 }

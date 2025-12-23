@@ -22,7 +22,7 @@ class SocioTipoController extends BaseController
     )
     {
         //$this->middleware(['auth:sanctum', 'ability:criar-regras-de-pagamento-de-contribuicao'])->only(['buscarTodosParaFiltro']);
-        $this->middleware(['auth:sanctum'])->except(['']);
+        $this->middleware(['auth:sanctum'])->except(['buscarTodosParaFiltro']);
 
         $this->service = $service;
     }
@@ -32,7 +32,6 @@ class SocioTipoController extends BaseController
      *     path="/socio/tipo/filtro",
      *     summary="Busca todas os tipos dos socios para usar como filtro",
      *     tags={"Socio Tipo"},
-     *     security={{"bearerAuth": {}}},
      *     @OA\Response(
      *         response=200,
      *         description="Operacao realizada com sucesso",
