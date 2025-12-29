@@ -155,7 +155,16 @@ INSERT INTO `permissao` VALUES
     ('Atualizar regras de pagamento de contribuição','Contribuição'),
     ('Criar meio de pagamento de contribuição','Contribuição'),
     ('Visualizar meio de pagamento de contribuição','Contribuição'),
-    ('Atualizar meio de pagamento de contribuição','Contribuição');
+    ('Atualizar meio de pagamento de contribuição','Contribuição')
+    ('Visualizar as contribuições','Contribuição'),
+    ('Visualizar os Socios','Socios'),
+    ('Visualizar os Socios Aniversariante','Socios'),
+    ('Visualizar os Socios Gráfico','Socios'),
+    ('Visualizar os Socios Relatorio','Socios'),
+    ('Atualizar o Socio','Socios'),
+    ('Criar tag de Socio','Socios'),
+    ('Visualizar tag de Socio','Socios'),
+    ('Atualizar tag de Socio','Socios');
 
 INSERT INTO perfil_permissao (id_perfil, id_permissao)
 SELECT 1, id_permissao

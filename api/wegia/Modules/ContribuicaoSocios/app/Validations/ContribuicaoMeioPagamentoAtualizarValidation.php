@@ -8,7 +8,6 @@ use Illuminate\Validation\Rule;
 /**
  * @OA\Schema(
  *     schema="ContribuicaoMeioPagamentoAtualizarValidation",
- *     @OA\Property(property="meio", type="string", description="Nome do meio de pagamento"),
  *     @OA\Property(property="id_plataforma", type="integer", description="id da plataforma"),
  *     @OA\Property(property="status", type="boolean", description="status"),
  * )
@@ -19,12 +18,6 @@ class ContribuicaoMeioPagamentoAtualizarValidation extends FormRequest
     public function rules() : array
     {
         return [
-            'meio' => [
-                'sometimes',
-                'string',
-                'max:45',
-                Rule::unique('contribuicao_meioPagamento', 'meio')->ignore($this->route('id')),
-            ],
             'id_plataforma' => 'sometimes|integer|exists:contribuicao_gatewayPagamento,id',
             'status'        => 'sometimes|boolean'
         ];

@@ -39,4 +39,13 @@ class ContribuicaoMeioDePagamentoRepository extends BaseRepository
             })
             ->paginate($itensPorPagina, ['*'], 'page', $pagina);
     }
+
+    public function buscarMeioPagamentosAtivos()
+    {
+        return $this->model
+            ->with(['regras.regra', 'gateway'])
+            ->where('status', 1)
+            ->get();
+    }
+
 }

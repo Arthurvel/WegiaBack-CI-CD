@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\ContribuicaoSocios\app\Models\Socio;
 
 class Pessoa extends Authenticatable
 {
@@ -79,6 +80,11 @@ class Pessoa extends Authenticatable
     public function arquivos()
     {
         return $this->hasMany(PessoaArquivo::class, 'id_pessoa', 'id_pessoa');
+    }
+
+    public function socio()
+    {
+        return $this->hasOne(Socio::class, 'id_pessoa');
     }
 
 }

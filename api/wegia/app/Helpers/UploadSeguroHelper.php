@@ -30,6 +30,24 @@ class UploadSeguroHelper
         return $caminho;
     }
 
+    public static function salvarArquivoRemoto(
+        string $conteudo,
+        string $extensao,
+        string $pasta
+    ): string {
+        $hash = hash('sha256', Str::uuid());
+        $nomeDoArquivo = $hash . '.' . $extensao;
+
+        $conteudoEncriptado = Crypt::encrypt($conteudo);
+
+        $ano = date('Y');
+        $caminho = "uploads/{$ano}/{$pasta}/{$nomeDoArquivo}";
+
+        Storage::disk('local_secure')->put($caminho, $conteudoEncriptado);
+
+        return $caminho;
+    }
+
     public static function urlTemporaria(String $caminho, Int $validadeURL = 10) : String
     {
         if (!Storage::disk('local_secure')->exists($caminho)) {

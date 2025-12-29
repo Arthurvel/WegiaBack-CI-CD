@@ -11,10 +11,7 @@ class ContribuicaoGatewayPagamento extends BaseModel
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'plataforma',
-        'endPoint',
-        'token',
-        'status'
+        'plataforma'
     ];
 
 
