@@ -14,4 +14,12 @@ class ContribuicaoRecorrenciaRepository extends BaseRepository
     {
         parent::__construct($model);
     }
+
+    public function buscarPorCodigo(string $codigo)
+    {
+        return $this->model
+                ->where('codigo', $codigo)
+                ->firstOrFail();
+    }
+
 }

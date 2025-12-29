@@ -20,7 +20,7 @@ class DataVencimentoRule implements Rule
         $meioNome = strtolower($this->meio->meio);
 
         $regras = [
-            'boleto' => [1, 5, 10, 15, 20, 25],
+            'carne' => [1, 5, 10, 15, 20, 25],
         ];
 
         if (!array_key_exists($meioNome, $regras)) {

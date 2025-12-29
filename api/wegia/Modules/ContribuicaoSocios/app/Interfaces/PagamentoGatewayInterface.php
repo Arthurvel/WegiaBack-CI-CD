@@ -16,4 +16,6 @@ interface PagamentoGatewayInterface
     public function criarCartaoCredito(PagamentoCadastrarDTO $dto, int $id_gateway): PagamentoGatewayDTO;
     public function criarCartaoCreditoRecorrencia(PagamentoCadastrarDTO $dto, int $id_gateway): PagamentoGatewayDTO;
 
+    public function sincronizarPagamentos();
+
 }

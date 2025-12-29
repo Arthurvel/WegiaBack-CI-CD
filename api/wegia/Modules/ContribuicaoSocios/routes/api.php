@@ -16,7 +16,12 @@ Route::prefix('contribuicao')->group(function () {
 
     Route::get('', [ContribuicaoLogController::class, 'buscarTodasPaginado']);
 
-    Route::post('pagamento', [PagamentoController::class, 'criarPagamento']);
+    Route::prefix('pagamento')->group(function () {
+        Route::post('', [PagamentoController::class, 'criarPagamento']);
+        Route::put('sincronizar', [PagamentoController::class, 'sincronizarPagamento']);
+    });
+
+    Route::get('/segunda-via/socio/{cpfCnpj}', [ContribuicaoLogController::class, 'buscarContribuicoesSegundaVia']);
 
     Route::prefix('gateway')->group(function () {
         Route::get('filtro', [ContribuicaoGatewayPagamentoController::class, 'buscarTodosParaFiltro']);

@@ -24,6 +24,7 @@ class PagamentoController extends BaseController
         PagamentoService $pagamentoService
     )
     {
+        $this->middleware(['auth:sanctum', 'ability:sincronizar-pagamentos'])->only(['sincronizarPagamento']);
         $this->pagamentoService = $pagamentoService;
     }
 
@@ -63,4 +64,32 @@ class PagamentoController extends BaseController
         }
     }
 
+    /**
+     * @OA\Put(
+     *     path="/contribuicao/pagamento/sincronizar",
+     *      summary="Sincroniza os pagamentos com as apis cadastradas",
+     *     tags={"Pagamento"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=204,
+     *         description="Operacao realizada com sucesso",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erro de validação",
+     *         @OA\JsonContent()
+     *     )
+     * )
+     */
+    public function sincronizarPagamento()
+    {
+        try {
+            $sincronizado = $this->pagamentoService->sincronizarPagamento();
+
+            return $this->sucessoResponse($sincronizado, 204);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
 }

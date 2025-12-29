@@ -5,6 +5,7 @@ namespace Modules\ContribuicaoSocios\app\Http\Controllers;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Paginacao\PaginacaoResource;
 use Modules\ContribuicaoSocios\app\DTO\ContribuicaoBuscarTodosParamsDTO;
+use Modules\ContribuicaoSocios\app\Http\Resources\ContribuicaoLogComDocumentoResource;
 use Modules\ContribuicaoSocios\app\Http\Resources\ContribuicaoLogResource;
 use Modules\ContribuicaoSocios\app\Services\ContribuicaoLogService;
 use Modules\ContribuicaoSocios\app\Services\ContribuicaoRegrasService;
@@ -27,7 +28,7 @@ class ContribuicaoLogController extends BaseController
     {
 
         $this->middleware(['auth:sanctum', 'ability:visualizar-as-contribuicoes'])->only(['buscarTodasPaginado']);
-        $this->middleware(['auth:sanctum'])->except(['']);
+        $this->middleware(['auth:sanctum'])->except(['buscarContribuicoesSegundaVia']);
 
         $this->service = $service;
     }
@@ -119,6 +120,41 @@ class ContribuicaoLogController extends BaseController
             $buscados = $this->service->buscarTodasPaginado($dto);
 
             return $this->sucessoResponse( new PaginacaoResource ($buscados, ContribuicaoLogResource::class) );
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/contribuicao/segunda-via/socio/{cpfCnpj}",
+     *     summary="Busca todas contribuicoes paginadas",
+     *     tags={"Contribuição"},
+     *     @OA\Parameter(
+     *          name="cpfCnpj",
+     *          in="path",
+     *          description="Cpf ou cnpj do socio",
+     *          required=true,
+     *          @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Operacao realizada com sucesso",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erro de validação",
+     *         @OA\JsonContent()
+     *     )
+     * )
+     */
+    public function buscarContribuicoesSegundaVia(string $cpfCnpj)
+    {
+        try {
+            $buscados = $this->service->buscarContribuicoesSegundaVia($cpfCnpj);
+
+            return $this->sucessoResponse( ContribuicaoLogComDocumentoResource::collection($buscados) );
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }

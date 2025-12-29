@@ -16,7 +16,7 @@ class PagarMeWebHookValidation extends FormRequest
     {
         return [
             'id' => 'required|string',
-            'type' => 'required|string|in:charge.paid,charge.pending,charge.refunded,charge.failed,order.paid,order.canceled',
+            'type' => 'required|string',
             'created_at' => 'required|date',
             'data' => 'required|array',
             'data.id' => 'required|string',

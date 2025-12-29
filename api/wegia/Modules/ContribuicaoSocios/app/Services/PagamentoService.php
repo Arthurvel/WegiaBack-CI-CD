@@ -7,6 +7,7 @@ use Modules\ContribuicaoSocios\app\DTO\ContribuicaoLogCadastrarDTO;
 use Modules\ContribuicaoSocios\app\DTO\ContribuicaoRecorrenciaDTO;
 use Modules\ContribuicaoSocios\app\DTO\PagamentoCadastrarDTO;
 use Modules\ContribuicaoSocios\app\Factories\PagamentoGatewayFactory;
+use Modules\ContribuicaoSocios\app\Repositories\ContribuicaoGatewayPagamentoRepository;
 use Modules\ContribuicaoSocios\app\Repositories\ContribuicaoLogRepository;
 use Modules\ContribuicaoSocios\app\Repositories\ContribuicaoMeioDePagamentoRepository;
 use Modules\ContribuicaoSocios\app\Repositories\ContribuicaoRecorrenciaRepository;
@@ -18,21 +19,24 @@ class PagamentoService
     use GerarCodigoTrait;
 
     private ContribuicaoMeioDePagamentoRepository $contribuicaoMeioDePagamentoRepository;
+    private ContribuicaoGatewayPagamentoRepository $contribuicaoGatewayPagamentoRepository;
     private ContribuicaoLogRepository $contribuicaoLogRepository;
     private ContribuicaoRecorrenciaRepository $contribuicaoRecorrenciaRepository;
     private PagamentoGatewayFactory $factory;
 
     public function __construct(
         ContribuicaoMeioDePagamentoRepository $contribuicaoMeioDePagamentoRepository,
+        ContribuicaoGatewayPagamentoRepository $contribuicaoGatewayPagamentoRepository,
         ContribuicaoLogRepository $contribuicaoLogRepository,
         ContribuicaoRecorrenciaRepository $contribuicaoRecorrenciaRepository,
         PagamentoGatewayFactory $factory
     )
     {
-        $this->contribuicaoMeioDePagamentoRepository = $contribuicaoMeioDePagamentoRepository;
-        $this->contribuicaoLogRepository             = $contribuicaoLogRepository;
-        $this->contribuicaoRecorrenciaRepository       = $contribuicaoRecorrenciaRepository;
-        $this->factory                               = $factory;
+        $this->contribuicaoMeioDePagamentoRepository  = $contribuicaoMeioDePagamentoRepository;
+        $this->contribuicaoGatewayPagamentoRepository = $contribuicaoGatewayPagamentoRepository;
+        $this->contribuicaoLogRepository              = $contribuicaoLogRepository;
+        $this->contribuicaoRecorrenciaRepository      = $contribuicaoRecorrenciaRepository;
+        $this->factory                                = $factory;
     }
 
     public function criarPagamento(PagamentoCadastrarDTO $dto)
@@ -87,4 +91,44 @@ class PagamentoService
         });
     }
 
+    public function sincronizarPagamento()
+    {
+        $gateways = $this->contribuicaoGatewayPagamentoRepository->buscarTodos();
+        $teste = '';
+
+        foreach ($gateways as $gateway) {
+            try {
+                $plataforma = strtolower(str_replace(' ', '', $gateway->plataforma));
+
+                if (!$this->gatewayTemCredenciais($plataforma)) {
+                    continue;
+                }
+
+                $gatewayInstance = $this->factory->make($gateway);
+
+                $teste = $gatewayInstance->sincronizarPagamentos();
+
+            } catch (\Exception $e) {
+                return $e;
+            }
+        }
+
+        return $teste;
+    }
+
+    private function gatewayTemCredenciais($plataforma): bool
+    {
+        $configKey = match ($plataforma) {
+            'pagarme' => 'contribuicaosocios.gateways.pagarme.private_key',
+            'mercadopago' => 'contribuicaosocios.gateways.mercadopago.access_token',
+            default => null
+        };
+
+        if (!$configKey) {
+            return false;
+        }
+
+        $credential = config($configKey);
+        return !empty($credential);
+    }
 }

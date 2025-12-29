@@ -3,6 +3,7 @@
 namespace Modules\ContribuicaoSocios\app\Validations;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 use Modules\ContribuicaoSocios\app\Models\ContribuicaoMeioDePagamento;
 use Modules\ContribuicaoSocios\app\Rules\DataVencimentoRule;
@@ -49,9 +50,28 @@ class PagamentoCadastrarValidation extends FormRequest
             ],
 
             'data_vencimento' => [
-              'sometimes',
-              'numeric',
-              new DataVencimentoRule($this->meio)
+                Rule::requiredIf(function() {
+                    return strtolower($this->meio->meio) === 'carne'
+                        && empty($this->data_vencimento_completa);
+                }),
+                'numeric',
+                new DataVencimentoRule($this->meio)
+            ],
+
+            'data_vencimento_completa' => [
+                Rule::requiredIf(function() {
+                    return strtolower($this->meio->meio) === 'carne'
+                        && empty($this->data_vencimento);
+                }),
+                'nullable',
+                'date',
+                'after_or_equal:today',
+            ],
+
+            'intervalo' => [
+                'sometimes',
+                'integer',
+                'min:1',
             ],
 
             'parcelas' => [

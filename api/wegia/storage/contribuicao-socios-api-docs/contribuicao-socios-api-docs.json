@@ -356,6 +356,44 @@
                 ]
             }
         },
+        "/contribuicao/segunda-via/socio/{cpfCnpj}": {
+            "get": {
+                "tags": [
+                    "Contribuição"
+                ],
+                "summary": "Busca todas contribuicoes paginadas",
+                "operationId": "57f95c72e01551b0b358583f6f5a4f1b",
+                "parameters": [
+                    {
+                        "name": "cpfCnpj",
+                        "in": "path",
+                        "description": "Cpf ou cnpj do socio",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/contribuicao/meio-pagamento": {
             "get": {
                 "tags": [
@@ -609,6 +647,33 @@
                 },
                 "responses": {
                     "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contribuicao/pagamento/sincronizar": {
+            "put": {
+                "tags": [
+                    "Pagamento"
+                ],
+                "summary": "Sincroniza os pagamentos com as apis cadastradas",
+                "operationId": "653649a7d3084739ebd4372e5d55a5a3",
+                "responses": {
+                    "204": {
                         "description": "Operacao realizada com sucesso",
                         "content": {
                             "application/json": {

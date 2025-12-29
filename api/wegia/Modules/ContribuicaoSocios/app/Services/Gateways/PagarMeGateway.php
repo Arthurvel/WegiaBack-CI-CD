@@ -7,6 +7,8 @@ use App\Helpers\UploadSeguroHelper;
 use App\Models\Pessoa\Pessoa;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
+use Modules\ContribuicaoSocios\app\DTO\ContribuicaoLogAtualizarVariosPagamentosDTO;
+use Modules\ContribuicaoSocios\app\DTO\ContribuicaoLogCriarVariasRecorrenciasDTO;
 use Modules\ContribuicaoSocios\app\DTO\PagamentoCadastrarDTO;
 use Modules\ContribuicaoSocios\app\DTO\PagamentoGatewayDTO;
 use Modules\ContribuicaoSocios\app\Interfaces\PagamentoGatewayInterface;
@@ -67,7 +69,7 @@ class PagarMeGateway implements PagamentoGatewayInterface
         $pessoa = $socio->pessoa;
 
         $codigo = $this->gerarNumeroDocumento(16);
-        $vencimento = now()->addDays(7)->format('Y-m-d');
+        $vencimento = $dto->data_vencimento_completa ?? now()->addDays(7)->format('Y-m-d') ;
         $data = $this->basePayload($dto, $pessoa, $socio->email, $codigo);
 
         $this->addCustomerAddress($data, $pessoa);
@@ -102,12 +104,22 @@ class PagarMeGateway implements PagamentoGatewayInterface
 
         $codigo = $this->gerarCodigo();
 
-        $dataAtual = new DateTime();
         $pagamentoGatewayArrayDTO = [];
         $pdfUrls = [];
 
-        if ($dto->data_vencimento <= $dataAtual->format('d')) {
-            $dataAtual->modify('first day of next month');
+        if (!empty($dto->data_vencimento_completa)) {
+            $dataInicial = new DateTime($dto->data_vencimento_completa);
+        } else {
+            $dataAtual = new DateTime();
+            if ($dto->data_vencimento <= $dataAtual->format('d')) {
+                $dataAtual->modify('first day of next month');
+            }
+            $dataInicial = clone $dataAtual;
+            $dataInicial->setDate(
+                $dataInicial->format('Y'),
+                $dataInicial->format('m'),
+                $dto->data_vencimento
+            );
         }
 
         for ($i = 0; $i < $dto->parcelas; $i++) {
@@ -115,20 +127,23 @@ class PagarMeGateway implements PagamentoGatewayInterface
 
             $this->addCustomerAddress($data, $pessoa);
 
-            $dataVencimento = clone $dataAtual;
+            $dataVencimento = clone $dataInicial;
 
-            $dataVencimento->modify("+{$i} month");
+            $dataVencimento->modify("+". ($i * $dto->intervalo) ." month");
 
-            $dataVencimento->setDate($dataVencimento->format('Y'), $dataVencimento->format('m'), $dto->data_vencimento);
+            $diaOriginal = $dataInicial->format('d');
+            $ultimoDiaDoMes = $dataVencimento->format('t');
+            $diaFinal = min($diaOriginal, $ultimoDiaDoMes);
 
-            if ($dataVencimento->format('d') != $dto->data_vencimento) {
-                $dataVencimento->modify('last day of previous month');
-            }
+            $dataVencimento->setDate(
+                $dataVencimento->format('Y'),
+                $dataVencimento->format('m'),
+                $diaFinal
+            );
 
             $numeroDocumento = $this->gerarNumeroDocumento(16);
 
             $this->addPagamentoCarne($data, $numeroDocumento, $dataVencimento);
-
 
             try {
                 $responseData = $this->chamada($data);
@@ -222,10 +237,72 @@ class PagarMeGateway implements PagamentoGatewayInterface
         }
     }
 
+    public function sincronizarPagamentos()
+    {
+        $size = 30;
+        $status = 'paid';
+        $dataAtual = new DateTime();
+        $anoAtual = intval($dataAtual->format('Y'));
+
+        $anoAnalise = $anoAtual - 1;
+        $dataAnalise = new DateTime("{$anoAnalise}-12-01");
+
+        $tipos = ['orders', 'invoices'];
+
+        foreach ($tipos as $tipo) {
+
+            $page = 1;
+            $totalPaginas = null;
+            $dtosOrders   = [];
+            $dtosInvoices = [];
+
+            do {
+                $params = [
+                    'page'          => $page,
+                    'size'          => $size,
+                    'created_since' => $dataAnalise->format('Y-m-d'),
+                    'status'        => $status
+                ];
+
+                $retorno = $this->chamadaGet($params, '/' . $tipo);
+
+                foreach ($retorno['data'] as $item) {
+
+                    match ($tipo) {
+                        'orders'   => $this->mapOrderParaDTO($item, $dtosOrders),
+                        'invoices' => $this->mapInvoiceParaDTO($item, $dtosInvoices),
+                    };
+
+                }
+
+                if ($totalPaginas === null) {
+                    $totalItens = $retorno['paging']['total'] ?? 0;
+                    $totalPaginas = (int) ceil($totalItens / $size);
+                }
+
+                $page++;
+            } while ($page <= $totalPaginas);
+
+            match($tipo) {
+                'orders'   => $this->contribuicaoLogRepository->atualizarVariosPagamentos($dtosOrders),
+                'invoices' => $this->contribuicaoLogRepository->criarAPartirDeRecorrencia($dtosInvoices),
+            };
+        }
+
+    }
+
     private function basePayload(PagamentoCadastrarDTO $dto, Pessoa $pessoa, string $email, string $codigo)
     {
-        $cpfSemMascara = preg_replace('/\D/', '', $pessoa->cpf);
+        $documento = preg_replace('/\D/', '', $pessoa->cpf);
         $description = "Contribuição Sócio - $pessoa->nome $pessoa->sobrenome";
+
+        if (strlen($documento) === 14) {
+            $documentType = 'cnpj';
+            $customerType = 'company';
+        } else {
+            $documentType = 'cpf';
+            $customerType = 'individual';
+        }
 
         return [
             'items' => [
@@ -239,9 +316,9 @@ class PagarMeGateway implements PagamentoGatewayInterface
             "customer" => [
                 "name" => $pessoa->nome,
                 "email" => $email,
-                "document_type" => "CPF",
-                "document" => $cpfSemMascara,
-                "type" => "Individual"
+                "document_type" => $documentType,
+                "document" => $documento,
+                "type" => $customerType
             ],
         ];
 
@@ -287,6 +364,41 @@ class PagarMeGateway implements PagamentoGatewayInterface
             }
 
             throw new \Exception("Erro ao criar: {$message}");
+        }
+
+        return $responseData;
+    }
+
+    private function chamadaGet(array $query = [], string $complemento = '/orders')
+    {
+        $url = $this->baseUrl . $complemento;
+
+        if (!empty($query)) {
+            $url .= '?' . http_build_query($query);
+        }
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Content-Type: application/json",
+            "Authorization: Basic " . base64_encode($this->secretKey . ":")
+        ]);
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            throw new \Exception("Erro na requisição GET: " . curl_error($ch));
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        $responseData = json_decode($response, true);
+
+        if ($httpCode >= 400) {
+            $message = $responseData['message'] ?? 'Erro desconhecido';
+            throw new \Exception("Erro na requisição GET: {$message}");
         }
 
         return $responseData;
@@ -398,7 +510,6 @@ class PagarMeGateway implements PagamentoGatewayInterface
             [
                 "description"    => "Plano Contribuicao Mensal",
                 "quantity"       => 1,
-                "amount"         => $valorEmCentavos,  // ← ADICIONE ISSO!
                 "pricing_scheme" => [
                     "scheme_type" => "unit",
                     "price"       => $valorEmCentavos
@@ -406,28 +517,25 @@ class PagarMeGateway implements PagamentoGatewayInterface
             ]
         ];
 
-        $data["payment_method"] = "credit_card";
-        $data["card_token"] = $dto->cartao_hash;
-        $data["billing_type"] = "prepaid";
-        $data["installments"] = 1;
-        $data["statement_descriptor"] = "Contribuicao Mensal";
+        $data["payment_method"]       = "credit_card";
+        $data["card_token"]           = $dto->cartao_hash;
+        $data["billing_type"]         = "prepaid";
+        $data["installments"]         = 1;
+        $data["statement_descriptor"] = "ASSINATURA";
 
-        $data["billing_address"] = [
+        $data["card"]["billing_address"] = [
             "line_1"   => $pessoa->logradouro . ", n°" . $pessoa->numero_endereco . ", " . $pessoa->bairro,
+            "line_2"   => $pessoa->complemento,
             "zip_code" => $pessoa->cep,
             "city"     => $pessoa->cidade,
             "state"    => $pessoa->estado,
             "country"  => "BR"
         ];
 
-        $data["pricing_scheme"] = [
-            "scheme_type" => "unit",
-            "price"       => $valorEmCentavos
-        ];
-
         $data["interval"] = "month";
         $data["interval_count"] = 1;
         $data["minimum_price"] = $valorEmCentavos;
+
     }
 
     private function salvarPdf(string $content, string $nomeArquivo): string
@@ -517,6 +625,40 @@ class PagarMeGateway implements PagamentoGatewayInterface
             }
             throw $e;
         }
+    }
+
+    private function mapOrderParaDTO(array $item, array &$dtos): void
+    {
+        $codigo        = $item['id'] ?? null;
+        $dataPagamento = $item['charges'][0]['paid_at'] ?? null;
+
+        if (!$codigo || !$dataPagamento) {
+            return;
+        }
+
+        $dtos[] = ContribuicaoLogAtualizarVariosPagamentosDTO::fromArray([
+            'codigo'         => $codigo,
+            'data_pagamento' => (new \DateTime($dataPagamento))->format('Y-m-d'),
+        ]);
+    }
+
+    private function mapInvoiceParaDTO(array $item, array &$dtos): void
+    {
+        $codigo            = $item['id'] ?? null;
+        $codigoRecorrencia = $item['subscription']['id'] ?? null;
+
+        if (!$codigo || !$codigoRecorrencia) {
+            return;
+        }
+
+        $dtos[] = ContribuicaoLogCriarVariasRecorrenciasDTO::fromArray([
+            'codigo'             => $codigo,
+            'codigo_recorrencia' => $codigoRecorrencia,
+            'data_geracao'       => (new \DateTime($item['charge']['created_at']))->format('Y-m-d'),
+            'data_vencimento'    => (new \DateTime($item['charge']['due_at']))->format('Y-m-d'),
+            'data_pagamento'     => (new \DateTime($item['charge']['paid_at']))->format('Y-m-d'),
+            'status_pagamento'   => $item['charge']['status'] === 'paid',
+        ]);
     }
 
 }

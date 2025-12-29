@@ -17,6 +17,7 @@ class PagarMeWebhookController extends BaseController
     )
     {
         $this->contribuicaoLogService = $contribuicaoLogService;
+        $this->middleware(['pagarme.ip', 'pagarme.hmac']);
     }
 
     public function handle(PagarMeWebHookValidation $request)
@@ -26,7 +27,7 @@ class PagarMeWebhookController extends BaseController
             $validated = $request->validated();
 
             match (strtolower($validated->type)) {
-                'charge.paid'    => $this->contribuicaoLogService->atualizarPagamento($validated->data->id)
+                'order.paid'    => $this->contribuicaoLogService->atualizarPagamento($validated->data)
             };
 
             return $this->sucessoResponse(['status' => 'success'], 204);
