@@ -5,7 +5,7 @@ INSERT INTO `pessoa` (`id_pessoa`, `cpf`, `senha`, `nome`) VALUES (NULL, 'admin'
 INSERT INTO `perfil`(`id_perfil`, `cargo`, `nome`) VALUES (1,'Administrador', 'Administrador');
 INSERT INTO `perfil`(`id_perfil`, `cargo`, `nome`) VALUES (2,'Sem cargo definido', 'Sem cargo definido');
 
-INSERT INTO `permissao` VALUES
+INSERT INTO `permissao` (nome, categoria) VALUES
     ('Criar Pessoa','Pessoa'),
     ('Visualizar Pessoa','Pessoa'),
     ('Atualizar Pessoa','Pessoa'),
@@ -88,7 +88,7 @@ INSERT INTO `permissao` VALUES
     ('Visualizar Arquivo Da Pessoa','Pessoa'),
     ('Criar Arquivo para Pessoa','Pessoa'),
     ('Deletar Arquivo da Pessoa','Pessoa'),
-    ('Atualizar Memorando','Memorando');
+    ('Atualizar Memorando','Memorando'),
     ('Criar Saúde Sinais Vitais', 'Saude'),
     ('Visualizar Saúde Sinais Vitais', 'Saude'),
     ('Criar Saúde Medico', 'Saude'),
@@ -155,7 +155,7 @@ INSERT INTO `permissao` VALUES
     ('Atualizar regras de pagamento de contribuição','Contribuição'),
     ('Criar meio de pagamento de contribuição','Contribuição'),
     ('Visualizar meio de pagamento de contribuição','Contribuição'),
-    ('Atualizar meio de pagamento de contribuição','Contribuição')
+    ('Atualizar meio de pagamento de contribuição','Contribuição'),
     ('Visualizar as contribuições','Contribuição'),
     ('Visualizar os Socios','Socios'),
     ('Visualizar os Socios Aniversariante','Socios'),
@@ -199,10 +199,6 @@ INSERT INTO `campo_imagem` (`id_campo`, `nome_campo`, `tipo`) VALUES
 
 INSERT INTO `contato_instituicao`(`id`, `descricao`, `contato`) VALUES
     (1, 'Apoio aos doadores', 'telefone_ou_@email.com');
-
-INSERT INTO `tabela_imagem_campo` (`id_relacao`, `id_campo`, `id_imagem`) VALUES
-(1, 1, 1),
-(2, 2, 1);
 
 INSERT INTO `socio_tipo` (`id_sociotipo`, `tipo`) VALUES
 (0, 'Física - Casual - Boleto'),
@@ -256,7 +252,8 @@ INSERT INTO `socio_status` (`id_sociostatus`, `status`) VALUES
 INSERT INTO `socio_tag` (`tag`) VALUES
 ('Solicitante');
 
-INSERT INTO `unidade` (`descricao_unidade`) VALUES ('Quilo'), ('Litro'), ('Metro'), ('Pacote'), ('Unidade');
+
+INSERT INTO `material_unidade` (`descricao`) VALUES ('Quilo'), ('Litro'), ('Metro'), ('Pacote'), ('Unidade');
 
 INSERT INTO `recurso` (`id_recurso`, `descricao`) VALUES 
 ('1', 'Módulo Pessoa'),
@@ -295,35 +292,15 @@ INSERT INTO `modulos_visiveis` (`id_recurso`, `visivel`) VALUES
 (6, 1),
 (7, 1);
 
-INSERT INTO `sistema_pagamento` (`id`, `nome_sistema`) VALUES 
-(1, 'PAGSEGURO'), 
-(2, 'PAYPAL'), 
-(3, 'BOLETOFACIL'), 
-(4, 'WIDEPAY'),
-(5, 'PIX');
-
-INSERT INTO `doacao_pix_tipos` (`ID`, `TIPO`) VALUES
-(1, 'CNPJ'),
-(2, 'e-mail'),
-(3, 'telefone'),
-(4, 'aleatória');
-
-INSERT INTO `doacao_boleto_regras` (`id`, `min_boleto_uni`, `max_dias_venc`, `juros`, `multa`, `max_parcela`, `min_parcela`, `agradecimento`, `dias_boleto_a_vista`, `dias_venc_carne_op1`, `dias_venc_carne_op2`, `dias_venc_carne_op3`, `dias_venc_carne_op4`, `dias_venc_carne_op5`, `dias_venc_carne_op6`) VALUES 
-('1', '10.00', '29', '0', '0', '1000.00', '30.00', 'Agradecemos sua ajuda financeira!', '3', '1', '5', '10', '15', '20', '25');
-
-INSERT INTO `doacao_boleto_info` (`id`, `api`, `token_api`, `sandbox`, `token_sandbox`, `id_sistema`, `id_regras`) VALUES 
-('0', 'https://sandbox.boletobancario.com/boletofacil/integration/api/v1/issue-charge?', 'CADASTRA-SE NO GATEWAY DE PAGAMENTO PARA RECEBER UM TOKEN', '', '', '3', '1');
-
-INSERT INTO `doacao_cartao_avulso` (`url`, `id_sistema`) VALUES ('Cadastre sua instituição no gateway de pagamento', 1);
 
 INSERT INTO `atendido_ocorrencia_tipos` (`idatendido_ocorrencia_tipos`, `descricao`) VALUES
-(1, 'Acolhimento'),
-(2, 'Falecimento'); 
+    (1, 'Acolhimento'),
+    (2, 'Falecimento');
 
 INSERT INTO `atendido_tipo` (`idatendido_tipo`, `descricao`) VALUES (1, 'Interno');
-INSERT INTO `atendido_status` (`idatendido_status`, `status`) VALUES 
-(1, 'Ativo'),
-(2, 'Inativo');
+INSERT INTO `atendido_status` (`idatendido_status`, `status`) VALUES
+    (1, 'Ativo'),
+    (2, 'Inativo');
 
 INSERT INTO `funcionario_remuneracao_tipo` (`idfuncionario_remuneracao_tipo`, `descricao`) VALUES
 (1, 'Vencimento Básico'),
@@ -340,13 +317,13 @@ INSERT INTO `funcionario_listainfo` (`idfuncionario_listainfo`, `descricao`) VAL
 (3, 'Estado Civil'),
 (4, 'Carteira do SUS');
 
-INSERT INTO categoria_produto (descricao_categoria) VALUES ('Alimento'),('Higiene'),('Limpeza'),('Medicamento'),('Papelaria');
+INSERT INTO material_categoria (descricao) VALUES ('Alimento'),('Higiene'),('Limpeza'),('Medicamento'),('Papelaria');
 
-INSERT INTO origem (nome_origem) VALUES ('Doador não identificado');
+INSERT INTO material_parceiro (nome) VALUES ('Doador não identificado');
 
-INSERT INTO tipo_entrada (descricao) VALUES ('Doação'), ('Compra'), ('Troca'); 
+INSERT INTO material_tipo_movimentacao (nome, tipo) VALUES ('Doação', 'e'), ('Compra', 'e'), ('Troca', 'e');
 
-INSERT INTO tipo_saida (descricao) VALUES ('Consumo'), ('Troca'), ('Vencido');
+INSERT INTO material_tipo_movimentacao (nome, tipo) VALUES ('Consumo', 's'), ('Troca', 's'), ('Vencido', 's');
 
 INSERT INTO `saude_exame_tipos` (`id_exame_tipo`, `descricao`) VALUES
 (1, 'Fezes'),
@@ -365,22 +342,13 @@ INSERT INTO `saude_exame_tipos` (`id_exame_tipo`, `descricao`) VALUES
 (14, 'TGO'),
 (15, 'TGP');
 
--- Inserir as descrições existentes na tabela `saude_fichamedica` na tabela `saude_fichamedica_descricoes`
-/*INSERT INTO `wegia`.`saude_fichamedica_descricoes` (`id_fichamedica`, `descricao`)
-SELECT `id_fichamedica`, `descricao`
-FROM `wegia`.`saude_fichamedica`
-WHERE `descricao` IS NOT NULL;*/
-
-INSERT INTO `saude_medicacao_status` (`descricao`) VALUES ('Em tratamento'), ('Concluído') , ('Substituído'), ('Cancelado');
-
 INSERT INTO `saude_tabelacid` (`CID`, `descricao`) VALUES ('B34.2', 'Infecção por coronavírus de localização não especificada');
 
--- 240621: Refatoração do módulo Contribuição, dados para as novas tabelas --
 INSERT INTO `contribuicao_regras` (`regra`) VALUES 
 ('MIN_VALUE'), 
 ('MAX_VALUE');
 
-INSERT INTO `contribuicao_gatewayPagamento` (plataforma,endPoint,token,status) VALUES ("NAO DEFINIDA","https://localhost/api","coloque o token aqui",0);
+INSERT INTO `contribuicao_gatewayPagamento` (plataforma) VALUES ("PagarMe");
 
 INSERT INTO `contribuicao_meioPagamento` (meio,id_plataforma,status) VALUES ("Boleto",1,0), ("Pix",1,0), ("Carne",1,0);
 
