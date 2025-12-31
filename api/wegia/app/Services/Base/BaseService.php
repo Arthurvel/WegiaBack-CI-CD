@@ -42,9 +42,9 @@ abstract class BaseService
         return $this->repository->atualizar($id, $dto);
     }
 
-    public function buscarTodos()
+    public function buscarTodos(Array $with = [])
     {
-        return $this->repository->buscarTodos();
+        return $this->repository->buscarTodos($with);
     }
 
     public function buscarPorId(int $id, Array $with = [])

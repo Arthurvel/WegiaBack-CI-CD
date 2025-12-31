@@ -16,7 +16,7 @@ class ContribuicaoMeioDePagamentoRepository extends BaseRepository
         parent::__construct($model);
     }
 
-    public function buscarTodos()
+    public function buscarTodos(array $with = [])
     {
         return $this->model->with(['gateway'])->get();
     }

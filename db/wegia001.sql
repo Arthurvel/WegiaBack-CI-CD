@@ -472,7 +472,7 @@ GROUP BY tp.id_produto, mp.descricao, t.id_almoxarifado;
 CREATE TABLE IF NOT EXISTS `wegia`.`imagem` (
   `id_imagem` INT(11) NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(50) NOT NULL,
-  `imagem` LONGBLOB NOT NULL,
+  `imagem` LONGTEXT NULL DEFAULT NULL,
   `tipo` VARCHAR(25) NOT NULL,
   PRIMARY KEY (`id_imagem`),
   UNIQUE INDEX `nome` (`nome` ASC))
@@ -596,6 +596,16 @@ CREATE TABLE IF NOT EXISTS `wegia`.`selecao_paragrafo` (
   PRIMARY KEY (`id_selecao`))
 ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `wegia`.`contato_instituicao`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `wegia`.`contato_instituicao` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `descricao` VARCHAR(256) NOT NULL,
+    `contato` VARCHAR(256) NOT NULL,
+    PRIMARY KEY (`id`))
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `wegia`.`tabela_imagem_campo`

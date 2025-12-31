@@ -34,7 +34,7 @@ class MedicamentoRepository extends BaseRepository
     }
 
 
-    public function buscarTodos()
+    public function buscarTodos(array $with = [])
     {
         return $this->model
             ->select(['id_medicamento', 'nome_medicamento'])
