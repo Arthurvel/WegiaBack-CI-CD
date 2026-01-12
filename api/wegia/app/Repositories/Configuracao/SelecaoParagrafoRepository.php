@@ -15,4 +15,11 @@ class SelecaoParagrafoRepository extends BaseRepository
         parent::__construct($model);
     }
 
+    public function buscarPorDescricao(string $descricao)
+    {
+        return $this->model
+            ->where('descricao', $descricao )
+            ->get();
+    }
+
 }

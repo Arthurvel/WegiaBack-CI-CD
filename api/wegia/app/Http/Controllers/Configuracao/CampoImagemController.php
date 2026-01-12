@@ -20,8 +20,6 @@ class CampoImagemController  extends BaseController
 
     public function __construct(CampoImagemService $service)
     {
-        $this->middleware('auth:sanctum')->except(['']);
-
         $this->service = $service;
     }
 
@@ -30,7 +28,6 @@ class CampoImagemController  extends BaseController
      *     path="/configuracao/campo-imagem",
      *     summary="Buscar os campos de imagens",
      *     tags={"Configuracao"},
-     *     security={{"bearerAuth": {}}},
      *     @OA\Response(response="200", description="Operacao realizada com sucesso!", @OA\JsonContent()),
      *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
      *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())

@@ -1043,12 +1043,7 @@
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/configuracao/contato-instituicao": {
@@ -5489,9 +5484,6 @@
                 "type": "object"
             },
             "PessoaCadastrarValidation": {
-                "required": [
-                    "cpf"
-                ],
                 "properties": {
                     "cpf": {
                         "description": "CPF único",

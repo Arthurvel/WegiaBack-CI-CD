@@ -23,7 +23,6 @@ class SelecaoParagrafoController extends BaseController
 
     public function __construct(SelecaoParagrafoService $service)
     {
-        $this->middleware(['auth:sanctum', 'ability:'])->only(['atualizar']);
         $this->middleware('auth:sanctum')->except(['index']);
 
         $this->service = $service;

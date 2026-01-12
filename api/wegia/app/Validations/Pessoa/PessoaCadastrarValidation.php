@@ -8,7 +8,6 @@ use Illuminate\Validation\Rule;
 /**
  * @OA\Schema(
  *     schema="PessoaCadastrarValidation",
- *     required={"cpf"},
  *     @OA\Property(property="cpf", type="string", maxLength=11, description="CPF único"),
  *     @OA\Property(property="nome", type="string", maxLength=100, nullable=true, description="Nome do usuário"),
  *     @OA\Property(property="sobrenome", type="string", maxLength=100, nullable=true, description="Sobrenome do usuário"),
@@ -40,7 +39,7 @@ class PessoaCadastrarValidation extends FormRequest
     {
         return [
             'cpf' => [
-                'required',
+                'sometimes',
                 'string',
                 'max:11',
                 Rule::unique('pessoa', 'cpf')->ignore($pessoaId, 'id_pessoa'),

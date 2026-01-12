@@ -36,4 +36,4 @@ volumes:
 
 networks:
   wegia-network:
-    driver: bridge
+    external: true
