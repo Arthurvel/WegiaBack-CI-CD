@@ -49,9 +49,9 @@ abstract class BaseRepository
     /**
      * @return \Illuminate\Database\Eloquent\Collection<int, TModel>
      */
-    public function buscarTodos()
+    public function buscarTodos(Array $with = [])
     {
-        return $this->model->all();
+        return $this->model->with($with)->get();
     }
 
     /**

@@ -1011,6 +1011,621 @@
                 ]
             }
         },
+        "/configuracao/campo-imagem": {
+            "get": {
+                "tags": [
+                    "Configuracao"
+                ],
+                "summary": "Buscar os campos de imagens",
+                "operationId": "eda529cc6e098b2d11d1569acaab0ac7",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/configuracao/contato-instituicao": {
+            "get": {
+                "tags": [
+                    "Configuracao"
+                ],
+                "summary": "Buscar os contatos da instituicao",
+                "operationId": "ce1cb6f598aa13e5734f8e3fcea0b603",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Configuracao"
+                ],
+                "summary": "Cadastrar um contato da instituicao",
+                "operationId": "14b6b5ee9c834813f696b0d1085668a9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContatoInstituicaoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/configuracao/contato-instituicao/{id}": {
+            "put": {
+                "tags": [
+                    "Configuracao"
+                ],
+                "summary": "Atualiza um contato da instituicao",
+                "operationId": "247c0480cf19a940c5911dae4c4d2181",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do contato da instituicao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContatoInstituicaoAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Configuracao"
+                ],
+                "summary": "Deleta um contato da instituicao",
+                "operationId": "d823a766bc0ea82c948c4fcbadd21e4e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do contato da instituicao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/configuracao/endereco-instituicao": {
+            "get": {
+                "tags": [
+                    "Configuracao"
+                ],
+                "summary": "Buscar o endereco da instituicao",
+                "operationId": "07b579c83e8858dc65d337d21b909f34",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Configuracao"
+                ],
+                "summary": "Atualiza um texto da aplicacao",
+                "operationId": "97199aaa74180dfdebe37e962162bd5f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EnderecoInstituicaoAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/configuracao/imagem": {
+            "get": {
+                "tags": [
+                    "Configuracao"
+                ],
+                "summary": "Buscar todas as imagens",
+                "operationId": "54da9be5d789ae4a6b52503b316cdf74",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Configuracao"
+                ],
+                "summary": "Cadastrar uma imagem de sistema",
+                "operationId": "8f0883b23608976bcd1a08b7d724cec1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ImagemCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/configuracao/imagem/campo-imagem/{id_campo_imagem}": {
+            "post": {
+                "tags": [
+                    "Configuracao"
+                ],
+                "summary": "Cadastrar uma imagem de sistema",
+                "operationId": "e329f1f2391e81f1cd9f9773211bea92",
+                "parameters": [
+                    {
+                        "name": "id_campo_imagem",
+                        "in": "path",
+                        "description": "ID do campo da imagem da instituicao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ImagemEmUmCampoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/configuracao/imagem/{id_imagem}/campo-imagem/{id_campo_imagem}": {
+            "post": {
+                "tags": [
+                    "Configuracao"
+                ],
+                "summary": "Substituir uma imagem de sistema",
+                "operationId": "baf1c0a4eca496d9b924c48436b6d68b",
+                "parameters": [
+                    {
+                        "name": "id_imagem",
+                        "in": "path",
+                        "description": "ID da imagem da instituicao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "id_campo_imagem",
+                        "in": "path",
+                        "description": "ID do campo da imagem da instituicao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ImagemEmUmCampoAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/configuracao/imagem/{id}": {
+            "delete": {
+                "tags": [
+                    "Configuracao"
+                ],
+                "summary": "Deletar uma imagem de sistema",
+                "operationId": "e9c510cf987d10320cfff2a8c47c816e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da imagem da instituicao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/configuracao/selecao-paragrafo": {
+            "get": {
+                "tags": [
+                    "Configuracao"
+                ],
+                "summary": "Buscar os textos da aplicacao",
+                "operationId": "b36d1f2bb6541c741c56d63ea934cd4b",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/configuracao/selecao-paragrafo/{id}": {
+            "put": {
+                "tags": [
+                    "Configuracao"
+                ],
+                "summary": "Atualiza um texto da aplicacao",
+                "operationId": "98103d92b0040f1e873308cb064e9c8e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da selecao paragrafo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SelecaoParagrafoAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/funcionario/todos": {
             "get": {
                 "tags": [
@@ -4142,6 +4757,127 @@
                 },
                 "type": "object"
             },
+            "ContatoInstituicaoAtualizarValidation": {
+                "properties": {
+                    "descricao": {
+                        "description": "texto para descrever o contato",
+                        "type": "string"
+                    },
+                    "contato": {
+                        "description": "texto do contato",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ContatoInstituicaoCadastrarValidation": {
+                "required": [
+                    "descricao",
+                    "contato"
+                ],
+                "properties": {
+                    "descricao": {
+                        "description": "texto para descrever o contato",
+                        "type": "string"
+                    },
+                    "contato": {
+                        "description": "texto do contato",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "EnderecoInstituicaoAtualizarValidation": {
+                "properties": {
+                    "nome": {
+                        "description": "Nome da instituicao",
+                        "type": "string"
+                    },
+                    "numero_endereco": {
+                        "description": "Numero do endereco da instituicao",
+                        "type": "string"
+                    },
+                    "logradouro": {
+                        "description": "logradouro da instituicao",
+                        "type": "string"
+                    },
+                    "bairro": {
+                        "description": "bairro da instituicao",
+                        "type": "string"
+                    },
+                    "cidade": {
+                        "description": "cidade da instituicao",
+                        "type": "string"
+                    },
+                    "estado": {
+                        "description": "estado da instituicao",
+                        "type": "string"
+                    },
+                    "cep": {
+                        "description": "cep da instituicao",
+                        "type": "string"
+                    },
+                    "complemento": {
+                        "description": "complemento da instituicao",
+                        "type": "string"
+                    },
+                    "ibge": {
+                        "description": "ibge da instituicao",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ImagemCadastrarValidation": {
+                "required": [
+                    "imagem"
+                ],
+                "properties": {
+                    "imagem": {
+                        "description": "Imagem de sistema (jpeg, jpg, png, máx. 5MB)",
+                        "type": "string",
+                        "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
+            "ImagemEmUmCampoAtualizarValidation": {
+                "properties": {
+                    "imagem": {
+                        "description": "Imagem de sistema (jpeg, jpg, png, máx. 5MB)",
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "id_imagem_nova": {
+                        "description": "id da nova imagem",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "ImagemEmUmCampoCadastrarValidation": {
+                "properties": {
+                    "imagem": {
+                        "description": "Imagem de sistema (jpeg, jpg, png, máx. 5MB)",
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "id_imagem": {
+                        "description": "id da imagem",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "SelecaoParagrafoAtualizarValidation": {
+                "properties": {
+                    "paragrafo": {
+                        "description": "texto do paragrafo",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "FuncionarioDependenteCadastrarValidation": {
                 "required": [
                     "id_funcionario",
@@ -4748,9 +5484,6 @@
                 "type": "object"
             },
             "PessoaCadastrarValidation": {
-                "required": [
-                    "cpf"
-                ],
                 "properties": {
                     "cpf": {
                         "description": "CPF único",
@@ -4944,6 +5677,10 @@
         {
             "name": "Cargo",
             "description": "Operações relacionadas ao Cargo do Funcionario"
+        },
+        {
+            "name": "Configuracao",
+            "description": "Operações relacionadas as configuracoes da aplicacao"
         },
         {
             "name": "Funcionario",

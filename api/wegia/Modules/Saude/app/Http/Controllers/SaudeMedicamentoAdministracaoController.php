@@ -10,6 +10,7 @@ use Modules\Saude\app\Http\Resources\SaudeMedicamentoAdministracaoResource;
 use Modules\Saude\app\Services\SaudeMedicamentoAdministracaoService;
 use Modules\Saude\app\Validations\SaudeMedicacaoAdministracaoBuscarTodosParamsValidation;
 use Modules\Saude\app\Validations\SaudeMedicacaoAdministracaoCadastrarValidation;
+use Modules\Saude\app\Validations\SaudeMedicacaoAministracaoCadastrarEmMassaValidation;
 
 /**
  * @OA\Tag(
@@ -70,6 +71,50 @@ class SaudeMedicamentoAdministracaoController extends BaseController
             $dto = SaudeMedicamentoAdministracaoCadastrarDTO::fromArray($validated);
 
             $criado = $this->service->criar($dto);
+
+            return $this->sucessoResponse($criado, 201);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/saude/medicacao/aplicacao",
+     *     summary="Cadastra um array de medicações",
+     *     tags={"Medicacao"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/SaudeMedicacaoAministracaoCadastrarEmMassaValidation")
+     *      ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Operacao realizada com sucesso",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erro de validação",
+     *         @OA\JsonContent()
+     *     )
+     * )
+     */
+    public function cadastrarEmMassa(SaudeMedicacaoAministracaoCadastrarEmMassaValidation $request)
+    {
+        try {
+            $validated = $request->validated();
+            $arrayDtos = [];
+
+            foreach ($validated['medicacao'] as $m) {
+                $arrayDtos[] = SaudeMedicamentoAdministracaoCadastrarDTO::fromArray([
+                    'aplicacao'                    => $validated['aplicacao'],
+                    'saude_medicacao_id_medicacao' => $m,
+                    'funcionario_id_funcionario'   => $validated['id_funcionario'],
+                ])->toArray();
+            }
+
+            $criado = $this->service->criarEmMassa($arrayDtos);
 
             return $this->sucessoResponse($criado, 201);
         } catch (\Exception $e) {

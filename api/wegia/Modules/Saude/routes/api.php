@@ -53,6 +53,7 @@ Route::prefix('saude')->group(function () {
 
     Route::put('/medicacao/{id}', [SaudeMedicacaoController::class, 'atualizar']);
     Route::get('/medicacao/{id}/aplicacao', [SaudeMedicamentoAdministracaoController::class, 'buscarTodosPaginado']);
+    Route::post('/medicacao/aplicacao', [SaudeMedicamentoAdministracaoController::class, 'cadastrarEmMassa']);
     Route::post('/medicacao/{id}/aplicacao', [SaudeMedicamentoAdministracaoController::class, 'cadastrar']);
 
     Route::prefix('exame')->group(function () {
