@@ -5,11 +5,13 @@ namespace Modules\ContribuicaoSocios\app\Http\Controllers;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Paginacao\PaginacaoResource;
 use Modules\ContribuicaoSocios\app\DTO\ContribuicaoBuscarTodosParamsDTO;
+use Modules\ContribuicaoSocios\app\DTO\ContribuicaoBuscarComprovantePagamentoPorPeriodoDTO;
 use Modules\ContribuicaoSocios\app\Http\Resources\ContribuicaoLogComDocumentoResource;
 use Modules\ContribuicaoSocios\app\Http\Resources\ContribuicaoLogResource;
 use Modules\ContribuicaoSocios\app\Services\ContribuicaoLogService;
 use Modules\ContribuicaoSocios\app\Services\ContribuicaoRegrasService;
 use Modules\ContribuicaoSocios\app\Validations\ContribuicaoBuscarTodosParamsValidation;
+use Modules\ContribuicaoSocios\app\Validations\ContribuicaoGerarComprovanteEmailValidation;
 
 /**
  * @OA\Tag(
@@ -28,7 +30,7 @@ class ContribuicaoLogController extends BaseController
     {
 
         $this->middleware(['auth:sanctum', 'ability:visualizar-as-contribuicoes'])->only(['buscarTodasPaginado']);
-        $this->middleware(['auth:sanctum'])->except(['buscarContribuicoesSegundaVia']);
+        $this->middleware(['auth:sanctum'])->except(['buscarContribuicoesSegundaVia', 'gerarComprovantePorEmail']);
 
         $this->service = $service;
     }
@@ -160,4 +162,39 @@ class ContribuicaoLogController extends BaseController
         }
     }
 
+    /**
+     * @OA\post(
+     *     path="/contribuicao/gerar-comprovante/email",
+     *     summary="Gera comprovantes de pagamento e envia por email",
+     *     tags={"Contribuição"},
+     *     @OA\RequestBody(
+     *           required=true,
+     *           @OA\JsonContent(ref="#/components/schemas/ContribuicaoGerarComprovanteEmailValidation")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Operacao realizada com sucesso",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erro de validação",
+     *         @OA\JsonContent()
+     *     )
+     * )
+     */
+    public function gerarComprovantePorEmail(ContribuicaoGerarComprovanteEmailValidation $request)
+    {
+        try {
+            $validated = $request->validated();
+
+            $dto = ContribuicaoBuscarComprovantePagamentoPorPeriodoDTO::fromArray($validated);
+
+            $teste = $this->service->gerarComprovantePorEmail($dto);
+
+            return $this->sucessoResponse( $teste, 200 );
+        } catch (\Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
 }

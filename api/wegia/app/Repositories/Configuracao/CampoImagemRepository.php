@@ -15,4 +15,11 @@ class CampoImagemRepository extends BaseRepository
         parent::__construct($model);
     }
 
+    public function buscarPorNomeCampo(string $nomeCampo)
+    {
+        return $this->model
+            ->with(['imagens'])
+            ->where('nome_campo', $nomeCampo)
+            ->get();
+    }
 }

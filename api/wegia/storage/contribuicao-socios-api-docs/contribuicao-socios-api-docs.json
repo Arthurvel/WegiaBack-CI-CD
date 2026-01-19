@@ -394,6 +394,43 @@
                 }
             }
         },
+        "/contribuicao/gerar-comprovante/email": {
+            "post": {
+                "tags": [
+                    "Contribuição"
+                ],
+                "summary": "Gera comprovantes de pagamento e envia por email",
+                "operationId": "c7589bf6145858dcf165a0d5f99854a7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContribuicaoGerarComprovanteEmailValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/contribuicao/meio-pagamento": {
             "get": {
                 "tags": [
@@ -1519,6 +1556,30 @@
                     "status": {
                         "description": "status",
                         "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "ContribuicaoGerarComprovanteEmailValidation": {
+                "required": [
+                    "cpf_cnpj",
+                    "data_inicio",
+                    "data_fim"
+                ],
+                "properties": {
+                    "cpf_cnpj": {
+                        "description": "CPF ou CNPJ do sócio",
+                        "type": "string"
+                    },
+                    "data_inicio": {
+                        "description": "Data inicial do período",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "data_fim": {
+                        "description": "Data final do período",
+                        "type": "string",
+                        "format": "date"
                     }
                 },
                 "type": "object"

@@ -2,6 +2,7 @@
 
 namespace app\Repositories\Configuracao;
 
+use App\Enums\SelecaoParagrafoEnum;
 use app\Models\Configuracao\SelecaoParagrafo;
 use App\Repositories\Base\BaseRepository;
 
@@ -15,11 +16,11 @@ class SelecaoParagrafoRepository extends BaseRepository
         parent::__construct($model);
     }
 
-    public function buscarPorDescricao(string $descricao)
+    public function buscarPorNome(SelecaoParagrafoEnum $enum)
     {
         return $this->model
-            ->where('descricao', $descricao )
-            ->get();
+            ->where('nome_campo', $enum->value )
+            ->firstOrFail();
     }
 
 }
