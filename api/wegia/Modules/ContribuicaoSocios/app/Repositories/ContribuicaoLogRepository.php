@@ -5,6 +5,7 @@ namespace Modules\ContribuicaoSocios\app\Repositories;
 use App\Repositories\Base\BaseRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Modules\ContribuicaoSocios\app\DTO\ContribuicaoBuscarComprovantePagamentoPorPeriodoDTO;
 use Modules\ContribuicaoSocios\app\DTO\ContribuicaoBuscarTodosParamsDTO;
 use Modules\ContribuicaoSocios\app\DTO\ContribuicaoLogAtualizarVariosPagamentosDTO;
 use Modules\ContribuicaoSocios\app\DTO\ContribuicaoLogCadastrarDTO;
@@ -106,6 +107,18 @@ class ContribuicaoLogRepository extends BaseRepository
             ->whereNotNull('url')
             ->where('url', '!=', '')
             ->orderBy('data_vencimento', 'ASC')
+            ->get();
+    }
+
+    public function buscarComprovantePagamentoPorPeriodo(ContribuicaoBuscarComprovantePagamentoPorPeriodoDTO $dto)
+    {
+        return $this->model
+            ->with(['meioPagamento', 'socio.pessoa'])
+            ->whereHas('socio.pessoa', function ($s) use ($dto) {
+                $s->where('cpf', $dto->cpf_cnpj);
+            })
+            ->where('data_pagamento', '<=', $dto->data_fim)
+            ->where('data_pagamento', '>=', $dto->data_inicio)
             ->get();
     }
 

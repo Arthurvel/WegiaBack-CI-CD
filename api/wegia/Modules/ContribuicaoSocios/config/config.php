@@ -11,5 +11,8 @@ return [
                 explode(',', env('ALLOWED_IPS_PAGAR_ME', ''))
             )
         ],
-    ]
+    ],
+
+    'titulo_email' => env('MAIL_FROM_NAME', '')
+
 ];

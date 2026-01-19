@@ -22,6 +22,7 @@ Route::prefix('contribuicao')->group(function () {
     });
 
     Route::get('/segunda-via/socio/{cpfCnpj}', [ContribuicaoLogController::class, 'buscarContribuicoesSegundaVia']);
+    Route::post('/gerar-comprovante/email', [ContribuicaoLogController::class, 'gerarComprovantePorEmail']);
 
     Route::prefix('gateway')->group(function () {
         Route::get('filtro', [ContribuicaoGatewayPagamentoController::class, 'buscarTodosParaFiltro']);

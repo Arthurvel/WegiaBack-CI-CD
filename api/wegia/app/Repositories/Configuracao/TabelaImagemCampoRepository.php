@@ -15,7 +15,6 @@ class TabelaImagemCampoRepository extends BaseRepository
     {
         parent::__construct($model);
     }
-
     public function substituirImagemEmUmCampo(int $id_campo, int $id_imagem, TabelaImagemCampoCadastrarOuAtualizarDTO $dto)
     {
         $relacao = $this->model
