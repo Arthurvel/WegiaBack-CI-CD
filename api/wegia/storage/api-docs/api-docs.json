@@ -12,6 +12,659 @@
         }
     ],
     "paths": {
+        "/atendido/aceitacao/etapa/{id_etapa}/arquivo": {
+            "post": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Cadastra um arquivo no processo de aceitação",
+                "operationId": "082ae49dd88b3d1ae6fea4c393e1cd56",
+                "parameters": [
+                    {
+                        "name": "id_etapa",
+                        "in": "path",
+                        "description": "Id da etapa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AtendidoAceitacaoEtapaArquivoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/atendido/aceitacao/{id_processo}/arquivo": {
+            "post": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Cadastra um arquivo no processo de aceitação",
+                "operationId": "2bcbcf44325a9c1e24118e67a05f4b99",
+                "parameters": [
+                    {
+                        "name": "id_processo",
+                        "in": "path",
+                        "description": "Id da processo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AtendidoAceitacaoPaArquivoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/atendido/aceitacao/{id_processo}/etapa": {
+            "get": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Buscar todos as etapas de um processo de aceitação paginados",
+                "operationId": "60d8606f42c952731cced082c5d206b2",
+                "parameters": [
+                    {
+                        "name": "id_processo",
+                        "in": "path",
+                        "description": "Id do processo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status da etapa de aceitação",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Página atual",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Cadastra uma pessoa no processo de aceitação",
+                "operationId": "749dc5daced2e119b8cc705f5692aa64",
+                "parameters": [
+                    {
+                        "name": "id_processo",
+                        "in": "path",
+                        "description": "Id da aceitacao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AtendidoAceitacaoPaEtapaCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/atendido/aceitacao/etapa/{id_etapa}": {
+            "put": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Atualizar uma etapa",
+                "operationId": "d48ff4742f6fbfa051ce6f2e30663b2f",
+                "parameters": [
+                    {
+                        "name": "id_etapa",
+                        "in": "path",
+                        "description": "Id da etapa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AtendidoAceitacaoPaEtapaAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/atendido/aceitacao/status": {
+            "get": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Buscar o status de aceitacao dos atendidos",
+                "operationId": "d06607e34fc8484071493d5e085b3b29",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/atendido/aceitacao": {
+            "get": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Buscar todos os processos de aceitação paginados",
+                "operationId": "ac86e27cb8e2902f7fd7911a5a50e87f",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca (nome, CPF, etc)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status do processo de aceitação",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Página atual",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Cadastra uma pessoa no processo de aceitação",
+                "operationId": "ec737460cd326c06c7fabb211ede14ad",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AtendidoAceitacaoProcessoDeAceitacaoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/atendido/aceitacao/{id_processo}": {
+            "get": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Buscar um processo de aceitação",
+                "operationId": "c4b0f06dac90e6c5ded4a855325527a1",
+                "parameters": [
+                    {
+                        "name": "id_processo",
+                        "in": "path",
+                        "description": "Id do processo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/atendido/aceitacao/pessoa/{id_pessoa}": {
+            "post": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Cadastra uma pessoa no processo de aceitação",
+                "operationId": "8857b857ab75cc92207dbffdb4d93b3d",
+                "parameters": [
+                    {
+                        "name": "id_pessoa",
+                        "in": "path",
+                        "description": "Id da pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/atendido/aceitacao/{id}": {
+            "put": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Atualizar uma aceitação",
+                "operationId": "b42ad60abb162f8a5ba6dea1eae72cdc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id da aceitacao",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AtendidoAceitacaoProcessoDeAceitacaoAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/atendido": {
             "get": {
                 "tags": [
@@ -4708,6 +5361,112 @@
     },
     "components": {
         "schemas": {
+            "AtendidoAceitacaoEtapaArquivoCadastrarValidation": {
+                "required": [
+                    "arquivo"
+                ],
+                "properties": {
+                    "arquivo": {
+                        "description": "Arquivo da aceitação (PDF ou imagem)",
+                        "type": "string",
+                        "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
+            "AtendidoAceitacaoPaArquivoCadastrarValidation": {
+                "required": [
+                    "arquivo"
+                ],
+                "properties": {
+                    "arquivo": {
+                        "description": "Arquivo da aceitação (PDF ou imagem)",
+                        "type": "string",
+                        "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
+            "AtendidoAceitacaoPaEtapaAtualizarValidation": {
+                "properties": {
+                    "data_inicio": {
+                        "description": "data de inicio",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "data_fim": {
+                        "description": "data de termino",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "id_status": {
+                        "description": "id do status",
+                        "type": "integer"
+                    },
+                    "descricao": {
+                        "description": "Descricao",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "AtendidoAceitacaoPaEtapaCadastrarValidation": {
+                "required": [
+                    "data_inicio",
+                    "id_status",
+                    "descricao"
+                ],
+                "properties": {
+                    "data_inicio": {
+                        "description": "data de inicio",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "id_status": {
+                        "description": "id do status",
+                        "type": "integer"
+                    },
+                    "descricao": {
+                        "description": "Descricao",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "AtendidoAceitacaoProcessoDeAceitacaoAtualizarValidation": {
+                "required": [
+                    "status"
+                ],
+                "properties": {
+                    "id_status": {
+                        "description": "id do status",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "AtendidoAceitacaoProcessoDeAceitacaoCadastrarValidation": {
+                "required": [
+                    "nome",
+                    "sobrenome",
+                    "cpf"
+                ],
+                "properties": {
+                    "nome": {
+                        "description": "nome da pessoa",
+                        "type": "string"
+                    },
+                    "sobrenome": {
+                        "description": "sobrenome da pessoa",
+                        "type": "string"
+                    },
+                    "cpf": {
+                        "description": "cpf da pessoa",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "AtendidoCadastrarValidation": {
                 "required": [
                     "pessoa_id_pessoa",

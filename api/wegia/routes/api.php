@@ -4,6 +4,11 @@ use App\Http\Controllers\Atendido\AtendidoController;
 use App\Http\Controllers\Atendido\AtendidoOcorrenciaController;
 use App\Http\Controllers\Atendido\AtendidoStatusController;
 use App\Http\Controllers\Atendido\AtendidoTipoController;
+use app\Http\Controllers\Atendido\Aceitacao\AtendidoAceitacaoPaStatusController;
+use app\Http\Controllers\Atendido\Aceitacao\AtendidoAceitacaoProcessoDeAceitacaoController;
+use app\Http\Controllers\Atendido\Aceitacao\AtendidoAceitacaoPaArquivoController;
+use app\Http\Controllers\Atendido\Aceitacao\AtendidoAceitacaoPaEtapaController;
+use app\Http\Controllers\Atendido\Aceitacao\AtendidoAceitacaoEtapaArquivoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AvisoController;
 use App\Http\Controllers\CargoController;
@@ -171,6 +176,28 @@ Route::group([ 'prefix' => 'atendido'], function () {
     Route::group([ 'prefix' => 'ocorrencia'], function () {
         Route::get('/tipos', [AtendidoOcorrenciaController::class, 'buscarOcorrenciaTipos']);
     });
+
+    Route::group([ 'prefix' => 'aceitacao'], function () {
+
+        Route::get('/', [AtendidoAceitacaoProcessoDeAceitacaoController::class, 'buscarTodos']);
+        Route::post('/', [AtendidoAceitacaoProcessoDeAceitacaoController::class, 'cadastrar']);
+        Route::put('/{id}', [AtendidoAceitacaoProcessoDeAceitacaoController::class, 'atualizar']);
+
+        Route::post('/pessoa/{id_pessoa}', [AtendidoAceitacaoProcessoDeAceitacaoController::class, 'cadastrarComPessoa']);
+
+        Route::post('/{id_processo}/arquivo', [AtendidoAceitacaoPaArquivoController::class, 'cadastrar']);
+
+        Route::get('/{id_processo}/etapa', [AtendidoAceitacaoPaEtapaController::class, 'buscarTodos']);
+        Route::post('/{id_processo}/etapa', [AtendidoAceitacaoPaEtapaController::class, 'cadastrar']);
+        Route::put('/etapa/{id_etapa}', [AtendidoAceitacaoPaEtapaController::class, 'atualizar']);
+
+        Route::post('/etapa/{id_etapa}/arquivo', [AtendidoAceitacaoEtapaArquivoController::class, 'cadastrar']);
+
+        Route::get('/status', [AtendidoAceitacaoPaStatusController::class, 'index']);
+
+        Route::get('/{id}', [AtendidoAceitacaoProcessoDeAceitacaoController::class, 'buscarPorId']);
+    });
+
 
     Route::get('/{id}', [AtendidoController::class, 'atendidoPorId']);
 });
