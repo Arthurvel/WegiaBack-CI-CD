@@ -16,7 +16,7 @@ class AtendidoBuscarValidation extends FormRequest
         ];
 
         return [
-            'id_situacao'    => 'nullable|integer',
+            'id_status'    => 'nullable|integer',
             'buscar'         => 'nullable|string',
             'itensPorPagina' => 'nullable|integer',
             'pagina'         => 'nullable|integer',
