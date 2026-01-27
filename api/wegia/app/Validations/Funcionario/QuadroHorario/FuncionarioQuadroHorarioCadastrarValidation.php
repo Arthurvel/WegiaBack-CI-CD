@@ -35,8 +35,8 @@ class FuncionarioQuadroHorarioCadastrarValidation extends FormRequest
     {
         return [
             'id_funcionario'   => 'required|integer|exists:funcionario,id_funcionario',
-            'id_escala'        => 'required|integer|exists:escala_quadro_horario,id_escala',
-            'id_tipo'          => 'required|integer|exists:tipo_quadro_horario,id_tipo',
+            'escala'        => 'required|integer|exists:escala_quadro_horario,id_escala',
+            'tipo'          => 'required|integer|exists:tipo_quadro_horario,id_tipo',
             'carga_horaria'    => 'nullable|string|max:200',
             'entrada1'         => 'nullable|string|max:200',
             'saida1'           => 'nullable|string|max:200',
