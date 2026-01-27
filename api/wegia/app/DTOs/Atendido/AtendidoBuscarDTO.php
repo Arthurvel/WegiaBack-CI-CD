@@ -7,7 +7,7 @@ use App\DTOs\BaseDTO;
 class AtendidoBuscarDTO extends BaseDTO
 {
 
-    public ?string $id_situacao;
+    public ?string $id_status;
     public ?string $buscar;
     public ?int $itensPorPagina;
     public ?int $pagina;
