@@ -191,7 +191,8 @@ INSERT INTO `selecao_paragrafo` (`id_selecao`, `nome_campo`, `paragrafo`, `origi
 (4, 'Objetivo', 'Promover uma boa administração ao fornecer serviços de ajuda e controle de estoques, gerenciamento de funcionários e pessoal, visando um maior proveito de recursos.\r\n\r\nEntre com suas credenciais padrão de administrador para configurar o sistema:\r\n\r\nusuário: admin\r\nsenha: wegia', 1),
 (5, 'Rodapé', 'WeGIA - Desenvolvido pelo Cefet/RJ UnED Nova Friburgo', 1),
 (6, 'ContribuiçãoMSG', 'Contribua você também!', 1),
-(7, 'agradecimento_doador', 'Mensagem de Agradecimento ao DOADOR', 1);
+(7, 'agradecimento_doador', 'Mensagem de Agradecimento ao DOADOR', 1),
+(8, 'CNPJ', 'Insira aqui o CNPJ da sua instituição', 1);
 
 INSERT INTO `campo_imagem` (`id_campo`, `nome_campo`, `tipo`) VALUES 
 (1, 'Logo', 'img'), 
@@ -301,6 +302,12 @@ INSERT INTO `atendido_tipo` (`idatendido_tipo`, `descricao`) VALUES (1, 'Interno
 INSERT INTO `atendido_status` (`idatendido_status`, `status`) VALUES
     (1, 'Ativo'),
     (2, 'Inativo');
+
+INSERT IGNORE INTO `wegia`.`pa_status` (`descricao`) VALUES
+('Em Andamento'),
+('Concluído'),
+('Cancelado'),
+('Aguardando Aprovação');
 
 INSERT INTO `funcionario_remuneracao_tipo` (`idfuncionario_remuneracao_tipo`, `descricao`) VALUES
 (1, 'Vencimento Básico'),
