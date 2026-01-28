@@ -982,7 +982,7 @@ CREATE TABLE IF NOT EXISTS `wegia`.`atendido_ocorrencia_doc` (
   `data` TIMESTAMP NOT NULL,
   `arquivo_nome` VARCHAR(255) NOT NULL,
   `arquivo_extensao` VARCHAR(200) NOT NULL,
-  `arquivo` VARCHAR(100) NOT NULL,
+  `arquivo` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`idatendido_ocorrencia_doc`),
   INDEX `fk_atendido_ocorrencia_doc_atentido_ocorrencia1_idx` (`atentido_ocorrencia_idatentido_ocorrencias` ASC),
   CONSTRAINT `fk_atendido_ocorrencia_doc_atentido_ocorrencia1`
@@ -992,6 +992,200 @@ CREATE TABLE IF NOT EXISTS `wegia`.`atendido_ocorrencia_doc` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------------------------
+-- Table `wegia`.`pa_status`
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `wegia`.`pa_status`(
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `descricao` VARCHAR(512) NOT NULL,
+    PRIMARY KEY (`id`))
+    ENGINE = InnoDB;
+
+-- -----------------------------------------------------------------------
+-- Table `wegia`.`processo_de_aceitacao`
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `wegia`.`processo_de_aceitacao`(
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `data_inicio` DATETIME NOT NULL,
+    `data_fim` DATETIME NULL,
+    `descricao` VARCHAR(512) NOT NULL,
+    `id_status` INT NOT NULL,
+    `id_pessoa` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_processo_status`
+    FOREIGN KEY (`id_status`)
+    REFERENCES `wegia`.`pa_status` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    CONSTRAINT `fk_processo_pessoa`
+    FOREIGN KEY (`id_pessoa`)
+    REFERENCES `wegia`.`pessoa` (`id_pessoa`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
+
+-- -----------------------------------------------------------------------
+-- Table `wegia`.`pa_etapa`
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `wegia`.`pa_etapa`(
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `data_inicio` DATETIME NOT NULL,
+    `data_fim` DATETIME NULL,
+    `descricao` VARCHAR(512) NOT NULL,
+    `id_processo` INT NOT NULL,
+    `id_status` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_etapa_processo`
+    FOREIGN KEY (`id_processo`)
+    REFERENCES `wegia`.`processo_de_aceitacao` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    CONSTRAINT `fk_etapa_status`
+    FOREIGN KEY (`id_status`)
+    REFERENCES `wegia`.`pa_status` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
+
+-- -----------------------------------------------------------------------
+-- Table `wegia`.`pa_arquivo`
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `wegia`.`pa_arquivo`(
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `id_processo` INT NULL,
+    `id_etapa` INT NULL,
+    `arquivo_nome` VARCHAR(255) NOT NULL,
+    `arquivo_extensao` VARCHAR(10) NOT NULL,
+    `arquivo` VARCHAR(255) NOT NULL,
+    `data_upload` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_pa_arquivo_processo`
+    FOREIGN KEY (`id_processo`)
+    REFERENCES `wegia`.`processo_de_aceitacao` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    CONSTRAINT `fk_pa_arquivo_etapa`
+    FOREIGN KEY (`id_etapa`)
+    REFERENCES `wegia`.`pa_etapa` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+)ENGINE = InnoDB;
+
+-- -----------------------------------------------------------------------
+-- Table `wegia`.`etapa_arquivo`
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `wegia`.`etapa_arquivo`(
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `etapa_id` INT NOT NULL,
+    `arquivo_nome` VARCHAR(255) NOT NULL,
+    `arquivo_extensao` VARCHAR(10) NOT NULL,
+    `arquivo` VARCHAR(255) NOT NULL,
+    `data_upload` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_etapa_arquivo_etapa`
+    FOREIGN KEY (`etapa_id`)
+    REFERENCES `wegia`.`pa_etapa` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+)ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------------------------
+-- Table `wegia`.`pa_status`
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `wegia`.`pa_status`(
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `descricao` VARCHAR(512) NOT NULL,
+    PRIMARY KEY (`id`))
+    ENGINE = InnoDB;
+
+-- -----------------------------------------------------------------------
+-- Table `wegia`.`processo_de_aceitacao`
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `wegia`.`processo_de_aceitacao`(
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `data_inicio` DATETIME NOT NULL,
+    `data_fim` DATETIME NULL,
+    `descricao` VARCHAR(512) NOT NULL,
+    `id_status` INT NOT NULL,
+    `id_pessoa` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_processo_status`
+    FOREIGN KEY (`id_status`)
+    REFERENCES `wegia`.`pa_status` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    CONSTRAINT `fk_processo_pessoa`
+    FOREIGN KEY (`id_pessoa`)
+    REFERENCES `wegia`.`pessoa` (`id_pessoa`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------------------------
+-- Table `wegia`.`pa_etapa`
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `wegia`.`pa_etapa`(
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `data_inicio` DATETIME NOT NULL,
+    `data_fim` DATETIME NULL,
+    `descricao` VARCHAR(512) NOT NULL,
+    `id_processo` INT NOT NULL,
+    `id_status` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_etapa_processo`
+    FOREIGN KEY (`id_processo`)
+    REFERENCES `wegia`.`processo_de_aceitacao` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    CONSTRAINT `fk_etapa_status`
+    FOREIGN KEY (`id_status`)
+    REFERENCES `wegia`.`pa_status` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------------------------
+-- Table `wegia`.`pa_arquivo`
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `wegia`.`pa_arquivo`(
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `id_processo` INT NULL,
+    `id_etapa` INT NULL,
+    `arquivo_nome` VARCHAR(255) NOT NULL,
+    `arquivo_extensao` VARCHAR(10) NOT NULL,
+    `arquivo` LONGBLOB NOT NULL,
+    `data_upload` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_pa_arquivo_processo`
+    FOREIGN KEY (`id_processo`)
+    REFERENCES `wegia`.`processo_de_aceitacao` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    CONSTRAINT `fk_pa_arquivo_etapa`
+    FOREIGN KEY (`id_etapa`)
+    REFERENCES `wegia`.`pa_etapa` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------------------------
+-- Table `wegia`.`etapa_arquivo`
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `wegia`.`etapa_arquivo`(
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `etapa_id` INT NOT NULL,
+    `arquivo_nome` VARCHAR(255) NOT NULL,
+    `arquivo_extensao` VARCHAR(10) NOT NULL,
+    `arquivo` LONGBLOB NOT NULL,
+    `data_upload` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_etapa_arquivo_etapa`
+    FOREIGN KEY (`etapa_id`)
+    REFERENCES `wegia`.`pa_etapa` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `wegia`.`funcionario_remuneracao_tipo`
