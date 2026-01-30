@@ -7,5 +7,10 @@
     "providers": [
         "Modules\\Saude\\Providers\\SaudeServiceProvider"
     ],
-    "files": []
+    "files": [],
+    "migration": {
+        "seeds": [
+            "Modules\\Saude\\Database\\Seeders\\DatabaseSeeder"
+        ]
+    }
 }
