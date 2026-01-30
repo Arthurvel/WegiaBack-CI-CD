@@ -7,5 +7,10 @@
     "providers": [
         "Modules\\ContribuicaoSocios\\Providers\\ContribuicaoSociosServiceProvider"
     ],
-    "files": []
+    "files": [],
+    "migration": {
+        "seeds": [
+            "Modules\\ContribuicaoSocios\\Database\\Seeders\\DatabaseSeeder"
+        ]
+    }
 }

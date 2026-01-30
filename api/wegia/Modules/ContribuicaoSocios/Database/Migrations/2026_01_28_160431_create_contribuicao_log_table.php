@@ -17,10 +17,10 @@ return new class extends Migration
             $table->unsignedInteger('id_socio');
 
             $table->foreignId('id_gateway')
-                ->constrained('contribuicao_gateway_pagamento');
+                ->constrained('contribuicao_gatewayPagamento');
 
             $table->foreignId('id_meio_pagamento')
-                ->constrained('contribuicao_meio_pagamento');
+                ->constrained('contribuicao_meioPagamento');
 
             $table->foreignId('id_recorrencia')
                 ->nullable()

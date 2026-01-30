@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contribuicao_meio_pagamento', function (Blueprint $table) {
+        Schema::create('contribuicao_gatewayPagamento', function (Blueprint $table) {
             $table->id();
-            $table->string('meio', 45)->unique();
-            $table->foreignId('id_plataforma')
-                ->constrained('contribuicao_gateway_pagamento')
-                ->restrictOnDelete();
-            $table->boolean('status');
+            $table->string('plataforma', 50);
         });
-
     }
 
     /**
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contribuicao_meio_pagamento');
+        Schema::dropIfExists('contribuicao_gatewayPagamento');
     }
 };

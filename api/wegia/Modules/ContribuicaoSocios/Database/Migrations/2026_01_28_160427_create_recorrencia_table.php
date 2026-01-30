@@ -18,7 +18,7 @@ return new class extends Migration
 
 
             $table->foreignId('id_gateway')
-                ->constrained('contribuicao_gateway_pagamento');
+                ->constrained('contribuicao_gatewayPagamento');
 
             $table->string('codigo', 255)->unique();
             $table->decimal('valor', 10, 2);

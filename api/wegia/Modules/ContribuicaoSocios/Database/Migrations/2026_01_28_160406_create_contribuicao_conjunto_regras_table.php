@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contribuicao_conjunto_regras', function (Blueprint $table) {
+        Schema::create('contribuicao_conjuntoRegras', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('id_meioPagamento')
                 ->nullable()
-                ->constrained('contribuicao_meio_pagamento');
+                ->constrained('contribuicao_meioPagamento');
 
             $table->foreignId('id_regra')
                 ->nullable()
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contribuicao_conjunto_regras');
+        Schema::dropIfExists('contribuicao_conjuntoRegras');
     }
 };

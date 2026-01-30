@@ -7,5 +7,10 @@
     "providers": [
         "Modules\\Material\\Providers\\MaterialServiceProvider"
     ],
-    "files": []
+    "files": [],
+    "migration": {
+        "seeds": [
+            "Modules\\Material\\Database\\Seeders\\DatabaseSeeder"
+        ]
+    }
 }
