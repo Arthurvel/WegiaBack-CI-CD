@@ -67,6 +67,21 @@ Atualmente, os módulos são:
   -   **Utilização:** Contêm funções auxiliares e stateless que podem ser usadas em qualquer parte da aplicação.
       *   `UploadSeguroHelper.php`: Padroniza a manipulação de um arquivo, podendo salvar, excluir e criar uma rota de visualização para ele.
 
+#### **Migrations**
+-   **Localização:** `app/database/migrations`
+-   **Utilização:** São arquivos de criação das tabelas no banco de dados. Ela é executada a primeira vez e registrada na tabela migrations para não ser executada novamente
+    *    Como criar: `php artisan make:migration create_tabela`
+    *    Como executar: `php artisan migrate`
+
+#### **Seeders**
+-   **Localização:** `app/database/seeders`
+-   **Utilização:** Responsáveis por popular os dados nas tabelas. Sua execução acontece cada vez que rodar o camando, com isso pode gerar duplicação, tomar cuidado na hora de adicionar o sql de inserção.
+    *    Como criar: `php artisan make:seeder UsuarioSeeder`
+    *    Como executar no modulo principal: `php artisan db:seed`
+    *    Como executar nos modulos: `php artisan module:seed --class=DatabaseSeeder --all`
+- **OBSERVAÇÃO:** Necessário configurar os módulos para executarem o arquivo correto (DatabaseSeeder). Somente será executado os modulos que estiverem como true dentro do arquivo `modules_statuses.json`.
+    
+
 ## 4. Documentação da API (Swagger)
 
 - Pacote `L5-Swagger` gera documentação interativa.

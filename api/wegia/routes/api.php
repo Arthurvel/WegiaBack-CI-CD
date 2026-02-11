@@ -200,6 +200,7 @@ Route::group([ 'prefix' => 'atendido'], function () {
 
 
     Route::get('/{id}', [AtendidoController::class, 'atendidoPorId']);
+    Route::put('/{id}', [AtendidoController::class, 'atualizar']);
 });
 
 // Configuracao
