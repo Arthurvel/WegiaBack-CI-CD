@@ -22,6 +22,16 @@ use Illuminate\Foundation\Http\FormRequest;
  */
 class FuncionarioAtualizarValidation extends FormRequest
 {
+
+    protected function prepareForValidation()
+    {
+        if (!$this->user()?->tokenCan('atualizar-cargo-do-funcionario')) {
+            $this->merge([
+                'id_perfil' => null
+            ]);
+        }
+    }
+
     public function rules(): array
     {
         return [

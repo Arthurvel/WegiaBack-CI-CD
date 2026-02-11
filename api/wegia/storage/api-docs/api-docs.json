@@ -881,6 +881,65 @@
                         "bearerAuth": []
                     }
                 ]
+            },
+            "put": {
+                "tags": [
+                    "Atendido"
+                ],
+                "summary": "Buscar Atendido por ID",
+                "operationId": "32ebdac098ac748819c1a75f8b7b393c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id do  atendido",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AtendidoAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/atendido/{id}/ocorrencia": {
@@ -5463,6 +5522,18 @@
                     "cpf": {
                         "description": "cpf da pessoa",
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "AtendidoAtualizarValidation": {
+                "required": [
+                    "atendido_status_idatendido_status"
+                ],
+                "properties": {
+                    "atendido_status_idatendido_status": {
+                        "description": "id do status do atendido",
+                        "type": "integer"
                     }
                 },
                 "type": "object"
