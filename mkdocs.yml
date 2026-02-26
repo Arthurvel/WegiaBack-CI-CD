@@ -46,6 +46,9 @@ nav:
       - 'Segurança':
           - 'Autenticacao': 'desenvolvimento/seguranca/autenticacao.md'
           - 'Arquivo': 'desenvolvimento/seguranca/arquivo.md'
+      - 'Migration': 'desenvolvimento/migration.md'
+      - 'Seeder': 'desenvolvimento/seeder.md'
+      - 'Módulos': 'desenvolvimento/modules.md'
       - 'Swagger': 'desenvolvimento/swagger.md'
 
 

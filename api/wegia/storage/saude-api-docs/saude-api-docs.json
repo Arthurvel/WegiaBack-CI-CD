@@ -1690,6 +1690,48 @@
                 ]
             }
         },
+        "/saude/medicacao/aplicacao": {
+            "post": {
+                "tags": [
+                    "Medicacao"
+                ],
+                "summary": "Cadastra um array de medicações",
+                "operationId": "ffc299de9d5a3fe2509747e179a8071f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaudeMedicacaoAministracaoCadastrarEmMassaValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/saude/medico": {
             "get": {
                 "tags": [
@@ -2139,6 +2181,32 @@
                     "funcionario_id_funcionario": {
                         "description": "Nome do medico",
                         "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "SaudeMedicacaoAministracaoCadastrarEmMassaValidation": {
+                "required": [
+                    "id_funcionario",
+                    "aplicacao"
+                ],
+                "properties": {
+                    "id_funcionario": {
+                        "description": "id do funcionário",
+                        "type": "integer"
+                    },
+                    "aplicacao": {
+                        "description": "",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "medicacao": {
+                        "description": "Lista com id da medicação",
+                        "type": "array",
+                        "items": {
+                            "description": "id do medicamento",
+                            "type": "integer"
+                        }
                     }
                 },
                 "type": "object"

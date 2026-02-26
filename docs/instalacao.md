@@ -21,6 +21,8 @@ git clone https://github.com/LabRedesCefetRJ/WeGIA-back.git
 cd WeGIA-back
 ```
 
+---
+
 ### 2. Configurar o Ambiente
 
 O projeto utiliza um arquivo `.env` para configurar as variáveis de ambiente. Copie o arquivo de exemplo `.env.example` para criar o seu próprio.
@@ -35,7 +37,9 @@ cp .env.example .env
 
 Após copiar, abra o arquivo `.env` e configure as variáveis, especialmente as relacionadas à conexão com o banco de dados (`DB_*`), se necessário.
 
-**Observação:** os valores padrão já funcionam com o `docker-compose.yml` fornecido
+**Observação:** os valores padrão já funcionam com o `docker-compose.yml` fornecido, entretanto, caso queira algumas funcionalidades dos extras como envio de email e pagamento, é necessário preencher seu valor no .env.
+
+---
 
 ### 3. Build e Execução dos Containers
 
@@ -59,6 +63,8 @@ docker-compose logs -f
 
 Este comando irá baixar as imagens necessárias (PHP, Nginx, MariaDB) e construir os containers para a aplicação.
 
+---
+
 ### 4. Instalar Dependências do Composer (Opcional)
 
 O composer é instalado automaticamente no entrypoint, mas caso queira instalar ou atualizar manualmente:
@@ -66,6 +72,8 @@ O composer é instalado automaticamente no entrypoint, mas caso queira instalar 
 ```bash
 docker-compose exec api composer install --optimize-autoloader
 ```
+
+---
 
 ### 5. Gerar a Chave da Aplicação
 
@@ -75,7 +83,11 @@ O Laravel requer uma chave de aplicação única, que pode ser gerada com o segu
 docker-compose exec app php artisan key:generate
 ```
 
-Essa chave é usada em configurações internas do Laravel, incluindo criptografia e upload de arquivos.
+Essa chave é usada em configurações internas do Laravel, incluindo criptografia e upload de arquivos. É necessário que seja guardada corretamente para que não perca acesso a esses dados.
+
+Ela é referenciada dentro do .env como `APP_KEY`.
+
+---
 
 ### 6. Executar as Migrations
 
@@ -85,13 +97,37 @@ O entrypoint do container já realiza as migrations automaticamente. Se precisar
 docker-compose exec app php artisan migrate
 ```
 
-### 7. Acessar a Aplicação
+---
+
+### 7. Executar as Seeders
+
+O entrypoint do container já realiza as seeds automaticamente. Toda inserção de dados necessária no banco é feita por dois comandos.
+
+Seeders padrões:
+
+```bash
+docker-compose exec app php artisan db:seed
+```
+
+Seeders dos módulos:
+
+```bash
+docker-compose exec app php artisan module:seed --class=DatabaseSeeder --all
+```
+
+Cada Seeder é executada apenas uma vez para que não ocorra duplicação de dados
+
+---
+
+### 8. Acessar a Aplicação
 
 Pronto! A API deve estar em execução e acessível em `http://localhost:8000` (ou na porta que você configurou no `docker-compose.yml`).
 
 Para verificar se tudo está funcionando, você pode acessar um endpoint público ou a documentação da API.
 
-### 8. Estrutura de Volumes e Permissões
+---
+
+### 9. Estrutura de Volumes e Permissões
 
 O entrypoint já cria os diretórios de armazenamento e backups com permissões corretas:
 
@@ -102,7 +138,9 @@ O entrypoint já cria os diretórios de armazenamento e backups com permissões 
 
 Eles são persistidos no volume Docker db_data para o banco de dados e no diretório local ./db para dados inicias.
 
-### 9. Parar os Containers
+---
+
+### 10. Parar os Containers
 
 Para parar os containers sem removê-los:
 

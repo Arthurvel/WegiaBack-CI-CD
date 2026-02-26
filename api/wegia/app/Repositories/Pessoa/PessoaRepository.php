@@ -30,9 +30,12 @@ class PessoaRepository extends BaseRepository
 
     }
 
-    public function buscarPessoaPorCpf(string $cpf)
+    public function buscarPessoaPorCpf(string $cpf, array $with = [])
     {
-        return $this->model->where('cpf', $cpf)->firstOrFail();
+        return $this->model
+            ->with($with)
+            ->where('cpf', $cpf)
+            ->firstOrFail();
     }
 
     public function buscarPessoaParaFiltros()
@@ -62,6 +65,7 @@ class PessoaRepository extends BaseRepository
     {
         return Pessoa::findOrFail($id);
     }
+
 
     public function criarParentesco(CadastrarPessoaDependenteDTO $dependente) : PessoaDependente
     {

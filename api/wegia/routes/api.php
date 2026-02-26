@@ -4,6 +4,11 @@ use App\Http\Controllers\Atendido\AtendidoController;
 use App\Http\Controllers\Atendido\AtendidoOcorrenciaController;
 use App\Http\Controllers\Atendido\AtendidoStatusController;
 use App\Http\Controllers\Atendido\AtendidoTipoController;
+use app\Http\Controllers\Atendido\Aceitacao\AtendidoAceitacaoPaStatusController;
+use app\Http\Controllers\Atendido\Aceitacao\AtendidoAceitacaoProcessoDeAceitacaoController;
+use app\Http\Controllers\Atendido\Aceitacao\AtendidoAceitacaoPaArquivoController;
+use app\Http\Controllers\Atendido\Aceitacao\AtendidoAceitacaoPaEtapaController;
+use app\Http\Controllers\Atendido\Aceitacao\AtendidoAceitacaoEtapaArquivoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AvisoController;
 use App\Http\Controllers\CargoController;
@@ -21,6 +26,11 @@ use app\Http\Controllers\Pessoa\PessoaTipoArquivoController;
 use app\Http\Controllers\Pessoa\PessoaArquivoController;
 use App\Http\Controllers\SituacaoController;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\Configuracao\SelecaoParagrafoController;
+use app\Http\Controllers\Configuracao\ContatoInstituicaoController;
+use app\Http\Controllers\Configuracao\EnderecoInstituicaoController;
+use app\Http\Controllers\Configuracao\CampoImagemController;
+use app\Http\Controllers\Configuracao\ImagemController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/upload/{path}', [UploadController::class, 'retornarImagem'])
@@ -167,5 +177,62 @@ Route::group([ 'prefix' => 'atendido'], function () {
         Route::get('/tipos', [AtendidoOcorrenciaController::class, 'buscarOcorrenciaTipos']);
     });
 
+    Route::group([ 'prefix' => 'aceitacao'], function () {
+
+        Route::get('/', [AtendidoAceitacaoProcessoDeAceitacaoController::class, 'buscarTodos']);
+        Route::post('/', [AtendidoAceitacaoProcessoDeAceitacaoController::class, 'cadastrar']);
+        Route::put('/{id}', [AtendidoAceitacaoProcessoDeAceitacaoController::class, 'atualizar']);
+
+        Route::post('/pessoa/{id_pessoa}', [AtendidoAceitacaoProcessoDeAceitacaoController::class, 'cadastrarComPessoa']);
+
+        Route::post('/{id_processo}/arquivo', [AtendidoAceitacaoPaArquivoController::class, 'cadastrar']);
+
+        Route::get('/{id_processo}/etapa', [AtendidoAceitacaoPaEtapaController::class, 'buscarTodos']);
+        Route::post('/{id_processo}/etapa', [AtendidoAceitacaoPaEtapaController::class, 'cadastrar']);
+        Route::put('/etapa/{id_etapa}', [AtendidoAceitacaoPaEtapaController::class, 'atualizar']);
+
+        Route::post('/etapa/{id_etapa}/arquivo', [AtendidoAceitacaoEtapaArquivoController::class, 'cadastrar']);
+
+        Route::get('/status', [AtendidoAceitacaoPaStatusController::class, 'index']);
+
+        Route::get('/{id}', [AtendidoAceitacaoProcessoDeAceitacaoController::class, 'buscarPorId']);
+    });
+
+
     Route::get('/{id}', [AtendidoController::class, 'atendidoPorId']);
+    Route::put('/{id}', [AtendidoController::class, 'atualizar']);
+});
+
+// Configuracao
+
+Route::group([ 'prefix' => 'configuracao'], function () {
+
+    Route::group([ 'prefix' => 'selecao-paragrafo'], function () {
+        Route::get('/', [SelecaoParagrafoController::class, 'index']);
+        Route::put('/{id}', [SelecaoParagrafoController::class, 'atualizar']);
+    });
+
+    Route::group([ 'prefix' => 'contato-instituicao'], function () {
+        Route::get('/', [ContatoInstituicaoController::class, 'index']);
+        Route::post('/', [ContatoInstituicaoController::class, 'cadastrar']);
+        Route::put('/{id}', [ContatoInstituicaoController::class, 'atualizar']);
+        Route::delete('/{id}', [ContatoInstituicaoController::class, 'deletar']);
+    });
+
+    Route::group([ 'prefix' => 'endereco-instituicao'], function () {
+        Route::get('/', [EnderecoInstituicaoController::class, 'index']);
+        Route::put('/', [EnderecoInstituicaoController::class, 'atualizar']);
+    });
+
+    Route::group([ 'prefix' => 'campo-imagem'], function () {
+        Route::get('/', [CampoImagemController::class, 'index']);
+    });
+
+    Route::group([ 'prefix' => 'imagem'], function () {
+        Route::get('/', [ImagemController::class, 'index']);
+        Route::post('/', [ImagemController::class, 'cadastrar']);
+        Route::post('/campo-imagem/{id_campo_imagem}', [ImagemController::class, 'cadastrarImagemEmUmCampo']);
+        Route::post('/{id_imagem}/campo-imagem/{id_campo_imagem}', [ImagemController::class, 'substituirImagemEmUmCampo']);
+        Route::delete('/{id}', [ImagemController::class, 'deletar']);
+    });
 });

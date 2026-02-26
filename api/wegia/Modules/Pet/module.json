@@ -7,5 +7,10 @@
     "providers": [
         "Modules\\Pet\\Providers\\PetServiceProvider"
     ],
-    "files": []
+    "files": [],
+    "migration": {
+        "seeds": [
+            "Modules\\Pet\\Database\\Seeders\\DatabaseSeeder"
+        ]
+    }
 }

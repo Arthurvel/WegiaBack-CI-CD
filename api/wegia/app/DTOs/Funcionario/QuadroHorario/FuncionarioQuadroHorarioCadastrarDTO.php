@@ -7,8 +7,8 @@ use App\DTOs\BaseDTO;
 class FuncionarioQuadroHorarioCadastrarDTO extends BaseDTO
 {
     public int $id_funcionario;
-    public int $id_escala;
-    public int $id_tipo;
+    public int $escala;
+    public int $tipo;
     public ?string $carga_horaria;
     public ?string $entrada1;
     public ?string $saida1;

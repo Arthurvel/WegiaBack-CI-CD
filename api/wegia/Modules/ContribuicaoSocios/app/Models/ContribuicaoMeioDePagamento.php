@@ -4,6 +4,7 @@ namespace Modules\ContribuicaoSocios\app\Models;
 
 use App\Models\BaseModel\BaseModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ContribuicaoMeioDePagamento extends BaseModel
 {
@@ -16,6 +17,15 @@ class ContribuicaoMeioDePagamento extends BaseModel
         'id_plataforma',
         'status'
     ];
+
+    public function regras(): HasMany
+    {
+        return $this->hasMany(
+            ContribuicaoConjuntoRegras::class,
+            'id_meioPagamento',
+            'id'
+        );
+    }
 
     public function gateway() : BelongsTo
     {

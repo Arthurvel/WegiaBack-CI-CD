@@ -17,6 +17,23 @@ class AtendidoRepository extends BaseRepository
         parent::__construct($model);
     }
 
+    public function buscarAtendidoPorCPF(string $cpf): ?Atendido
+    {
+        return $this->model
+            ->with(['pessoa'])
+            ->whereHas('pessoa', function ($query) use ($cpf) {
+                $query->where('cpf', $cpf);
+            })
+            ->first();
+    }
+
+    public function buscarPorIdPessoa(int $idPessoa): ?Atendido
+    {
+        return $this->model
+            ->where('pessoa_id_pessoa', $idPessoa)
+            ->first();
+    }
+
     public function buscarAtendimentos(AtendidoBuscarDTO $dto) : LengthAwarePaginator
     {
         $status         = $dto->id_status ?? null;

@@ -15,6 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
             'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
+            'pagarme.ip' => \Modules\ContribuicaoSocios\app\Http\Middleware\PagarmeIpMiddleware::class,
+            'pagarme.hmac' => \Modules\ContribuicaoSocios\app\Http\Middleware\PagarmeHmacMiddleware::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -26,8 +26,8 @@ class PessoaController extends BaseController
     private PessoaService $pessoaService;
 
     public function __construct(PessoaService $pessoaService)
-        {
-            $this->middleware(['auth:sanctum', 'ability:criar-pessoa'])->only(['create']);
+    {
+        $this->middleware(['auth:sanctum', 'ability:criar-pessoa'])->only(['create']);
         $this->middleware(['auth:sanctum', 'ability:visualizar-pessoa'])->only(['buscarPessoaPorCpf']);
         $this->middleware(['auth:sanctum', 'ability:atualizar-senha-de-outras-pessoas'])->only(['mudarSenhaDeFuncionarios']);
         $this->middleware(['auth:sanctum', 'ability:atualizar-pessoa'])->only(['cadastrarOuAtualizarImagem', 'update']);
@@ -139,7 +139,6 @@ class PessoaController extends BaseController
         } catch (\Exception $e) {
             return $this->errorResponse($e);
         }
-
     }
 
     /**

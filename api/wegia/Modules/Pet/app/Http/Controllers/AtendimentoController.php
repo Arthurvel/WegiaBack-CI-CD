@@ -134,7 +134,8 @@ class AtendimentoController extends BaseController
             $validated = $request->validated();
 
             $data = [
-                'id_ficha_medica' => $id_ficha_medica
+                'id_ficha_medica' => $id_ficha_medica,
+                ...$validated
             ];
 
             $dto = AtendimentoComMedicamentoDTO::fromArray($data);

@@ -16,7 +16,7 @@ class ContribuicaoMeioDePagamentoRepository extends BaseRepository
         parent::__construct($model);
     }
 
-    public function buscarTodos()
+    public function buscarTodos(array $with = [])
     {
         return $this->model->with(['gateway'])->get();
     }
@@ -39,4 +39,13 @@ class ContribuicaoMeioDePagamentoRepository extends BaseRepository
             })
             ->paginate($itensPorPagina, ['*'], 'page', $pagina);
     }
+
+    public function buscarMeioPagamentosAtivos()
+    {
+        return $this->model
+            ->with(['regras.regra', 'gateway'])
+            ->where('status', 1)
+            ->get();
+    }
+
 }

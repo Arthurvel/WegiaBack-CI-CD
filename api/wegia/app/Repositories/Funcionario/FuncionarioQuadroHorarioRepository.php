@@ -30,7 +30,7 @@ class FuncionarioQuadroHorarioRepository extends BaseRepository
         return $this->model
             ->with(['quadroHorarioTipo', 'quadroHorarioEscala'])
             ->where('id_funcionario', $id_funcionario)
-            ->first();
+            ->firstOrFail();
     }
 
     public function cadastrarQuadroHorario(FuncionarioQuadroHorarioCadastrarDTO $dto)

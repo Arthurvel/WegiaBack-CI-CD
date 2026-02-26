@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Atendido;
 
+use app\DTOs\Atendido\AtendidoAtualizarDTO;
 use app\DTOs\Atendido\AtendidoBuscarDTO;
 use app\DTOs\Atendido\AtendidoCadastrarDTO;
 use App\Http\Controllers\BaseController;
 use app\Http\Resources\Atendido\AtendidoResource;
 use App\Http\Resources\Paginacao\PaginacaoResource;
 use app\Services\Atendido\AtendidoService;
+use app\Validations\Atendido\AtendidoAtualizarValidation;
 use App\Validations\Atendido\AtendidoBuscarPorIdValidation;
 use App\Validations\Atendido\AtendidoBuscarValidation;
 use App\Validations\Atendido\AtendidoCadastrarValidation;
 use Exception;
-use Illuminate\Http\Request;
 
 /**
  * @OA\Tag(
@@ -31,6 +32,7 @@ class AtendidoController extends BaseController
     {
         $this->middleware(['auth:sanctum', 'ability:criar-atendido'])->only(['create']);
         $this->middleware(['auth:sanctum', 'ability:visualizar-atendido'])->only(['atendidoPorId', 'index']);
+        $this->middleware(['auth:sanctum', 'ability:atualizar-atendido'])->only(['atualizar']);
         $this->middleware('auth:sanctum')->except([]);
 
         $this->atendidoService = $atendidoService;
@@ -142,7 +144,9 @@ class AtendidoController extends BaseController
         try {
             $validated = $request->validated();
 
-            $with = isset($validated['with']) ? [$validated['with']] : [];
+            $with = isset($validated['with'])
+                ? array_map('trim', explode(',', $validated['with']))
+                : [];
 
             $atendido = $this->atendidoService->buscarPorId($id, $with);
 
@@ -177,6 +181,43 @@ class AtendidoController extends BaseController
             $this->atendidoService->criar($dto);
 
             return  $this->sucessoResponse(true, 201);
+        } catch (Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/atendido/{id}",
+     *     summary="Buscar Atendido por ID",
+     *     tags={"Atendido"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="Id do  atendido",
+     *          required=true,
+     *          @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/AtendidoAtualizarValidation")
+     *      ),
+     *     @OA\Response(response="204", description="Operacao realizada com sucesso!", @OA\JsonContent()),
+     *     @OA\Response(response="422", description="Erro de validação", @OA\JsonContent()),
+     *     @OA\Response(response="500", description="Erro interno", @OA\JsonContent())
+     * )
+     */
+    public function atualizar($id, AtendidoAtualizarValidation $request)
+    {
+        try {
+            $validated = $request->validated();
+
+            $dto = AtendidoAtualizarDTO::fromArray($validated);
+
+            $this->atendidoService->atualizar($id, $dto);
+
+            return  $this->sucessoResponse(null, 204 );
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }

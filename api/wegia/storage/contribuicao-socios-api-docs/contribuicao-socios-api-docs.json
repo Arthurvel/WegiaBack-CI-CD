@@ -197,136 +197,6 @@
                 ]
             }
         },
-        "/contribuicao/gateway": {
-            "get": {
-                "tags": [
-                    "Contribuição Gateway"
-                ],
-                "summary": "Busca todos os Gateway de pagamento paginados",
-                "operationId": "31259ee15b1a52a3688511eea3c69dd9",
-                "parameters": [
-                    {
-                        "name": "buscar",
-                        "in": "query",
-                        "description": "Texto para busca por nome da plataforma",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "ordenacao",
-                        "in": "query",
-                        "description": "Campo de ordenação",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "plataforma"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "tipoOrdenacao",
-                        "in": "query",
-                        "description": "Tipo de ordenação ASC ou DESC",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "ASC",
-                                "asc",
-                                "DESC",
-                                "desc"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "pagina",
-                        "in": "query",
-                        "description": "Número da página (mínimo 1)",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 1
-                        }
-                    },
-                    {
-                        "name": "itensPorPagina",
-                        "in": "query",
-                        "description": "Quantidade de itens por página (mínimo 1)",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 1
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Operacao realizada com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Erro de validação",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
-            "post": {
-                "tags": [
-                    "Contribuição Gateway"
-                ],
-                "summary": "Cadastra um Gateway de pagamento",
-                "operationId": "32c53528a223e16a41cf0afd59f8952f",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ContribuicaoGatewayPagamentoCadastrarValidation"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Operacao realizada com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Erro de validação",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/contribuicao/gateway/filtro": {
             "get": {
                 "tags": [
@@ -359,36 +229,110 @@
                 ]
             }
         },
-        "/contribuicao/gateway/{id}": {
-            "put": {
+        "/contribuicao": {
+            "get": {
                 "tags": [
-                    "Contribuição Gateway"
+                    "Contribuição"
                 ],
-                "summary": "Atualizar um Gateway de pagamento",
-                "operationId": "cd60838cb6cb6aa1f082853d001dd62e",
+                "summary": "Busca todas contribuicoes paginadas",
+                "operationId": "a6d52753cbe2faef68b3f4cd249071a8",
                 "parameters": [
                     {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID do gateway de pagamento",
-                        "required": true,
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo para ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "nome",
+                                "plataforma",
+                                "meio_pagamento",
+                                "data_geracao",
+                                "data_vencimento",
+                                "data_pagamento",
+                                "valor",
+                                "status_pagamento"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "DESC"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "periodo",
+                        "in": "query",
+                        "description": "Número de dias para filtrar contribuições (busca últimos X dias)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "id_socio",
+                        "in": "query",
+                        "description": "ID do sócio",
+                        "required": false,
                         "schema": {
                             "type": "integer"
                         }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ContribuicaoGatewayPagamentoAtualizarValidation"
-                            }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status da contribuição (0=Inativo, 1=Ativo)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                0,
+                                1
+                            ]
                         }
                     }
-                },
+                ],
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Operacao realizada com sucesso",
                         "content": {
                             "application/json": {
@@ -410,6 +354,81 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/contribuicao/segunda-via/socio/{cpfCnpj}": {
+            "get": {
+                "tags": [
+                    "Contribuição"
+                ],
+                "summary": "Busca todas contribuicoes paginadas",
+                "operationId": "57f95c72e01551b0b358583f6f5a4f1b",
+                "parameters": [
+                    {
+                        "name": "cpfCnpj",
+                        "in": "path",
+                        "description": "Cpf ou cnpj do socio",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contribuicao/gerar-comprovante/email": {
+            "post": {
+                "tags": [
+                    "Contribuição"
+                ],
+                "summary": "Gera comprovantes de pagamento e envia por email",
+                "operationId": "c7589bf6145858dcf165a0d5f99854a7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContribuicaoGerarComprovanteEmailValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
             }
         },
         "/contribuicao/meio-pagamento": {
@@ -500,46 +519,6 @@
                         "bearerAuth": []
                     }
                 ]
-            },
-            "post": {
-                "tags": [
-                    "Contribuição Meio de Pagamento"
-                ],
-                "summary": "Cadastra um meio de pagamento",
-                "operationId": "89bd37a0214964671699200f7bd040ef",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ContribuicaoMeioPagamentoCadastrarValidation"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Operacao realizada com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Erro de validação",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
             }
         },
         "/contribuicao/meio-pagamento/filtro": {
@@ -572,6 +551,33 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/contribuicao/meio-pagamento/ativos": {
+            "get": {
+                "tags": [
+                    "Contribuição Meio de Pagamento"
+                ],
+                "summary": "Busca todos os meios de pagamentos ativos para usar",
+                "operationId": "5fe29973c99d292df3c5b1c0ce8ae5b0",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
             }
         },
         "/contribuicao/meio-pagamento/{id}": {
@@ -658,6 +664,848 @@
                     }
                 ]
             }
+        },
+        "/contribuicao/pagamento": {
+            "post": {
+                "tags": [
+                    "Pagamento"
+                ],
+                "summary": "Cadastrar um pagamento",
+                "operationId": "7dc86ebdd24b43e4644682719d6aa2e5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PagamentoCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contribuicao/pagamento/sincronizar": {
+            "put": {
+                "tags": [
+                    "Pagamento"
+                ],
+                "summary": "Sincroniza os pagamentos com as apis cadastradas",
+                "operationId": "653649a7d3084739ebd4372e5d55a5a3",
+                "responses": {
+                    "204": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio": {
+            "get": {
+                "tags": [
+                    "Socio"
+                ],
+                "summary": "Busca todos os socios paginados",
+                "operationId": "77e61113e7fb2f02d9e3fd1d5a4f5aab",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome da plataforma",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "nome",
+                                "email",
+                                "telefone",
+                                "endereco",
+                                "cpf",
+                                "tipo"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Socio"
+                ],
+                "summary": "Cadastrar um socio",
+                "operationId": "cf88e4c6c5a1102004eb1fd1dee4ad3a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SocioCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/pessoa": {
+            "post": {
+                "tags": [
+                    "Socio"
+                ],
+                "summary": "Cadastrar uma pessoa com socio",
+                "operationId": "7c7a398b385b6670d53f5780dc76e1d8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SocioPessoaCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/aniversariante": {
+            "get": {
+                "tags": [
+                    "Socio"
+                ],
+                "summary": "Busca todos os socios aniversariantes paginados",
+                "operationId": "3e149d303590eb912c3dd38eac817051",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome da plataforma",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "nome",
+                                "email",
+                                "telefone",
+                                "endereco",
+                                "cpf",
+                                "tipo"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/relatorio": {
+            "get": {
+                "tags": [
+                    "Socio"
+                ],
+                "summary": "Busca todos os socios para relatorio",
+                "operationId": "102a5fd005065bfcc1a25a0237739224",
+                "parameters": [
+                    {
+                        "name": "tipo_socio",
+                        "in": "query",
+                        "description": "Tipo de sócio",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Casual",
+                                "Mensal",
+                                "Bimestral",
+                                "Trimestral",
+                                "Semestral"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "id_status",
+                        "in": "query",
+                        "description": "ID do status do sócio",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "id_tag",
+                        "in": "query",
+                        "description": "ID da tag do sócio",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "tipo_pessoa",
+                        "in": "query",
+                        "description": "Tipo de pessoa (f=Física, j=Jurídica)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 1,
+                            "enum": [
+                                "f",
+                                "j"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "valor_filtro",
+                        "in": "query",
+                        "description": "Tipo de filtro para valor",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "maior",
+                                "maior_igual",
+                                "menor",
+                                "menor_igual",
+                                "igual"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "valor",
+                        "in": "query",
+                        "description": "Valor para filtro (mínimo 0)",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "format": "float",
+                            "minimum": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/pessoa/{cpfCnpj}": {
+            "get": {
+                "tags": [
+                    "Socio"
+                ],
+                "summary": "Buscar pessoa por cpf ou cnpj e trazer socio",
+                "operationId": "690bae8c75d8676a9d4fb3c00c9db3ff",
+                "parameters": [
+                    {
+                        "name": "cpfCnpj",
+                        "in": "path",
+                        "description": "CPF ou CNPJ da pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                }
+            }
+        },
+        "/socio/tipo/estatistica": {
+            "get": {
+                "tags": [
+                    "Socio"
+                ],
+                "summary": "Estatistica do socio pelo tipo",
+                "operationId": "a77ccb50184a81ff6d92fbc1d4a5a148",
+                "responses": {
+                    "200": {
+                        "description": "Operação realizado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/{id_socio}/pessoa/{id_pessoa}": {
+            "put": {
+                "tags": [
+                    "Socio"
+                ],
+                "summary": "Atualizar uma tag do socio",
+                "operationId": "174fc5e9fcf46d400daff8c5dd8fc0e2",
+                "parameters": [
+                    {
+                        "name": "id_socio",
+                        "in": "path",
+                        "description": "ID do socio",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "id_pessoa",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SocioAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/status/filtro": {
+            "get": {
+                "tags": [
+                    "Socio Status"
+                ],
+                "summary": "Busca todas os status dos socios para usar como filtro",
+                "operationId": "8b7fc0c405ee1bedf79d2aafa5891f07",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/tag": {
+            "get": {
+                "tags": [
+                    "Socio Tag"
+                ],
+                "summary": "Busca todos as tags dos socios paginados",
+                "operationId": "d37d475a90bc463f42776af7bb6f9db0",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "description": "Texto para busca por nome da plataforma",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenacao",
+                        "in": "query",
+                        "description": "Campo de ordenação",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "tag"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipoOrdenacao",
+                        "in": "query",
+                        "description": "Tipo de ordenação ASC ou DESC",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ASC",
+                                "asc",
+                                "DESC",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "pagina",
+                        "in": "query",
+                        "description": "Número da página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "itensPorPagina",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (mínimo 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Socio Tag"
+                ],
+                "summary": "Cadastrar uma tag de socio",
+                "operationId": "cee9deff9dd862570f387803b9a30abd",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SocioTagCadastrarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/tag/filtro": {
+            "get": {
+                "tags": [
+                    "Socio Tag"
+                ],
+                "summary": "Busca todas as tags dos socios para usar como filtro",
+                "operationId": "cdcc8abbef1713f7fba71c1a7998de38",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/tag/{id}": {
+            "put": {
+                "tags": [
+                    "Socio Tag"
+                ],
+                "summary": "Atualizar uma tag do socio",
+                "operationId": "1bd80f8c3202c5473ece6636fe61c5d7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da tag",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SocioTagAtualizarValidation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/socio/tipo/filtro": {
+            "get": {
+                "tags": [
+                    "Socio Tipo"
+                ],
+                "summary": "Busca todas os tipos dos socios para usar como filtro",
+                "operationId": "1f9478b252db7d3dacfa1e40a367629f",
+                "responses": {
+                    "200": {
+                        "description": "Operacao realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -712,60 +1560,32 @@
                 },
                 "type": "object"
             },
-            "ContribuicaoGatewayPagamentoAtualizarValidation": {
-                "properties": {
-                    "plataforma": {
-                        "description": "Nome da plataforma",
-                        "type": "string"
-                    },
-                    "endPoint": {
-                        "description": "endpoint do gateway",
-                        "type": "string"
-                    },
-                    "token": {
-                        "description": "token do gateway",
-                        "type": "string"
-                    },
-                    "status": {
-                        "description": "status",
-                        "type": "boolean"
-                    }
-                },
-                "type": "object"
-            },
-            "ContribuicaoGatewayPagamentoCadastrarValidation": {
+            "ContribuicaoGerarComprovanteEmailValidation": {
                 "required": [
-                    "plataforma",
-                    "endPoint",
-                    "token",
-                    "status"
+                    "cpf_cnpj",
+                    "data_inicio",
+                    "data_fim"
                 ],
                 "properties": {
-                    "plataforma": {
-                        "description": "Nome da plataforma",
+                    "cpf_cnpj": {
+                        "description": "CPF ou CNPJ do sócio",
                         "type": "string"
                     },
-                    "endPoint": {
-                        "description": "endpoint do gateway",
-                        "type": "string"
+                    "data_inicio": {
+                        "description": "Data inicial do período",
+                        "type": "string",
+                        "format": "date"
                     },
-                    "token": {
-                        "description": "token do gateway",
-                        "type": "string"
-                    },
-                    "status": {
-                        "description": "status",
-                        "type": "boolean"
+                    "data_fim": {
+                        "description": "Data final do período",
+                        "type": "string",
+                        "format": "date"
                     }
                 },
                 "type": "object"
             },
             "ContribuicaoMeioPagamentoAtualizarValidation": {
                 "properties": {
-                    "meio": {
-                        "description": "Nome do meio de pagamento",
-                        "type": "string"
-                    },
                     "id_plataforma": {
                         "description": "id da plataforma",
                         "type": "integer"
@@ -777,24 +1597,269 @@
                 },
                 "type": "object"
             },
-            "ContribuicaoMeioPagamentoCadastrarValidation": {
+            "PagamentoCadastrarValidation": {
                 "required": [
-                    "meio",
-                    "id_plataforma",
-                    "status"
+                    "id_socio",
+                    "id_contribuicao_conjuntoRegras",
+                    "valor"
                 ],
                 "properties": {
-                    "meio": {
-                        "description": "Nome do meio de pagamento",
-                        "type": "string"
-                    },
-                    "id_plataforma": {
-                        "description": "id da plataforma",
+                    "id_socio": {
+                        "description": "id do socio",
                         "type": "integer"
                     },
-                    "status": {
-                        "description": "status",
-                        "type": "boolean"
+                    "id_contribuicao_meioPagamento": {
+                        "description": "id do meio de pagamento",
+                        "type": "integer"
+                    },
+                    "valor": {
+                        "description": "valor do pagamento",
+                        "type": "integer"
+                    },
+                    "parcelas": {
+                        "description": "quantidade de parcelas",
+                        "type": "integer"
+                    },
+                    "data_vencimento": {
+                        "description": "valor do pagamento",
+                        "type": "integer"
+                    },
+                    "cartao_hash": {
+                        "description": "hash do cartao",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SocioAtualizarValidation": {
+                "properties": {
+                    "nome": {
+                        "type": "string",
+                        "example": "João da Silva"
+                    },
+                    "cpf": {
+                        "type": "string",
+                        "example": "12345678900"
+                    },
+                    "telefone": {
+                        "type": "string",
+                        "example": "21999999999"
+                    },
+                    "data_nascimento": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "1995-08-20"
+                    },
+                    "id_sociostatus": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "id_sociotipo": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "id_sociotag": {
+                        "type": "integer",
+                        "example": 3,
+                        "nullable": true
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "joao@email.com"
+                    },
+                    "valor_periodo": {
+                        "type": "number",
+                        "example": 150
+                    },
+                    "data_referencia": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-01"
+                    }
+                },
+                "type": "object"
+            },
+            "SocioCadastrarValidation": {
+                "required": [
+                    "id_pessoa",
+                    "id_sociostatus",
+                    "id_sociotipo"
+                ],
+                "properties": {
+                    "id_pessoa": {
+                        "description": "ID da pessoa vinculada",
+                        "type": "integer"
+                    },
+                    "id_sociostatus": {
+                        "description": "Status do sócio",
+                        "type": "integer"
+                    },
+                    "id_sociotipo": {
+                        "description": "Tipo do sócio",
+                        "type": "integer"
+                    },
+                    "id_sociotag": {
+                        "description": "Tag do sócio",
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "email": {
+                        "description": "Email do sócio",
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "valor_periodo": {
+                        "description": "Valor pago no período",
+                        "type": "number",
+                        "format": "decimal",
+                        "nullable": true
+                    },
+                    "data_referencia": {
+                        "description": "Data de referência",
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "SocioPessoaCadastrarValidation": {
+                "required": [
+                    "id_sociostatus",
+                    "id_sociotipo",
+                    "nome",
+                    "cpf",
+                    "telefone"
+                ],
+                "properties": {
+                    "id_sociostatus": {
+                        "description": "Status do sócio",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "id_sociotipo": {
+                        "description": "Tipo do sócio",
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "id_sociotag": {
+                        "description": "Tag do sócio",
+                        "type": "integer",
+                        "example": 3,
+                        "nullable": true
+                    },
+                    "email": {
+                        "description": "Email do sócio",
+                        "type": "string",
+                        "example": "email@teste.com",
+                        "nullable": true
+                    },
+                    "valor_periodo": {
+                        "description": "Valor pago no período",
+                        "type": "number",
+                        "example": 150.5,
+                        "nullable": true
+                    },
+                    "data_referencia": {
+                        "description": "Data de referência",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-12-01",
+                        "nullable": true
+                    },
+                    "nome": {
+                        "description": "Nome completo",
+                        "type": "string",
+                        "example": "João da Silva"
+                    },
+                    "cpf": {
+                        "description": "CPF da pessoa",
+                        "type": "string",
+                        "example": "123.456.789-10"
+                    },
+                    "telefone": {
+                        "description": "Telefone",
+                        "type": "string",
+                        "example": "(11) 90000-0000"
+                    },
+                    "data_nascimento": {
+                        "description": "Data de nascimento",
+                        "type": "string",
+                        "format": "date",
+                        "example": "1990-05-20",
+                        "nullable": true
+                    },
+                    "cep": {
+                        "description": "CEP",
+                        "type": "string",
+                        "example": "01001-000",
+                        "nullable": true
+                    },
+                    "estado": {
+                        "description": "UF do endereço",
+                        "type": "string",
+                        "example": "SP",
+                        "nullable": true
+                    },
+                    "cidade": {
+                        "description": "Cidade",
+                        "type": "string",
+                        "example": "São Paulo",
+                        "nullable": true
+                    },
+                    "bairro": {
+                        "description": "Bairro",
+                        "type": "string",
+                        "example": "Centro",
+                        "nullable": true
+                    },
+                    "logradouro": {
+                        "description": "Logradouro",
+                        "type": "string",
+                        "example": "Rua Exemplo",
+                        "nullable": true
+                    },
+                    "numero_endereco": {
+                        "description": "Número",
+                        "type": "string",
+                        "example": "100",
+                        "nullable": true
+                    },
+                    "complemento": {
+                        "description": "Complemento",
+                        "type": "string",
+                        "example": "Apartamento 12",
+                        "nullable": true
+                    },
+                    "ibge": {
+                        "description": "Código IBGE",
+                        "type": "string",
+                        "example": "3550308",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "SocioTagAtualizarValidation": {
+                "required": [
+                    "tag"
+                ],
+                "properties": {
+                    "tag": {
+                        "description": "Tag do socio",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SocioTagCadastrarValidation": {
+                "required": [
+                    "tag"
+                ],
+                "properties": {
+                    "tag": {
+                        "description": "Tag do socio",
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -820,6 +1885,30 @@
         {
             "name": "Contribuição Meio de Pagamento",
             "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
+        },
+        {
+            "name": "Pagamento",
+            "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
+        },
+        {
+            "name": "Socio",
+            "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
+        },
+        {
+            "name": "Socio Status",
+            "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
+        },
+        {
+            "name": "Socio Tag",
+            "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
+        },
+        {
+            "name": "Socio Tipo",
+            "description": "Operações relacionadas ao Modulo de Contribuicao e Socios"
+        },
+        {
+            "name": "Contribuição",
+            "description": "Contribuição"
         }
     ]
 }

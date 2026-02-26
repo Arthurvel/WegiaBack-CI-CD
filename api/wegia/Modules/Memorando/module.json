@@ -7,5 +7,10 @@
     "providers": [
         "Modules\\Memorando\\Providers\\MemorandoServiceProvider"
     ],
-    "files": []
+    "files": [],
+    "migration": {
+        "seeds": [
+            "Modules\\Memorando\\Database\\Seeders\\DatabaseSeeder"
+        ]
+    }
 }

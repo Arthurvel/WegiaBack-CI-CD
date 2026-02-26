@@ -50,10 +50,10 @@ class FuncionarioCadastrarValidation extends FormRequest
             'data_expedicao' => 'required|date',
 
             'data_admissao' => 'required|date',
-            'id_situacao' => 'required|integer|max:11|exists:situacao,id_situacao',
-            'id_perfil' => 'required|integer|max:11|exists:perfil,id_perfil',
-            'id_escala' => 'required|integer|max:11|exists:escala_quadro_horario,id_escala',
-            'id_tipo' => 'required|integer|max:11|exists:tipo_quadro_horario,id_tipo',
+            'id_situacao' => 'required|integer|exists:situacao,id_situacao',
+            'id_perfil' => 'required|integer|exists:perfil,id_perfil',
+            'id_escala' => 'required|integer|exists:escala_quadro_horario,id_escala',
+            'id_tipo' => 'required|integer|exists:tipo_quadro_horario,id_tipo',
             'certificado_reservista_numero' => 'nullable|string|max:100',
             'certificado_reservista_serie' => 'nullable|string|max:100',
         ];
@@ -71,7 +71,7 @@ class FuncionarioCadastrarValidation extends FormRequest
             'size'     => 'O campo :attribute deve ter exatamente :size caracteres.',
             'exists'   => 'O campo :attribute deve existir na tabela correspondente',
             'mimes'    => 'O campo :attribute deve receber apenas extensões do tipo .pdf, .jpg, jpeg e .png',
-            'max'      => 'O campo :attribute  deve ter no maximo 5mb',
+            'imagem.max'      => 'O campo :attribute  deve ter no maximo 5mb',
 
             'cpf.unique' => 'Este CPF já está em uso.',
             'data_nascimento.date' => 'O campo data de nascimento deve ser uma data válida.',
