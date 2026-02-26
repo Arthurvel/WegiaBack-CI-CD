@@ -10,11 +10,11 @@ class SocioStatusSeeder extends Seeder
     public function run(): void
     {
         $status = [
-            [0, 'Ativo'],
-            [1, 'Inativo'],
-            [2, 'Inadimplente'],
-            [3, 'Inativo Temporariamente'],
-            [4, 'Sem informação'],
+            [1, 'Ativo'],
+            [2, 'Inativo'],
+            [3, 'Inadimplente'],
+            [4, 'Inativo Temporariamente'],
+            [5, 'Sem informação'],
         ];
 
         foreach ($status as [$id, $nome]) {

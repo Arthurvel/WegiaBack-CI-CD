@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->dateTime('data_inicio');
             $table->dateTime('data_fim')->nullable();
-            $table->string('descricao', 512);
+            $table->text('descricao');
 
             $table->unsignedInteger('id_processo');
             $table->unsignedInteger('id_status');

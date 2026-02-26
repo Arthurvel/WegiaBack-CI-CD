@@ -13,6 +13,8 @@ class ContribuicaoMeioPagamentoSeeder extends Seeder
             ['meio' => 'Boleto', 'id_plataforma' => 1, 'status' => 0],
             ['meio' => 'Pix', 'id_plataforma' => 1, 'status' => 0],
             ['meio' => 'Carne', 'id_plataforma' => 1, 'status' => 0],
+            ['meio' => 'CartaoCredito', 'id_plataforma' => 1, 'status' => 0],
+            ['meio' => 'Recorrencia', 'id_plataforma' => 1, 'status' => 0],
         ];
 
         foreach ($meios as $m) {
