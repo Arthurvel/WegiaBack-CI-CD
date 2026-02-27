@@ -11,7 +11,7 @@ class PessoaSeeder extends Seeder{
             ['id_pessoa' => 1],
             [
                 'cpf' => 'admin',
-                'senha' => '9dcc9cbd309bfe63101c96687fb79ca847e9f238ce965f82eb44e8daf825cdbb',
+                'senha' => 'wegia',
                 'nome' => 'admin'
             ]
         );
