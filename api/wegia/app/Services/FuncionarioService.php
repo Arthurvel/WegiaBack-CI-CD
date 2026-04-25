@@ -142,8 +142,6 @@ class FuncionarioService extends BaseService
             $depentendes->total(),
             $depentendes->perPage()
         );
-
-        return $this->repository->buscarDependentesPorFuncionario($dados, $id_funcionario, ['pessoa', 'funcionario', 'parentesco']);
     }
 
     public function cadastrarDependenteParentesco(array $dados) : FuncionarioDependenteParentesco
