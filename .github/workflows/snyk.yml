@@ -36,7 +36,7 @@ jobs:
         run: npm install -g snyk
 
       - name: Autenticar no Snyk
-        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+        run: snyk auth ${{ secrets.SECRET_SNYK }}
 
       - name: Executar scan Snyk
         run: snyk test --file=composer.lock
