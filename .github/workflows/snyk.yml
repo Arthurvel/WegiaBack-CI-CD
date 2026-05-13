@@ -1,38 +1,45 @@
-name: Snyk Security Scan
+name: Snyk PHP Security Scan
 
 on:
   push:
     branches:
       - master
+      - main
 
   pull_request:
     branches:
       - master
+      - main
+
+  workflow_dispatch:
 
 jobs:
   security:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do código
+      - name: Checkout código
         uses: actions/checkout@v4
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          node-version: 20
+          php-version: '8.2'
+
+      - name: Validar Composer
+        run: composer validate
 
       - name: Instalar dependências
-        run: npm install
+        run: composer install --no-interaction --prefer-dist
 
       - name: Instalar Snyk CLI
         run: npm install -g snyk
 
-      - name: Autenticar Snyk
-        run: snyk auth ${{ secrets.SECRET_SNYK }}
+      - name: Autenticar no Snyk
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
 
-      - name: Scan de vulnerabilidades
-        run: snyk test
+      - name: Executar scan Snyk
+        run: snyk test --file=composer.lock
 
       - name: Monitorar projeto
-        run: snyk monitor
+        run: snyk monitor --file=composer.lock
