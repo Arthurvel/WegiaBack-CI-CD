@@ -1,0 +1,38 @@
+name: Snyk Security Scan
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Instalar Snyk CLI
+        run: npm install -g snyk
+
+      - name: Autenticar Snyk
+        run: snyk auth ${{ secrets.SECRET_SNYK }}
+
+      - name: Scan de vulnerabilidades
+        run: snyk test
+
+      - name: Monitorar projeto
+        run: snyk monitor
