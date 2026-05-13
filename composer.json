@@ -1,15 +1,7 @@
 {
     "name": "arthur/wegia-back",
-    "autoload": {
-        "psr-4": {
-            "Arthur\\WegiaBack\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Arthurvel",
-            "email": "ajvribeiro1@gmail.com"
-        }
-    ],
+    "description": "Backend PHP do projeto Wegia",
+    "type": "project",
+    "license": "proprietary",
     "require": {}
 }
