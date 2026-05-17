@@ -1,0 +1,10 @@
+Adicionando segurança neste projeto, foi criada uma pipeline, para análise do código.
+Nesta pipeline contém as ferramentas:
+
+- Snyk:
+https://docs.snyk.io/
+
+- SonarQube:
+https://docs.sonarsource.com/sonarqube-cloud
+
+Todas as ferramentas estão sendo utilizadas em opções grátis.
