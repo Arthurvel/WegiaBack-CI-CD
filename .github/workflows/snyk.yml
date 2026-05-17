@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -35,11 +37,35 @@ jobs:
       - name: Instalar Snyk CLI
         run: npm install -g snyk
 
-      - name: Autenticar no Snyk
-        run: snyk auth ${{ secrets.SECRET_SNYK }}
-
       - name: Executar scan Snyk
-        run: snyk test --file=composer.lock
+        env:
+          SNYK_TOKEN: ${{ secrets.SECRET_SNYK }}
+        run: |
+          snyk test \
+            --file=composer.lock \
+            --severity-threshold=medium
 
       - name: Monitorar projeto
+        if: success()
+        env:
+          SNYK_TOKEN: ${{ secrets.SECRET_SNYK }}
         run: snyk monitor --file=composer.lock
+
+      # =========================
+      # SONARQUBE SCAN
+      # =========================
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SECRET_SONAR }}
+          
+      # =========================
+      # QUALITY GATE
+      # =========================
+
+      - name: SonarQube Quality Gate
+        uses: SonarSource/sonarqube-quality-gate-action@v1.2.0
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SECRET_SONAR }}
